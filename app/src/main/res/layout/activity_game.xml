@@ -9,13 +9,7 @@
     android:background="@android:color/black"
     tools:context=".gameActivity">
 
-    <!--
-         ImageView for your 500x322 map.
-         - Height is 0dp with top and bottom constraints so it fills the vertical space.
-         - Width is wrap_content so it gets calculated from the ratio.
-         - The dimension ratio "H,322:500" means that the height is fixed by constraints and
-           the width = height * (500/322), preserving the native ratio.
-    -->
+    <!-- ImageView for your 500x322 map -->
     <ImageView
         android:id="@+id/mapImageView"
         android:layout_width="wrap_content"
@@ -30,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/map_image" />
 
-    <!-- Container for your game elements (GameView overlay, etc.) -->
+    <!-- Container for your game elements -->
     <FrameLayout
         android:id="@+id/gameContainer"
         android:layout_width="0dp"
@@ -39,7 +33,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <Button
+            android:id="@+id/nextPhaseButton"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:text="Start Phase 2"
+            android:visibility="visible" />
+    </FrameLayout>
 
     <!-- Tower Panel (hidden by default) -->
     <LinearLayout
@@ -53,7 +56,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,4 +74,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Phase announcement TextView positioned 20dp from top and 200dp from right -->
+    <TextView
+        android:id="@+id/phaseAnnouncement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phase One"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="240dp" />
+
+    <!-- Button to start the next phase -->
 </androidx.constraintlayout.widget.ConstraintLayout>
