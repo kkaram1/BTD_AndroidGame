@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gameActivity"
-    android:background="@drawable/btd1_map">
+    android:background="@android:color/black"
+    tools:context=".gameActivity">
 
+    <!--
+         ImageView for your 500x322 map.
+         - Height is 0dp with top and bottom constraints so it fills the vertical space.
+         - Width is wrap_content so it gets calculated from the ratio.
+         - The dimension ratio "H,322:500" means that the height is fixed by constraints and
+           the width = height * (500/322), preserving the native ratio.
+    -->
+    <ImageView
+        android:id="@+id/mapImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:src="@drawable/btd1_map"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        app:layout_constraintDimensionRatio="H,322:500"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/map_image" />
+
+    <!-- Container for your game elements (GameView overlay, etc.) -->
     <FrameLayout
         android:id="@+id/gameContainer"
         android:layout_width="0dp"
@@ -18,6 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Tower Panel (hidden by default) -->
     <LinearLayout
         android:id="@+id/towerPanel"
         android:layout_width="200dp"
@@ -36,10 +60,9 @@
             android:text="Toweroptions"
             android:textStyle="bold"
             android:textSize="18sp"/>
-
-
     </LinearLayout>
 
+    <!-- Tower Button -->
     <Button
         android:id="@+id/towerButton"
         android:layout_width="60dp"
