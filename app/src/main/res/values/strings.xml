@@ -1,6 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">BaloonsTD</string>
-    <string name="Welcome" tools:ignore="StringEscaping">Welcome to Briaire's and Kokash's</string>
-    <string name="BB" tools:ignore="StringEscaping">Baloons Tower Defense</string>
 
 </resources>
