@@ -36,8 +36,8 @@ public class GameView extends View {
     }
     private void init() {
         Bitmap originalBalloon = BitmapFactory.decodeResource(getResources(), R.drawable.red_balloon);
-        int newWidth = 200;
-        int newHeight = 200;
+        int newWidth = 100;
+        int newHeight = 100;
         balloon = Bitmap.createScaledBitmap(originalBalloon, newWidth, newHeight, true);
 
         path = new ArrayList<>();
@@ -75,7 +75,7 @@ public class GameView extends View {
         super.onDraw(canvas);
 
         paint.setColor(Color.TRANSPARENT);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(30);
         paint.setStyle(Paint.Style.STROKE);
 
         if (path.size() > 1) {
@@ -90,7 +90,6 @@ public class GameView extends View {
         }
 
         canvas.drawBitmap(balloon, posX * scaleX, posY * scaleY, null);
-
         updateEnemyPosition();
         postInvalidateDelayed(16);
     }
