@@ -21,7 +21,7 @@ public class gameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Enable edge-to-edge content
+
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         EdgeToEdge.enable(this);
 
@@ -35,10 +35,10 @@ public class gameActivity extends AppCompatActivity {
         nextPhaseButton = findViewById(R.id.nextPhaseButton);
         nextPhaseButton.setVisibility(View.GONE);
         nextPhaseButton.setOnClickListener(v -> {
-            // Start Phase 2 when button is pressed.
+
             nextPhaseButton.setVisibility(View.GONE);
             phaseAnnouncement.setText("Phase 2");
-            // For example, phase 2 spawns 30 balloons.
+
             gameView.setPhase(2, 30);
         });
 
@@ -46,7 +46,7 @@ public class gameActivity extends AppCompatActivity {
         gameView = new GameView(this);
         container.addView(gameView);
 
-        // Set a listener for phase completion
+
         gameView.setOnPhaseCompleteListener(phase -> {
             if (phase == 1) {
                 // Phase 1 complete: update announcement and show next-phase button.
@@ -55,10 +55,9 @@ public class gameActivity extends AppCompatActivity {
                     nextPhaseButton.setVisibility(View.VISIBLE);
                 });
             }
-            // You can add logic for further phases as needed.
+
         });
 
-        // Start phase 1 with, for example, 20 balloons.
         gameView.setPhase(1, 20);
     }
 
