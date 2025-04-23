@@ -57,23 +57,23 @@ public class GameView extends View {
         balloon = Bitmap.createScaledBitmap(originalBalloon, newWidth, newHeight, true);
 
         path = new ArrayList<>();
-        path.add(new Point(0, 120));
-        path.add(new Point(233, 120));
-        path.add(new Point(233, 30));
-        path.add(new Point(145, 30));
-        path.add(new Point(145, 249));
-        path.add(new Point(64, 249));
-        path.add(new Point(64, 177));
-        path.add(new Point(295, 177));
-        path.add(new Point(295, 80));
-        path.add(new Point(357, 80));
-        path.add(new Point(357, 226));
-        path.add(new Point(203, 226));
-        path.add(new Point(203, 320));
+        path.add(new Point(0, 124));
+        path.add(new Point(247, 124));
+        path.add(new Point(247, 15));
+        path.add(new Point(165, 15));
+        path.add(new Point(165, 295));
+        path.add(new Point(82, 295));
+        path.add(new Point(82, 194));
+        path.add(new Point(314, 194));
+        path.add(new Point(314, 83));
+        path.add(new Point(375, 83));
+        path.add(new Point(375, 263));
+        path.add(new Point(224, 263));
+        path.add(new Point(224, 320));
 
         enemies = new ArrayList<>();
 
-        paint.setColor(Color.BLUE);
+        paint.setColor(Color.TRANSPARENT);
         paint.setStrokeWidth(5);
         paint.setStyle(Paint.Style.STROKE);
     }
@@ -128,7 +128,9 @@ public class GameView extends View {
         }
 
         for (BalloonEnemy enemy : enemies) {
-            canvas.drawBitmap(balloon, enemy.posX * scaleX, enemy.posY * scaleY, null);
+            float balloonCenterX = enemy.posX * scaleX - balloon.getWidth() / 2;
+            float balloonCenterY = enemy.posY * scaleY - balloon.getHeight() / 2;
+            canvas.drawBitmap(balloon, balloonCenterX, balloonCenterY, null);
         }
 
         updateEnemyPositions();
