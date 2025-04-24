@@ -1,11 +1,18 @@
 package com.example.baloonstd;
 
+import android.graphics.Point;
+
 public class BalloonEnemy {
-    float posX, posY;
+    int balloonImage;
+    float speed;
+    int health;
+    Point position;
     int currentWaypointIndex;
-    BalloonEnemy(float startX, float startY) {
-        posX = startX;
-        posY = startY;
+    BalloonEnemy(int balloonImage, float speed, int health, Point position) {
+        this.balloonImage = balloonImage;
+        this.speed = speed;
+        this.health = health;
+        this.position = position;
         currentWaypointIndex = 1;
     }
 }

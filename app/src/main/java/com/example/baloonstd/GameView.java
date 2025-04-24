@@ -100,7 +100,7 @@ public class GameView extends View {
     private void spawnEnemy() {
         if (!path.isEmpty()) {
             Point start = path.get(0);
-            BalloonEnemy enemy = new BalloonEnemy(start.x, start.y);
+            BalloonEnemy enemy = new BalloonEnemy(1, speed , 1,start);
             enemies.add(enemy);
         }
     }
@@ -128,8 +128,8 @@ public class GameView extends View {
         }
 
         for (BalloonEnemy enemy : enemies) {
-            float balloonCenterX = enemy.posX * scaleX - balloon.getWidth() / 2;
-            float balloonCenterY = enemy.posY * scaleY - balloon.getHeight() / 2;
+            float balloonCenterX = enemy.position.x * scaleX - balloon.getWidth() / 2;
+            float balloonCenterY = enemy.position.x * scaleY - balloon.getHeight() / 2;
             canvas.drawBitmap(balloon, balloonCenterX, balloonCenterY, null);
         }
 
@@ -154,16 +154,16 @@ public class GameView extends View {
                 continue;
             }
             Point target = path.get(enemy.currentWaypointIndex);
-            float dx = target.x - enemy.posX;
-            float dy = target.y - enemy.posY;
+            float dx = target.x - enemy.position.x;
+            float dy = target.y - enemy.position.y;
             float distance = (float) Math.sqrt(dx * dx + dy * dy);
             if (distance < speed) {
-                enemy.posX = target.x;
-                enemy.posY = target.y;
+                enemy.position.x = target.x;
+                enemy.position.y = target.y;
                 enemy.currentWaypointIndex++;
             } else {
-                enemy.posX += speed * (dx / distance);
-                enemy.posY += speed * (dy / distance);
+                enemy.position.x += speed * (dx / distance);
+                enemy.position.y += speed * (dy / distance);
             }
         }
     }
