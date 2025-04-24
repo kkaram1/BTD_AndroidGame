@@ -18,9 +18,9 @@ import java.util.List;
 
 public class GameView extends View {
 
-    private Bitmap balloon;
+    private List<Bitmap> balloons;
     private ArrayList<Point> path;
-    private float speed = 5f;
+
     private Paint paint = new Paint();
     private final int nativeWidth = 500;
     private final int nativeHeight = 322;
@@ -51,10 +51,14 @@ public class GameView extends View {
         init();
     }
     private void init() {
-        Bitmap originalBalloon = BitmapFactory.decodeResource(getResources(), R.drawable.red_balloon);
         int newWidth = 100;
         int newHeight = 100;
-        balloon = Bitmap.createScaledBitmap(originalBalloon, newWidth, newHeight, true);
+        balloons = new ArrayList<>();
+        Bitmap originalRedBalloon = BitmapFactory.decodeResource(getResources(), R.drawable.red_balloon);
+        balloons.add(Bitmap.createScaledBitmap(originalRedBalloon, newWidth, newHeight, true));
+
+        Bitmap originalBlueBalloon = BitmapFactory.decodeResource(getResources(), R.drawable.blue_balloon_correct);
+        balloons.add(Bitmap.createScaledBitmap(originalBlueBalloon, newWidth, newHeight, true));
 
         path = new ArrayList<>();
         path.add(new Point(0, 124));
@@ -100,10 +104,15 @@ public class GameView extends View {
     private void spawnEnemy() {
         if (!path.isEmpty()) {
             Point start = path.get(0);
-            BalloonEnemy enemy = new BalloonEnemy(1, speed , 1,start);
-            enemies.add(enemy);
+            Point spawnPos = new Point(start.x, start.y);
+
+            BalloonEnemy red  = new BalloonEnemy(balloons.get(0), 5f, 1, spawnPos);
+            BalloonEnemy blue = new BalloonEnemy(balloons.get(1), 8f, 2, spawnPos);
+            enemies.add(red);
+            enemies.add(blue);
         }
     }
+
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -128,9 +137,10 @@ public class GameView extends View {
         }
 
         for (BalloonEnemy enemy : enemies) {
-            float balloonCenterX = enemy.position.x * scaleX - balloon.getWidth() / 2;
-            float balloonCenterY = enemy.position.x * scaleY - balloon.getHeight() / 2;
-            canvas.drawBitmap(balloon, balloonCenterX, balloonCenterY, null);
+            Bitmap balloonImage = enemy.balloonImage;
+            float balloonCenterX = enemy.position.x * scaleX - balloonImage.getWidth() / 2;
+            float balloonCenterY = enemy.position.y * scaleY - balloonImage.getHeight() / 2;
+            canvas.drawBitmap(balloonImage, balloonCenterX, balloonCenterY, null);
         }
 
         updateEnemyPositions();
@@ -157,13 +167,13 @@ public class GameView extends View {
             float dx = target.x - enemy.position.x;
             float dy = target.y - enemy.position.y;
             float distance = (float) Math.sqrt(dx * dx + dy * dy);
-            if (distance < speed) {
+            if (distance < enemy.speed) {
                 enemy.position.x = target.x;
                 enemy.position.y = target.y;
                 enemy.currentWaypointIndex++;
             } else {
-                enemy.position.x += speed * (dx / distance);
-                enemy.position.y += speed * (dy / distance);
+                enemy.position.x += enemy.speed * (dx / distance);
+                enemy.position.y += enemy.speed * (dy / distance);
             }
         }
     }
