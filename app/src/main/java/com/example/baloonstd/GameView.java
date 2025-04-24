@@ -25,9 +25,7 @@ public class GameView extends View {
     private final int nativeWidth = 500;
     private final int nativeHeight = 322;
     private float scaleX = 1f, scaleY = 1f;
-
     private List<BalloonEnemy> enemies;
-
     private Handler spawnHandler = new Handler();
     private int spawnCount = 0;
     private int phaseBalloonCount = 0;
@@ -97,7 +95,7 @@ public class GameView extends View {
         if (!path.isEmpty()) {
             Point start = path.get(0);
             Point spawnPos = new Point(start.x, start.y);
-
+            // TODO: 24/04/2025 change so that each phase is hardcoded can do that either with textfile or new class
             BalloonEnemy red = new BalloonEnemy(balloons.get(0), 5f, 1, spawnPos);
             BalloonEnemy blue = new BalloonEnemy(balloons.get(1), 7f, 2, spawnPos);
             if (spawnCount < phaseBalloonCount / 2) {
