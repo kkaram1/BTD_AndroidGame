@@ -19,7 +19,7 @@ import java.util.List;
 public class GameView extends View {
 
     private Bitmap balloon;
-    private List<Point> path;
+    private ArrayList<Point> path;
     private float speed = 5f;
     private Paint paint = new Paint();
     private final int nativeWidth = 500;
