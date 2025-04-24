@@ -20,7 +20,7 @@ public class GameView extends View {
 
     private List<Bitmap> balloons;
     private ArrayList<Point> path;
-
+    private int mapNum;
     private Paint paint = new Paint();
     private final int nativeWidth = 500;
     private final int nativeHeight = 322;
@@ -46,6 +46,11 @@ public class GameView extends View {
         super(context);
         init();
     }
+    public GameView(Context context,int mapNum) {
+        super(context);
+        this.mapNum=mapNum;
+        init();
+    }
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -60,20 +65,7 @@ public class GameView extends View {
         Bitmap originalBlueBalloon = BitmapFactory.decodeResource(getResources(), R.drawable.blue_balloon_correct);
         balloons.add(Bitmap.createScaledBitmap(originalBlueBalloon, newWidth, newHeight, true));
 
-        path = new ArrayList<>();
-        path.add(new Point(0, 124));
-        path.add(new Point(247, 124));
-        path.add(new Point(247, 15));
-        path.add(new Point(165, 15));
-        path.add(new Point(165, 295));
-        path.add(new Point(82, 295));
-        path.add(new Point(82, 194));
-        path.add(new Point(314, 194));
-        path.add(new Point(314, 83));
-        path.add(new Point(375, 83));
-        path.add(new Point(375, 263));
-        path.add(new Point(224, 263));
-        path.add(new Point(224, 320));
+        path = MapManager.getMap(mapNum).getPath();
 
         enemies = new ArrayList<>();
 

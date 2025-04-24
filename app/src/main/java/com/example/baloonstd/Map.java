@@ -8,6 +8,7 @@ public class Map {
     private ArrayList<Point> path;
     private Point spawnPoint;
 
+
     public Map(int mapImage,ArrayList<Point> path) {
         this.mapImage = mapImage;
         this.path = path;

@@ -12,6 +12,7 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MenuSelect extends AppCompatActivity {
+    private int mapNum=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +29,23 @@ public class MenuSelect extends AppCompatActivity {
     }
 
 
-    public void goToGame(View v) {
+    public void goToGame0(View v) {
+        mapNum=0;
         Intent i = new Intent(MenuSelect.this, gameActivity.class);
+        i.putExtra("mapNum", mapNum);
         startActivity(i);
     }
+    public void goToGame1(View v) {
+        mapNum=1;
+        Intent i = new Intent(MenuSelect.this, gameActivity.class);
+        i.putExtra("mapNum", mapNum);
+        startActivity(i);
+    }
+    public void goToGame2(View v) {
+        mapNum=2;
+        Intent i = new Intent(MenuSelect.this, gameActivity.class);
+        i.putExtra("mapNum", mapNum);
+        startActivity(i);
+    }
+    public int getMapNum(){ return mapNum;}
 }
