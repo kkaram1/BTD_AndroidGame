@@ -106,10 +106,13 @@ public class GameView extends View {
             Point start = path.get(0);
             Point spawnPos = new Point(start.x, start.y);
 
-            BalloonEnemy red  = new BalloonEnemy(balloons.get(0), 5f, 1, spawnPos);
-            BalloonEnemy blue = new BalloonEnemy(balloons.get(1), 8f, 2, spawnPos);
-            enemies.add(red);
-            enemies.add(blue);
+            BalloonEnemy red = new BalloonEnemy(balloons.get(0), 5f, 1, spawnPos);
+            BalloonEnemy blue = new BalloonEnemy(balloons.get(1), 7f, 2, spawnPos);
+            if (spawnCount < phaseBalloonCount / 2) {
+                enemies.add(red);
+            } else {
+                enemies.add(blue);
+            }
         }
     }
 
