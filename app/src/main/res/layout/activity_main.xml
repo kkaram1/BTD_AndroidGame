@@ -73,7 +73,7 @@
         android:id="@+id/start_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="goToGame"
+        android:onClick="goToMenu"
         android:backgroundTint="@color/black"
         android:text="Start game"
         app:layout_constraintBottom_toBottomOf="parent"

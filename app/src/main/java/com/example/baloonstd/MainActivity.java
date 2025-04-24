@@ -26,9 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
-
-    public void goToGame(View v){
-        Intent i = new Intent(MainActivity.this, gameActivity.class);
+    public void goToMenu(View v){
+        Intent i = new Intent(MainActivity.this, MenuSelect.class);
         startActivity(i);
     }
 }
