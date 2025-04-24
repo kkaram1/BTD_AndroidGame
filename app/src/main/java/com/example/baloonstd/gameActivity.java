@@ -80,11 +80,10 @@ public class gameActivity extends AppCompatActivity {
     private void updateMapImage(int mapNum) {
         switch (mapNum) {
             case 0:
-                mapImageView.setImageResource(R.drawable.btd1_map); // Map 0
+                mapImageView.setImageResource(R.drawable.btdmap1); // Map 0
                 break;
             case 1:
-                mapImageView.setImageResource(R.drawable.
-                        homepage_background); // Map 1
+                mapImageView.setImageResource(R.drawable.btdmap2); // Map 1
                 break;
             case 2:
                 mapImageView.setImageResource(R.drawable.red_balloon); // Map 2

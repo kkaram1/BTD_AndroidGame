@@ -10,31 +10,33 @@
 
     <ImageButton
         android:id="@+id/map1"
-        android:layout_width="150dp"
-        android:layout_height="148dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginEnd="10dp"
         android:onClick="goToGame0"
         android:scaleType="centerCrop"
-        android:src="@drawable/btd1_map"
+        android:src="@drawable/btdmap1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/map2"
-        app:layout_constraintHorizontal_bias="0.553"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.274" />
+        app:layout_constraintVertical_bias="0.322" />
 
     <ImageButton
         android:id="@+id/map2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="164dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginBottom="120dp"
         android:onClick="goToGame1"
+        android:scaleType="centerCrop"
+        android:src="@drawable/btdmap2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.5"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintVertical_bias="0.25"
+        app:layout_constraintHorizontal_bias="0.5"/>
 
     <ImageButton
         android:id="@+id/map3"
@@ -54,9 +56,16 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Pick a map to play"
         app:layout_constraintBottom_toTopOf="@+id/map2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:fontFamily="sans-serif"
+        android:shadowColor="#000000"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="7"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
