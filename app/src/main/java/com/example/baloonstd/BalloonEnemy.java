@@ -6,13 +6,13 @@ import android.graphics.Point;
 public class BalloonEnemy {
     Bitmap balloonImage;
     float speed;
-    int health;
+    int layer;
     Point position;
     int currentWaypointIndex;
-    BalloonEnemy(Bitmap balloonImage, float speed, int health, Point position) {
+    BalloonEnemy(Bitmap balloonImage, float speed, int layer, Point position) {
         this.balloonImage = balloonImage;
         this.speed = speed;
-        this.health = health;
+        this.layer = layer;
         this.position = position;
         currentWaypointIndex = 1;
     }
