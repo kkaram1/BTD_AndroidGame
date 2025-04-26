@@ -20,6 +20,8 @@ public class towerDrag {
     private float dragOffsetX, dragOffsetY;
     private Monkey currentDraggingMonkey;
     private final List<Monkey> placedMonkeys = new ArrayList<>();
+    private View rangeOverlay;
+
 
     public towerDrag(FrameLayout container, LinearLayout panel, ImageView icon, GameView gv) {
         this.gameContainer = container;
@@ -78,6 +80,34 @@ public class towerDrag {
                             currentDraggingMonkey.performClick();
                             placedMonkeys.add(currentDraggingMonkey);
                         }
+                        currentDraggingMonkey.setOnClickListener(v -> {
+                            if (rangeOverlay != null) {
+                                gameContainer.removeView(rangeOverlay);
+                                rangeOverlay = null;
+                            } else {
+                                int radius = 400;
+                                RangeView rv = new RangeView(v.getContext(), radius);
+                                FrameLayout.LayoutParams rlp = new FrameLayout.LayoutParams(
+                                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                                        FrameLayout.LayoutParams.WRAP_CONTENT);
+                                rv.setLayoutParams(rlp);
+
+                                rv.measure(
+                                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                                );
+                                int w = rv.getMeasuredWidth(), h = rv.getMeasuredHeight();
+
+                                float centerX = v.getX() + v.getWidth()/2f;
+                                float centerY = v.getY() + v.getHeight()/2f;
+                                rv.setX(centerX - w/2f);
+                                rv.setY(centerY - h/2f);
+
+                                gameContainer.addView(rv);
+                                rangeOverlay = rv;
+                            }
+                        });
+
                         currentDraggingMonkey = null;
                     }
                     towerPanel.setVisibility(View.VISIBLE);
