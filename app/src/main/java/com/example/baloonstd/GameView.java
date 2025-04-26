@@ -31,6 +31,7 @@ public class GameView extends View {
     private int phaseBalloonCount = 0;
     private int currentPhase = 1;
     private boolean phaseCompleteNotified = false;
+    private boolean showPathOverlay = false;
 
     public interface OnPhaseCompleteListener {
         void onPhaseComplete(int phase);
@@ -67,8 +68,8 @@ public class GameView extends View {
 
         enemies = new ArrayList<>();
 
-        paint.setColor(Color.TRANSPARENT);
-        paint.setStrokeWidth(5);
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(100f);
         paint.setStyle(Paint.Style.STROKE);
     }
 
@@ -118,7 +119,7 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (path.size() > 1) {
+        if (showPathOverlay && path.size() > 1) {
             Path drawPath = new Path();
             Point first = path.get(0);
             drawPath.moveTo(first.x * scaleX, first.y * scaleY);
@@ -169,5 +170,34 @@ public class GameView extends View {
                 enemy.position.y += enemy.speed * (dy / distance);
             }
         }
+    }
+    public boolean isOnPath(float viewX, float viewY) {
+
+        float mapX = viewX / scaleX;
+        float mapY = viewY / scaleY;
+
+        final float threshold = 26f;
+
+        for (int i = 0; i < path.size() - 1; i++) {
+            Point a = path.get(i);
+            Point b = path.get(i + 1);
+            if (distToSegment(mapX, mapY, a, b) < threshold) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private float distToSegment(float px, float py, Point a, Point b) {
+        float dx = b.x - a.x, dy = b.y - a.y;
+        float len2 = dx*dx + dy*dy;
+        float t = ((px - a.x)*dx + (py - a.y)*dy) / (len2 == 0 ? 1 : len2);
+        t = Math.max(0, Math.min(1, t));
+        float cx = a.x + t*dx, cy = a.y + t*dy;
+        return (float)Math.hypot(px - cx, py - cy);
+    }
+
+    public void showPathOverlay(boolean show) {
+        showPathOverlay = show;
+        invalidate();  // herteken
     }
 }

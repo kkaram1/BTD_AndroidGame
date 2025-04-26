@@ -42,14 +42,6 @@
             android:layout_marginTop="8dp"
             android:text="Start Phase 2"
             android:visibility="visible" />
-        <ImageView
-            android:id="@+id/dartMonkeyView"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="top|start"
-            android:src="@drawable/dartmonkey"
-            android:translationX="100dp"
-            android:translationY="100dp" />
     </FrameLayout>
 
     <!-- Tower Panel (hidden by default) -->
@@ -70,6 +62,12 @@
             android:text="Toweroptions"
             android:textStyle="bold"
             android:textSize="18sp"/>
+        <ImageView
+            android:id="@+id/towerMonkeyIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/dartmonkey"
+            android:padding="8dp" />
     </LinearLayout>
 
     <!-- Tower Button -->
@@ -95,6 +93,8 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="240dp" />
+
+
 
     <!-- Button to start the next phase -->
 </androidx.constraintlayout.widget.ConstraintLayout>
