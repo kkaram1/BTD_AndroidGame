@@ -33,6 +33,9 @@ public class GameView extends View {
     private boolean phaseCompleteNotified = false;
     private boolean showPathOverlay = false;
 
+    private PhaseManager phaseManager;
+    private List<BalloonEnemy> enemiesToSpawn;
+
     public interface OnPhaseCompleteListener {
         void onPhaseComplete(int phase);
     }
@@ -73,17 +76,21 @@ public class GameView extends View {
         paint.setStyle(Paint.Style.STROKE);
     }
 
-    public void setPhase(int phase, int balloonCount) {
-        currentPhase = phase;
-        phaseBalloonCount = balloonCount;
+    public void setPhase(PhaseManager phaseManager) {
+        this.phaseManager = phaseManager;
+        Phase current = phaseManager.getCurrentPhase();
+        if (current != null) {
+            enemiesToSpawn = new ArrayList<>(current.getBalloons());
+        }
         spawnCount = 0;
         phaseCompleteNotified = false;
         enemies.clear();
         spawnHandler.removeCallbacksAndMessages(null);
+
         spawnHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (spawnCount < phaseBalloonCount) {
+                if (spawnCount < enemiesToSpawn.size()) {
                     spawnEnemy();
                     spawnCount++;
                     spawnHandler.postDelayed(this, 500);
@@ -93,17 +100,18 @@ public class GameView extends View {
     }
 
     private void spawnEnemy() {
-        if (!path.isEmpty()) {
+        if (!path.isEmpty() && spawnCount < enemiesToSpawn.size()) {
+            BalloonEnemy template = enemiesToSpawn.get(spawnCount);
             Point start = path.get(0);
             Point spawnPos = new Point(start.x, start.y);
-            // TODO: 24/04/2025 change so that each phase is hardcoded can do that either with textfile or new class
-            BalloonEnemy red = new BalloonEnemy(balloons.get(0), 5f, 1, spawnPos);
-            BalloonEnemy blue = new BalloonEnemy(balloons.get(1), 7f, 2, spawnPos);
-            if (spawnCount < phaseBalloonCount / 2) {
-                enemies.add(red);
-            } else {
-                enemies.add(blue);
-            }
+
+            BalloonEnemy enemy = new BalloonEnemy(
+                template.balloonImage,
+                template.speed,
+                template.layer,
+                spawnPos
+            );
+            enemies.add(enemy);
         }
     }
 

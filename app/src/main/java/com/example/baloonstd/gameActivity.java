@@ -27,6 +27,8 @@ public class gameActivity extends AppCompatActivity {
     private FrameLayout gameContainer;
     private towerDrag dragController;
 
+    private PhaseManager phaseManager;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class gameActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mapNum = intent.getIntExtra("mapNum", -1);
         gameView = new GameView(this, mapNum);
+        phaseManager = new PhaseManager(this);
+        gameView.setPhase(phaseManager);
         gameContainer.addView(gameView);
         updateMapImage(mapNum);
 
@@ -61,20 +65,20 @@ public class gameActivity extends AppCompatActivity {
         openPanel.setOnClickListener(v -> togglePanel());
         nextPhaseButton.setVisibility(View.GONE);
         nextPhaseButton.setOnClickListener(v -> {
-            nextPhaseButton.setVisibility(View.GONE);
-            phaseAnnouncement.setText("Phase 2");
-            gameView.setPhase(2, 30);
+            if (phaseManager.hasNextPhase()) {
+                phaseManager.moveToNextPhase();
+                gameView.setPhase(phaseManager);
+                nextPhaseButton.setVisibility(View.GONE);
+                phaseAnnouncement.setText("Phase " + phaseManager.getCurrentPhaseNum());
+            }
         });
 
         gameView.setOnPhaseCompleteListener(phase -> {
-            if (phase == 1) {
-                runOnUiThread(() -> {
-                    phaseAnnouncement.setText("End Phase 1");
-                    nextPhaseButton.setVisibility(View.VISIBLE);
-                });
-            }
+            runOnUiThread(() -> {
+                phaseAnnouncement.setText("End Phase " + phase);
+                nextPhaseButton.setVisibility(View.VISIBLE);
+            });
         });
-        gameView.setPhase(1, 20);
     }
 
     public void togglePanel() {

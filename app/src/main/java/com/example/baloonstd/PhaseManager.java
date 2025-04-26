@@ -1,0 +1,46 @@
+package com.example.baloonstd;
+
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+public class PhaseManager {
+    private int currentPhase = 1;
+    private Phase currentPhaseData;
+    private PhaseFactory phaseFactory;
+
+    public PhaseManager(Context context) {
+        phaseFactory = new PhaseFactory(context);
+        loadPhase(currentPhase);
+    }
+
+    private void loadPhase(int phaseNumber) {
+        currentPhaseData = phaseFactory.createPhase(phaseNumber);
+    }
+
+    public Phase getCurrentPhase() {
+        return currentPhaseData;
+    }
+
+    public boolean hasNextPhase() {
+        // You can decide how many total phases there are
+        return currentPhase < 50; // Example: 50 phases total
+    }
+
+    public Phase moveToNextPhase() {
+        if (hasNextPhase()) {
+            currentPhase++;
+            loadPhase(currentPhase);
+            return currentPhaseData;
+        }
+        return null;
+    }
+
+    public int getCurrentPhaseNum() {
+        return currentPhase;
+    }
+}
