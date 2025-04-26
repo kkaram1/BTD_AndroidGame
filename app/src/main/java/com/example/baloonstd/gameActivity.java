@@ -2,6 +2,7 @@ package com.example.baloonstd;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -21,6 +22,9 @@ public class gameActivity extends AppCompatActivity {
     private GameView gameView;
     private ImageView mapImageView;
     private int mapNum;
+    private ImageView dartMonkeyView;
+    private float dX, dY;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,33 @@ public class gameActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_game);
         mapImageView = findViewById(R.id.mapImageView);
+        dartMonkeyView = findViewById(R.id.dartMonkeyView);
+        dartMonkeyView.setClickable(true);
+        dartMonkeyView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        dX = view.getX() - event.getRawX();
+                        dY = view.getY() - event.getRawY();
+                        view.bringToFront();
+                        return true;
 
+                    case MotionEvent.ACTION_MOVE:
+                        view.setX(event.getRawX() + dX);
+                        view.setY(event.getRawY() + dY);
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        // Bel de click-handler aan voor a11y en lint:
+                        view.performClick();
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
         // Get the mapNum from the Intent
         Intent intent = getIntent();
         mapNum = intent.getIntExtra("mapNum", -1); // Default to -1 if no mapNum is passed

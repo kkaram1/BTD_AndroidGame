@@ -42,6 +42,14 @@
             android:layout_marginTop="8dp"
             android:text="Start Phase 2"
             android:visibility="visible" />
+        <ImageView
+            android:id="@+id/dartMonkeyView"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="top|start"
+            android:src="@drawable/dartmonkey"
+            android:translationX="100dp"
+            android:translationY="100dp" />
     </FrameLayout>
 
     <!-- Tower Panel (hidden by default) -->
