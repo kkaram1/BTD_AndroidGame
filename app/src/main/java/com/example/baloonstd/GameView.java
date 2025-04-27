@@ -32,9 +32,22 @@ public class GameView extends View {
     private int currentPhase = 1;
     private boolean phaseCompleteNotified = false;
     private boolean showPathOverlay = false;
-
+    Point spawnPos ;
     private PhaseManager phaseManager;
     private List<BalloonEnemy> enemiesToSpawn;
+
+    private final Runnable spawnRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (spawnCount < enemiesToSpawn.size()) {
+                BalloonEnemy enemy = enemiesToSpawn.get(spawnCount);
+                enemy.setPosition(new Point(spawnPos.x, spawnPos.y));
+                enemies.add(enemy);
+                spawnCount++;
+                spawnHandler.postDelayed(this, 500);
+            }
+        }
+    };
 
     public interface OnPhaseCompleteListener {
         void onPhaseComplete(int phase);
@@ -51,6 +64,7 @@ public class GameView extends View {
     public GameView(Context context,int mapNum) {
         super(context);
         this.mapNum=mapNum;
+        spawnPos = MapManager.getMap(mapNum).getSpawnPoint();
         init();
     }
     public GameView(Context context, AttributeSet attrs) {
@@ -61,11 +75,6 @@ public class GameView extends View {
         int newWidth = 100;
         int newHeight = 100;
         balloons = new ArrayList<>();
-        Bitmap originalRedBalloon = BitmapFactory.decodeResource(getResources(), R.drawable.red_balloon);
-        balloons.add(Bitmap.createScaledBitmap(originalRedBalloon, newWidth, newHeight, true));
-
-        Bitmap originalBlueBalloon = BitmapFactory.decodeResource(getResources(), R.drawable.blue_balloon_correct);
-        balloons.add(Bitmap.createScaledBitmap(originalBlueBalloon, newWidth, newHeight, true));
 
         path = MapManager.getMap(mapNum).getPath();
 
@@ -87,32 +96,11 @@ public class GameView extends View {
         enemies.clear();
         spawnHandler.removeCallbacksAndMessages(null);
 
-        spawnHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (spawnCount < enemiesToSpawn.size()) {
-                    spawnEnemy();
-                    spawnCount++;
-                    spawnHandler.postDelayed(this, 500);
-                }
-            }
-        }, 500);
+        startSpawning();
     }
 
-    private void spawnEnemy() {
-        if (!path.isEmpty() && spawnCount < enemiesToSpawn.size()) {
-            BalloonEnemy template = enemiesToSpawn.get(spawnCount);
-            Point start = path.get(0);
-            Point spawnPos = new Point(start.x, start.y);
-
-            BalloonEnemy enemy = new BalloonEnemy(
-                template.balloonImage,
-                template.speed,
-                template.layer,
-                spawnPos
-            );
-            enemies.add(enemy);
-        }
+    private void startSpawning() {
+        spawnHandler.postDelayed(spawnRunnable, 500);
     }
 
 

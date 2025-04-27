@@ -16,4 +16,8 @@ public class BalloonEnemy {
         this.position = position;
         currentWaypointIndex = 1;
     }
+
+    public void setPosition(Point position) {
+        this.position = position;
+    }
 }

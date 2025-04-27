@@ -70,12 +70,15 @@ public class gameActivity extends AppCompatActivity {
                 gameView.setPhase(phaseManager);
                 nextPhaseButton.setVisibility(View.GONE);
                 phaseAnnouncement.setText("Phase " + phaseManager.getCurrentPhaseNum());
+            } else {
+                nextPhaseButton.setVisibility(View.GONE);
+                phaseAnnouncement.setText("No more phases!");
             }
         });
-
         gameView.setOnPhaseCompleteListener(phase -> {
             runOnUiThread(() -> {
-                phaseAnnouncement.setText("End Phase " + phase);
+                phaseAnnouncement.setText("End of Phase " + phase);
+                nextPhaseButton.setText("Start Next Phase");
                 nextPhaseButton.setVisibility(View.VISIBLE);
             });
         });
