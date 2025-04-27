@@ -194,6 +194,6 @@ public class GameView extends View {
 
     public void showPathOverlay(boolean show) {
         showPathOverlay = show;
-        invalidate();  // herteken
+        invalidate();
     }
 }

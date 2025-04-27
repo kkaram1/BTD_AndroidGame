@@ -112,34 +112,29 @@ public class towerDrag {
                 placedMonkeys.add(currentDraggingMonkey);
                 currentDraggingMonkey.setOnClickListener(v -> {
                     if (rangeOverlay != null) {
-                        if (rangeOverlay.getParent() != null) {
-                            gameContainer.removeView(rangeOverlay);
-                            rangeOverlay = null;
-                        }
-                    }
-                    if (rangeOverlay == null) {
+                        gameContainer.removeView(rangeOverlay);
+                        rangeOverlay = null;
+                    } else {
                         int radius = 400;
                         RangeView rv = new RangeView(v.getContext(), radius);
                         FrameLayout.LayoutParams rlp = new FrameLayout.LayoutParams(
                                 FrameLayout.LayoutParams.WRAP_CONTENT,
                                 FrameLayout.LayoutParams.WRAP_CONTENT);
                         rv.setLayoutParams(rlp);
-
                         rv.measure(
                                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
                         );
                         int w = rv.getMeasuredWidth(), h = rv.getMeasuredHeight();
-
-                        float centerX = v.getX() + v.getWidth()/2f;
-                        float centerY = v.getY() + v.getHeight()/2f;
-                        rv.setX(centerX - w/2f);
-                        rv.setY(centerY - h/2f);
-
+                        float cxx = v.getX() + v.getWidth()/2f - w/2f;
+                        float cyy = v.getY() + v.getHeight()/2f - h/2f;
+                        rv.setX(cxx);
+                        rv.setY(cyy);
                         gameContainer.addView(rv);
                         rangeOverlay = rv;
                     }
                 });
+
                 currentDraggingMonkey = null;
             }
         } else {

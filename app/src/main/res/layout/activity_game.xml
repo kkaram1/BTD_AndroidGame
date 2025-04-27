@@ -9,7 +9,6 @@
     android:background="@android:color/black"
     tools:context=".gameActivity">
 
-    <!-- ImageView for your 500x322 map -->
     <ImageView
         android:id="@+id/mapImageView"
         android:layout_width="wrap_content"
@@ -24,7 +23,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/map_image" />
 
-    <!-- Container for your game elements -->
     <FrameLayout
         android:id="@+id/gameContainer"
         android:layout_width="0dp"
@@ -33,8 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
-
+        app:layout_constraintEnd_toEndOf="parent">
         <Button
             android:id="@+id/nextPhaseButton"
             android:layout_width="150dp"
@@ -44,7 +41,16 @@
             android:visibility="visible" />
     </FrameLayout>
 
-    <!-- Tower Panel (hidden by default) -->
+    <FrameLayout
+        android:id="@+id/dragLayer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <LinearLayout
         android:id="@+id/towerPanel"
         android:layout_width="200dp"
@@ -70,7 +76,6 @@
             android:padding="8dp" />
     </LinearLayout>
 
-    <!-- Tower Button -->
     <Button
         android:id="@+id/towerButton"
         android:layout_width="60dp"
@@ -80,7 +85,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Phase announcement TextView positioned 20dp from top and 200dp from right -->
     <TextView
         android:id="@+id/phaseAnnouncement"
         android:layout_width="wrap_content"
@@ -93,8 +97,4 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="240dp" />
-
-
-
-    <!-- Button to start the next phase -->
 </androidx.constraintlayout.widget.ConstraintLayout>
