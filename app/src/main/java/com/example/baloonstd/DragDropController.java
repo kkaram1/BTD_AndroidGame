@@ -20,7 +20,7 @@ public class DragDropController {
     private final LinearLayout towerPanel;
     private final ImageView towerMonkeyIcon;
     private final GameView gameView;
-    private final List<Monkey> placedMonkeys = new ArrayList<>();
+    private final List<Tower> placedTowers = new ArrayList<>();
 
     @SuppressLint("ClickableViewAccessibility")
     public DragDropController(FrameLayout dragLayer,
@@ -62,6 +62,31 @@ public class DragDropController {
                         return false;
                     towerPanel.setVisibility(View.GONE);
                     gameView.showPathOverlay(true);
+
+                    // Show temporary range circle at drag position
+                    int previewRange = 200;
+                    RangeView previewRangeView = new RangeView(dragLayer.getContext(), previewRange);
+                    FrameLayout.LayoutParams previewParams = new FrameLayout.LayoutParams(
+                            previewRange * 2 + (int)previewRangeView.getPaint().getStrokeWidth(),
+                            previewRange * 2 + (int)previewRangeView.getPaint().getStrokeWidth()
+                    );
+                    previewRangeView.setLayoutParams(previewParams);
+                    previewRangeView.setX(-1000); // Off-screen initially
+                    previewRangeView.setY(-1000);
+                    previewRangeView.setTag("PREVIEW_RANGE");
+                    dragLayer.addView(previewRangeView);
+
+                    return true;
+
+                case DragEvent.ACTION_DRAG_LOCATION:
+                    View previewView = dragLayer.findViewWithTag("PREVIEW_RANGE");
+                    if (previewView != null) {
+                        int radius = ((RangeView) previewView).getRadius();
+                        float px = event.getX() - radius;
+                        float py = event.getY() - radius;
+                        previewView.setX(px);
+                        previewView.setY(py);
+                    }
                     return true;
 
                 case DragEvent.ACTION_DROP:
@@ -81,7 +106,7 @@ public class DragDropController {
                     dropRect.inset(shrinkPx, shrinkPx);
 
                     boolean overlap = false;
-                    for (Monkey m : placedMonkeys) {
+                    for (Tower m : placedTowers) {
                         Rect r2 = m.getBounds();
                         r2.inset(shrinkPx, shrinkPx);
                         if (Rect.intersects(dropRect, r2)) {
@@ -96,19 +121,46 @@ public class DragDropController {
                     );
 
                     if (!onPath && !overlap) {
-                        Monkey placed = new Monkey(dragLayer.getContext());
+                        Tower placed = new Tower(dragLayer.getContext());
                         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, h);
                         placed.setLayoutParams(lp);
                         placed.setX(x);
                         placed.setY(y);
+
+                        // Add range view
+                        int rangeRadius = 200; // Customize this value as needed
+                        RangeView rangeView = new RangeView(dragLayer.getContext(), rangeRadius);
+                        FrameLayout.LayoutParams rangeParams = new FrameLayout.LayoutParams(
+                                rangeRadius * 2 + (int)rangeView.getPaint().getStrokeWidth(),
+                                rangeRadius * 2 + (int)rangeView.getPaint().getStrokeWidth()
+                        );
+                        rangeView.setLayoutParams(rangeParams);
+                        rangeView.setX(x + w/2f - rangeRadius);
+                        rangeView.setY(y + h/2f - rangeRadius);
+
+                        rangeView.setVisibility(View.INVISIBLE);
+
+                        // Add range and monkey
+                        dragLayer.addView(rangeView);
                         dragLayer.addView(placed);
-                        placedMonkeys.add(placed);
+                        placedTowers.add(placed);
+
+                        placed.setOnClickListener(v1 -> {
+                            rangeView.setVisibility(rangeView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
+                        });
                     }
                     return true;
 
                 case DragEvent.ACTION_DRAG_ENDED:
                     towerPanel.setVisibility(View.VISIBLE);
                     gameView.showPathOverlay(false);
+
+                    // Remove preview range view
+                    View preview = dragLayer.findViewWithTag("PREVIEW_RANGE");
+                    if (preview != null) {
+                        dragLayer.removeView(preview);
+                    }
+
                     return true;
 
                 default:

@@ -13,9 +13,8 @@ public class RangeView extends View {
     public RangeView(Context ctx,int radius) {
         super(ctx);
         this.radius = radius;
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(5f);
-        paint.setColor(0xAA0000FF);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(0x55000000); // Semi-transparent gray
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -27,5 +26,13 @@ public class RangeView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawCircle(getWidth()/2f, getHeight()/2f, radius, paint);
+    }
+
+    public Paint getPaint() {
+        return paint;
+    }
+
+    public int getRadius() {
+        return radius;
     }
 }

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Rect;
 import androidx.appcompat.widget.AppCompatImageView;
 
-public class Monkey extends AppCompatImageView {
-    public Monkey(Context context) {
+public class Tower extends AppCompatImageView {
+    public Tower(Context context) {
         super(context);
         setImageResource(R.drawable.dartmonkey);
         setClickable(true);

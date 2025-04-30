@@ -18,8 +18,8 @@ public class towerDrag {
     private final ImageView towerMonkeyIcon;
     private final GameView gameView;
     private float dragOffsetX, dragOffsetY;
-    private Monkey currentDraggingMonkey;
-    private final List<Monkey> placedMonkeys = new ArrayList<>();
+    private Tower currentDraggingTower;
+    private final List<Tower> placedTowers = new ArrayList<>();
     private View rangeOverlay;
     private boolean draggingStarted = false;
 
@@ -40,20 +40,20 @@ public class towerDrag {
                     draggingStarted = false;
                     return true;
                 case MotionEvent.ACTION_MOVE:
-                    if (currentDraggingMonkey != null) {
+                    if (currentDraggingTower != null) {
                         float newX = ev.getRawX() + dragOffsetX;
                         float newY = ev.getRawY() + dragOffsetY;
                         if (!draggingStarted) {
-                            if (Math.abs(newX - currentDraggingMonkey.getX()) > 8 || Math.abs(newY - currentDraggingMonkey.getY()) > 8) {
-                                currentDraggingMonkey.setVisibility(View.VISIBLE);
+                            if (Math.abs(newX - currentDraggingTower.getX()) > 8 || Math.abs(newY - currentDraggingTower.getY()) > 8) {
+                                currentDraggingTower.setVisibility(View.VISIBLE);
                                 draggingStarted = true;
                                 gameView.showPathOverlay(true);
                                 towerPanel.setVisibility(View.GONE);
                             }
                         }
                         if (draggingStarted) {
-                            currentDraggingMonkey.setX(newX);
-                            currentDraggingMonkey.setY(newY);
+                            currentDraggingTower.setX(newX);
+                            currentDraggingTower.setY(newY);
                         }
                     }
                     return true;
@@ -67,36 +67,36 @@ public class towerDrag {
     }
 
     private void createDraggingMonkey(View view, MotionEvent ev) {
-        if (currentDraggingMonkey == null) {
-            currentDraggingMonkey = new Monkey(view.getContext());
+        if (currentDraggingTower == null) {
+            currentDraggingTower = new Tower(view.getContext());
             int sizePx = (int) TypedValue.applyDimension(
                     TypedValue.COMPLEX_UNIT_DIP, 64, view.getResources().getDisplayMetrics());
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(sizePx, sizePx);
-            currentDraggingMonkey.setLayoutParams(lp);
-            currentDraggingMonkey.setVisibility(View.INVISIBLE);
-            gameContainer.addView(currentDraggingMonkey);
+            currentDraggingTower.setLayoutParams(lp);
+            currentDraggingTower.setVisibility(View.INVISIBLE);
+            gameContainer.addView(currentDraggingTower);
         }
-        int sizePx = currentDraggingMonkey.getWidth() > 0 ? currentDraggingMonkey.getWidth() : (int) TypedValue.applyDimension(
+        int sizePx = currentDraggingTower.getWidth() > 0 ? currentDraggingTower.getWidth() : (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 64, view.getResources().getDisplayMetrics());
         float startX = ev.getRawX(), startY = ev.getRawY();
-        currentDraggingMonkey.setX(startX - sizePx / 2f);
-        currentDraggingMonkey.setY(startY - sizePx / 2f);
-        dragOffsetX = currentDraggingMonkey.getX() - startX;
-        dragOffsetY = currentDraggingMonkey.getY() - startY;
-        currentDraggingMonkey.bringToFront();
+        currentDraggingTower.setX(startX - sizePx / 2f);
+        currentDraggingTower.setY(startY - sizePx / 2f);
+        dragOffsetX = currentDraggingTower.getX() - startX;
+        dragOffsetY = currentDraggingTower.getY() - startY;
+        currentDraggingTower.bringToFront();
     }
 
     private void finalizeMonkeyPlacement(MotionEvent ev) {
-        if (currentDraggingMonkey != null && draggingStarted) {
+        if (currentDraggingTower != null && draggingStarted) {
             gameView.showPathOverlay(false);
-            float cx = currentDraggingMonkey.getX() + currentDraggingMonkey.getWidth() / 2f;
-            float cy = currentDraggingMonkey.getY() + currentDraggingMonkey.getHeight() / 2f;
+            float cx = currentDraggingTower.getX() + currentDraggingTower.getWidth() / 2f;
+            float cy = currentDraggingTower.getY() + currentDraggingTower.getHeight() / 2f;
             boolean onPath = gameView.isOnPath(cx, cy);
-            Rect currRect = currentDraggingMonkey.getBounds();
+            Rect currRect = currentDraggingTower.getBounds();
             boolean overlap = false;
             int shrink = 70;
             currRect.inset(shrink, shrink);
-            for (Monkey m : placedMonkeys) {
+            for (Tower m : placedTowers) {
                 Rect r = m.getBounds();
                 r.inset(shrink, shrink);
                 if (Rect.intersects(currRect, m.getBounds())) {
@@ -105,12 +105,12 @@ public class towerDrag {
                 }
             }
             if (onPath || overlap) {
-                currentDraggingMonkey.setVisibility(View.GONE);
+                currentDraggingTower.setVisibility(View.GONE);
             } else {
-                currentDraggingMonkey.setVisibility(View.VISIBLE);
-                currentDraggingMonkey.performClick();
-                placedMonkeys.add(currentDraggingMonkey);
-                currentDraggingMonkey.setOnClickListener(v -> {
+                currentDraggingTower.setVisibility(View.VISIBLE);
+                currentDraggingTower.performClick();
+                placedTowers.add(currentDraggingTower);
+                currentDraggingTower.setOnClickListener(v -> {
                     if (rangeOverlay != null) {
                         gameContainer.removeView(rangeOverlay);
                         rangeOverlay = null;
@@ -135,11 +135,11 @@ public class towerDrag {
                     }
                 });
 
-                currentDraggingMonkey = null;
+                currentDraggingTower = null;
             }
         } else {
-            if (currentDraggingMonkey != null) {
-                currentDraggingMonkey.setVisibility(View.GONE);
+            if (currentDraggingTower != null) {
+                currentDraggingTower.setVisibility(View.GONE);
             }
         }
         towerPanel.setVisibility(View.VISIBLE);
