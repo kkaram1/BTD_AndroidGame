@@ -19,6 +19,7 @@ public class DragDropController {
     private final FrameLayout dragLayer;
     private final LinearLayout towerPanel;
     private final ImageView towerMonkeyIcon;
+    private final ImageView towerSniperIcon;
     private final GameView gameView;
     private final List<Tower> placedTowers = new ArrayList<>();
 
@@ -26,10 +27,12 @@ public class DragDropController {
     public DragDropController(FrameLayout dragLayer,
                               LinearLayout towerPanel,
                               ImageView towerMonkeyIcon,
+                              ImageView towerSniperIcon,
                               GameView gameView) {
         this.dragLayer       = dragLayer;
         this.towerPanel      = towerPanel;
         this.towerMonkeyIcon = towerMonkeyIcon;
+        this.towerSniperIcon = towerSniperIcon;
         this.gameView        = gameView;
     }
 
@@ -54,6 +57,25 @@ public class DragDropController {
             return false;
         });
 
+        towerSniperIcon.setOnTouchListener((v, e) -> {
+            if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                ClipData.Item item = new ClipData.Item("SNIPER_MONKEY");
+                ClipData data = new ClipData(
+                        "SNIPER_MONKEY",
+                        new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN },
+                        item
+                );
+                v.startDragAndDrop(
+                        data,
+                        new View.DragShadowBuilder(towerSniperIcon),
+                        null,
+                        0
+                );
+                return true;
+            }
+            return false;
+        });
+
         dragLayer.setOnDragListener((v, event) -> {
             switch (event.getAction()) {
                 case DragEvent.ACTION_DRAG_STARTED:
@@ -64,7 +86,9 @@ public class DragDropController {
                     gameView.showPathOverlay(true);
 
                     // Show temporary range circle at drag position
-                    int previewRange = 200;
+                    String dragType = event.getClipDescription().getLabel().toString();
+                    Towers previewType = getTowerTypeFromLabel(dragType);
+                    int previewRange = previewType.getRange();
                     RangeView previewRangeView = new RangeView(dragLayer.getContext(), previewRange);
                     FrameLayout.LayoutParams previewParams = new FrameLayout.LayoutParams(
                             previewRange * 2 + (int)previewRangeView.getPaint().getStrokeWidth(),
@@ -90,10 +114,17 @@ public class DragDropController {
                     return true;
 
                 case DragEvent.ACTION_DROP:
-                    float x = event.getX() - towerMonkeyIcon.getWidth()/2f;
-                    float y = event.getY() - towerMonkeyIcon.getHeight()/2f;
-                    int w = towerMonkeyIcon.getWidth();
-                    int h = towerMonkeyIcon.getHeight();
+                    int w, h;
+                    if (event.getLocalState() instanceof View) {
+                        View localView = (View) event.getLocalState();
+                        w = localView.getWidth();
+                        h = localView.getHeight();
+                    } else {
+                        w = towerMonkeyIcon.getWidth();
+                        h = towerMonkeyIcon.getHeight();
+                    }
+                    float x = event.getX() - w / 2f;
+                    float y = event.getY() - h / 2f;
 
                     Rect dropRect = new Rect(
                             (int)x,
@@ -121,14 +152,16 @@ public class DragDropController {
                     );
 
                     if (!onPath && !overlap) {
-                        Tower placed = new Tower(dragLayer.getContext());
+                        String clipLabel = event.getClipDescription().getLabel().toString();
+                        Towers selectedType = getTowerTypeFromLabel(clipLabel);
+                        Tower placed = new Tower(dragLayer.getContext(), selectedType);
                         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, h);
                         placed.setLayoutParams(lp);
                         placed.setX(x);
                         placed.setY(y);
 
                         // Add range view
-                        int rangeRadius = 200; // Customize this value as needed
+                        int rangeRadius = selectedType.getRange(); // Customize this value as needed
                         RangeView rangeView = new RangeView(dragLayer.getContext(), rangeRadius);
                         FrameLayout.LayoutParams rangeParams = new FrameLayout.LayoutParams(
                                 rangeRadius * 2 + (int)rangeView.getPaint().getStrokeWidth(),
@@ -167,5 +200,10 @@ public class DragDropController {
                     return false;
             }
         });
+    }
+
+
+    private Towers getTowerTypeFromLabel(String label) {
+        return Towers.fromTag(label);
     }
 }

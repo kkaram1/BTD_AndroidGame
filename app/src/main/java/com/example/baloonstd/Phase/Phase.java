@@ -1,4 +1,6 @@
-package com.example.baloonstd;
+package com.example.baloonstd.Phase;
+
+import com.example.baloonstd.BalloonEnemy;
 
 import java.util.ArrayList;
 

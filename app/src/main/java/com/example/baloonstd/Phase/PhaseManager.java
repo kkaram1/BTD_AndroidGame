@@ -1,12 +1,6 @@
-package com.example.baloonstd;
+package com.example.baloonstd.Phase;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PhaseManager {
     private int currentPhase = 1;

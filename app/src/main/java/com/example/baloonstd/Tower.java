@@ -5,10 +5,23 @@ import android.graphics.Rect;
 import androidx.appcompat.widget.AppCompatImageView;
 
 public class Tower extends AppCompatImageView {
-    public Tower(Context context) {
+    private int radius;
+    private final Towers towerType;
+
+    public Tower(Context context, Towers towerType) {
         super(context);
-        setImageResource(R.drawable.dartmonkey);
+        this.towerType = towerType;
+        this.radius = towerType.getRange();
+        setImageResource(towerType.getResourceId());
         setClickable(true);
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public Towers getTowerType() {
+        return towerType;
     }
 
     public Rect getBounds() {

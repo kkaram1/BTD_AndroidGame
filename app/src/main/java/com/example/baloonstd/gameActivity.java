@@ -13,13 +13,14 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
+import com.example.baloonstd.Phase.PhaseManager;
+
 public class gameActivity extends AppCompatActivity {
     private LinearLayout towerPanel;
     private TextView phaseAnnouncement;
     private Button nextPhaseButton;
     private GameView gameView;
-    private ImageView mapImageView, towerMonkeyIcon;
-    private FrameLayout gameContainer, dragLayer;
+    private ImageView mapImageView;
     private PhaseManager phaseManager;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -36,9 +37,10 @@ public class gameActivity extends AppCompatActivity {
         phaseAnnouncement = findViewById(R.id.phaseAnnouncement);
         nextPhaseButton   = findViewById(R.id.nextPhaseButton);
 
-        gameContainer     = findViewById(R.id.gameContainer);
-        dragLayer         = findViewById(R.id.dragLayer);
-        towerMonkeyIcon   = findViewById(R.id.towerMonkeyIcon);
+        FrameLayout gameContainer = findViewById(R.id.gameContainer);
+        FrameLayout dragLayer = findViewById(R.id.dragLayer);
+        ImageView towerMonkeyIcon = findViewById(R.id.towerMonkeyIcon);
+        ImageView towerSniperIcon = findViewById(R.id.towerSniperIcon);
 
         Intent intent = getIntent();
         int mapNum = intent.getIntExtra("mapNum", -1);
@@ -52,6 +54,7 @@ public class gameActivity extends AppCompatActivity {
                 dragLayer,
                 towerPanel,
                 towerMonkeyIcon,
+                towerSniperIcon,
                 gameView
         );
         controller.init();

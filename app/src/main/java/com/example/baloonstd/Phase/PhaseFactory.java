@@ -1,9 +1,12 @@
-package com.example.baloonstd;
+package com.example.baloonstd.Phase;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+
+import com.example.baloonstd.Balloon;
+import com.example.baloonstd.BalloonEnemy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

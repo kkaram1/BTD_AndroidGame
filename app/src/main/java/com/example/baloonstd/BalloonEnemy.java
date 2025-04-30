@@ -9,7 +9,7 @@ public class BalloonEnemy {
     int layer;
     Point position;
     int currentWaypointIndex;
-    BalloonEnemy(Bitmap balloonImage, float speedPixelsPerSecond, int layer, Point position) {
+    public BalloonEnemy(Bitmap balloonImage, float speedPixelsPerSecond, int layer, Point position) {
         this.balloonImage = balloonImage;
         this.speedPixelsPerSecond = speedPixelsPerSecond;
         this.layer = layer;

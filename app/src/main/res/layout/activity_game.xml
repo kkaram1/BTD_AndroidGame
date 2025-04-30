@@ -74,6 +74,12 @@
             android:layout_height="64dp"
             android:src="@drawable/dartmonkey"
             android:padding="8dp" />
+        <ImageView
+            android:id="@+id/towerSniperIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/dartmonkey"
+            android:padding="8dp" />
     </LinearLayout>
 
     <Button

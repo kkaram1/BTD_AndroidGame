@@ -11,6 +11,9 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import com.example.baloonstd.Map.MapManager;
+import com.example.baloonstd.Phase.Phase;
+import com.example.baloonstd.Phase.PhaseManager;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
