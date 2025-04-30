@@ -14,7 +14,7 @@ public class BalloonEnemy {
         this.speed = speed;
         this.layer = layer;
         this.position = position;
-        currentWaypointIndex = 1;
+        currentWaypointIndex = 0;
     }
 
     public void setPosition(Point position) {

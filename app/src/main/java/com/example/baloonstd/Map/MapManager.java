@@ -1,6 +1,9 @@
-package com.example.baloonstd;
+package com.example.baloonstd.Map;
 
 import android.graphics.Point;
+
+import com.example.baloonstd.R;
+
 import java.util.ArrayList;
 
 public class MapManager {
