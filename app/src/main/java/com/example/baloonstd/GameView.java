@@ -10,9 +10,7 @@ import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
-
 import com.example.baloonstd.Map.MapManager;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +34,8 @@ public class GameView extends View {
     Point spawnPos ;
     private PhaseManager phaseManager;
     private List<BalloonEnemy> enemiesToSpawn;
+    private long lastUpdateTime = System.currentTimeMillis();
+
 
     private final Runnable spawnRunnable = new Runnable() {
         @Override
@@ -129,8 +129,8 @@ public class GameView extends View {
 
         for (BalloonEnemy enemy : enemies) {
             Bitmap balloonImage = enemy.balloonImage;
-            float balloonCenterX = enemy.position.x * scaleX - balloonImage.getWidth() / 2;
-            float balloonCenterY = enemy.position.y * scaleY - balloonImage.getHeight() / 2;
+            float balloonCenterX = enemy.position.x * scaleX - (float) balloonImage.getWidth() / 2;
+            float balloonCenterY = enemy.position.y * scaleY - (float) balloonImage.getHeight() / 2;
             canvas.drawBitmap(balloonImage, balloonCenterX, balloonCenterY, null);
         }
 
@@ -147,6 +147,11 @@ public class GameView extends View {
     }
 
     private void updateEnemyPositions() {
+        long currentTime = System.currentTimeMillis();
+        long deltaTimeMillis = currentTime - lastUpdateTime;
+        lastUpdateTime = currentTime;
+        float deltaTimeSeconds = deltaTimeMillis / 1000f;
+
         Iterator<BalloonEnemy> iterator = enemies.iterator();
         while (iterator.hasNext()) {
             BalloonEnemy enemy = iterator.next();
@@ -154,17 +159,22 @@ public class GameView extends View {
                 iterator.remove();
                 continue;
             }
+
             Point target = path.get(enemy.currentWaypointIndex);
             float dx = target.x - enemy.position.x;
             float dy = target.y - enemy.position.y;
             float distance = (float) Math.sqrt(dx * dx + dy * dy);
-            if (distance < enemy.speed) {
-                enemy.position.x = target.x;
-                enemy.position.y = target.y;
+
+            // Calculate movement using delta time
+            float distanceToMove = enemy.getSpeedPixelsPerSecond() * deltaTimeSeconds;
+
+            if (distance <= distanceToMove) {
+                enemy.position.set(target.x, target.y);
                 enemy.currentWaypointIndex++;
             } else {
-                enemy.position.x += enemy.speed * (dx / distance);
-                enemy.position.y += enemy.speed * (dy / distance);
+                float ratio = distanceToMove / distance;
+                enemy.position.x += dx * ratio;
+                enemy.position.y += dy * ratio;
             }
         }
     }

@@ -5,13 +5,13 @@ import android.graphics.Point;
 
 public class BalloonEnemy {
     Bitmap balloonImage;
-    float speed;
+    private float speedPixelsPerSecond;
     int layer;
     Point position;
     int currentWaypointIndex;
-    BalloonEnemy(Bitmap balloonImage, float speed, int layer, Point position) {
+    BalloonEnemy(Bitmap balloonImage, float speedPixelsPerSecond, int layer, Point position) {
         this.balloonImage = balloonImage;
-        this.speed = speed;
+        this.speedPixelsPerSecond = speedPixelsPerSecond;
         this.layer = layer;
         this.position = position;
         currentWaypointIndex = 0;
@@ -19,5 +19,9 @@ public class BalloonEnemy {
 
     public void setPosition(Point position) {
         this.position = position;
+    }
+
+    public float getSpeedPixelsPerSecond() {
+        return speedPixelsPerSecond;
     }
 }
