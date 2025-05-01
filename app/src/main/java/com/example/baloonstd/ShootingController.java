@@ -58,14 +58,12 @@ public class ShootingController {
                 float ey = e.position.y * gameView.getMapScaleY();
                 float dx = ex - tx, dy = ey - ty;
                 if (Math.hypot(dx, dy) <= tower.getRadius()) {
-                    // roteer toren naar doel
                     float angle = (float)Math.toDegrees(Math.atan2(dy, dx)) + 180f;
                     tower.setPivotX(tower.getWidth()/2f);
                     tower.setPivotY(tower.getHeight()/2f);
                     tower.setRotation(angle);
 
-                    // spawn kogel
-                    projectiles.add(new projectile(tx, ty, e, 800f));
+                    projectiles.add(new projectile(tx, ty, e, 1000f));
                     lastShotTime = now;
                     return;
                 }
