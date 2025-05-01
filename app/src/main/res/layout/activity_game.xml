@@ -13,7 +13,7 @@
         android:id="@+id/mapImageView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:src="@drawable/red_balloon"
+        android:src="@drawable/btdmap1"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         app:layout_constraintDimensionRatio="H,322:500"
@@ -37,7 +37,9 @@
             android:layout_width="150dp"
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="10dp"
             android:text="Start Phase 2"
+            android:fontFamily="@font/luckiestguy"
             android:visibility="visible" />
 
     </FrameLayout>
@@ -102,17 +104,20 @@
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/luckiestguy"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="240dp" />
+        android:layout_marginEnd="280dp" />
     <TextView
         android:id="@+id/health"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Health: 100"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/luckiestguy"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="100dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
