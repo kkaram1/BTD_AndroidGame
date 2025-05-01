@@ -2,7 +2,7 @@ package com.example.baloonstd;
 
 public enum Towers {
     DART_MONKEY("dart_monkey", R.drawable.dartmonkey, "Dart Monkey", 150),
-    SNIPER_MONKEY("sniper_monkey", R.drawable.dartmonkey, "Sniper Monkey", 300),
+    SNIPER_MONKEY("sniper_monkey", R.drawable.sniper, "Sniper Monkey", 300),
     ICE_MONKEY("ice_monkey", R.drawable.dartmonkey, "Ice Monkey", 180);
 
     private final String tag;

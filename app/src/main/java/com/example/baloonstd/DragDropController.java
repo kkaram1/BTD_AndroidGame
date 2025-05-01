@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -177,6 +178,8 @@ public class DragDropController {
                         dragLayer.addView(rangeView);
                         dragLayer.addView(placed);
                         placedTowers.add(placed);
+                        Log.d("DDC", "Tower geplaatst: " + selectedType + " op (" + x + "," + y + ")");
+                        gameView.registerTower(placed);
 
                         placed.setOnClickListener(v1 -> {
                             rangeView.setVisibility(rangeView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);

@@ -1,3 +1,4 @@
+
 package com.example.baloonstd;
 
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.example.baloonstd.Map.MapManager;
 import com.example.baloonstd.Phase.Phase;
 import com.example.baloonstd.Phase.PhaseManager;
@@ -19,188 +21,164 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GameView extends View {
-
-    private List<Bitmap> balloons;
-    private ArrayList<Point> path;
+    private final int nativeWidth = 500, nativeHeight = 322;
     private int mapNum;
-    private Paint paint = new Paint();
-    private final int nativeWidth = 500;
-    private final int nativeHeight = 322;
+    private ArrayList<Point> path;
     private float scaleX = 1f, scaleY = 1f;
-    private List<BalloonEnemy> enemies;
+
+    private List<BalloonEnemy> enemies = new ArrayList<>();
+    private List<BalloonEnemy> enemiesToSpawn;
     private Handler spawnHandler = new Handler();
     private int spawnCount = 0;
-    private int phaseBalloonCount = 0;
-    private int currentPhase = 1;
     private boolean phaseCompleteNotified = false;
     private boolean showPathOverlay = false;
-    Point spawnPos ;
-    private PhaseManager phaseManager;
-    private List<BalloonEnemy> enemiesToSpawn;
-    private long lastUpdateTime = System.currentTimeMillis();
+    private Point spawnPos;
 
+    private long lastUpdateTime;
+
+    private PhaseManager phaseManager;
+    public interface OnPhaseCompleteListener { void onPhaseComplete(int phase); }
+    private OnPhaseCompleteListener phaseListener;
+    public void setOnPhaseCompleteListener(OnPhaseCompleteListener l) { phaseListener = l; }
+
+    public interface OnBalloonEscapeListener { void onBalloonEscaped(); }
+    private OnBalloonEscapeListener escapeListener;
+    public void setOnBalloonEscapeListener(OnBalloonEscapeListener l) { escapeListener = l; }
+
+    private ShootingController shooter;
+
+    public GameView(Context ctx) {
+        super(ctx);
+        init();
+    }
+    public GameView(Context ctx, int mapNum) {
+        super(ctx);
+        this.mapNum = mapNum;
+        spawnPos = MapManager.getMap(mapNum).getSpawnPoint();
+        init();
+    }
+    public GameView(Context ctx, AttributeSet attrs) {
+        super(ctx, attrs);
+        init();
+    }
+
+    private void init() {
+        path = MapManager.getMap(mapNum).getPath();
+        lastUpdateTime = System.currentTimeMillis();
+        shooter = new ShootingController(this);
+    }
+
+    public void setPhase(PhaseManager pm) {
+        this.phaseManager = pm;
+        Phase cur = pm.getCurrentPhase();
+        enemiesToSpawn = cur != null
+                ? new ArrayList<>(cur.getBalloons())
+                : new ArrayList<>();
+        enemies.clear();
+        spawnCount = 0;
+        phaseCompleteNotified = false;
+        spawnHandler.removeCallbacksAndMessages(null);
+        spawnHandler.postDelayed(spawnRunnable, 500);
+    }
 
     private final Runnable spawnRunnable = new Runnable() {
         @Override
         public void run() {
             if (spawnCount < enemiesToSpawn.size()) {
-                BalloonEnemy enemy = enemiesToSpawn.get(spawnCount);
-                enemy.setPosition(new Point(spawnPos.x, spawnPos.y));
-                enemies.add(enemy);
-                spawnCount++;
+                BalloonEnemy e = enemiesToSpawn.get(spawnCount++);
+                e.setPosition(new Point(spawnPos.x, spawnPos.y));
+                enemies.add(e);
                 spawnHandler.postDelayed(this, 500);
             }
         }
     };
 
-    public interface OnPhaseCompleteListener {
-        void onPhaseComplete(int phase);
-    }
-    private OnPhaseCompleteListener phaseListener;
-    public void setOnPhaseCompleteListener(OnPhaseCompleteListener listener) {
-        this.phaseListener = listener;
-    }
-
-    public GameView(Context context) {
-        super(context);
-        init();
-    }
-    public GameView(Context context,int mapNum) {
-        super(context);
-        this.mapNum=mapNum;
-        spawnPos = MapManager.getMap(mapNum).getSpawnPoint();
-        init();
-    }
-    public GameView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-    private void init() {
-        int newWidth = 100;
-        int newHeight = 100;
-        balloons = new ArrayList<>();
-
-        path = MapManager.getMap(mapNum).getPath();
-
-        enemies = new ArrayList<>();
-
-        paint.setColor(Color.RED);
-        paint.setStrokeWidth(100f);
-        paint.setStyle(Paint.Style.STROKE);
-    }
-
-    public void setPhase(PhaseManager phaseManager) {
-        this.phaseManager = phaseManager;
-        Phase current = phaseManager.getCurrentPhase();
-        if (current != null) {
-            enemiesToSpawn = new ArrayList<>(current.getBalloons());
-        }
-        spawnCount = 0;
-        phaseCompleteNotified = false;
-        enemies.clear();
-        spawnHandler.removeCallbacksAndMessages(null);
-
-        startSpawning();
-    }
-
-    private void startSpawning() {
-        spawnHandler.postDelayed(spawnRunnable, 500);
-    }
-
-
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(int w, int h, int ow, int oh) {
         scaleX = (float) w / nativeWidth;
         scaleY = (float) h / nativeHeight;
-        super.onSizeChanged(w, h, oldw, oldh);
+        super.onSizeChanged(w, h, ow, oh);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        long now = System.currentTimeMillis();
+        float deltaSec = (now - lastUpdateTime) / 1000f;
+        lastUpdateTime = now;
         super.onDraw(canvas);
-
         if (showPathOverlay && path.size() > 1) {
+            Paint p = new Paint();
+            p.setColor(Color.RED);
+            p.setStyle(Paint.Style.STROKE);
+            p.setStrokeWidth(100f);
+
             Path drawPath = new Path();
             Point first = path.get(0);
             drawPath.moveTo(first.x * scaleX, first.y * scaleY);
             for (int i = 1; i < path.size(); i++) {
-                Point p = path.get(i);
-                drawPath.lineTo(p.x * scaleX, p.y * scaleY);
+                Point pt = path.get(i);
+                drawPath.lineTo(pt.x * scaleX, pt.y * scaleY);
             }
-            canvas.drawPath(drawPath, paint);
+            canvas.drawPath(drawPath, p);
         }
-
-        for (BalloonEnemy enemy : enemies) {
-            Bitmap balloonImage = enemy.balloonImage;
-            float balloonCenterX = enemy.position.x * scaleX - (float) balloonImage.getWidth() / 2;
-            float balloonCenterY = enemy.position.y * scaleY - (float) balloonImage.getHeight() / 2;
-            canvas.drawBitmap(balloonImage, balloonCenterX, balloonCenterY, null);
+        for (BalloonEnemy e : enemies) {
+            Bitmap b = e.balloonImage;
+            float bx = e.position.x * scaleX - b.getWidth() / 2f;
+            float by = e.position.y * scaleY - b.getHeight() / 2f;
+            canvas.drawBitmap(b, bx, by, null);
         }
-
-        updateEnemyPositions();
-
-        if (spawnCount >= phaseBalloonCount && enemies.isEmpty() && !phaseCompleteNotified) {
+        updateEnemyPositions(deltaSec);
+        shooter.updateAndDraw(deltaSec, scaleX, scaleY, canvas);
+        if (spawnCount >= enemiesToSpawn.size()
+                && enemies.isEmpty()
+                && !phaseCompleteNotified) {
             phaseCompleteNotified = true;
             if (phaseListener != null) {
-                phaseListener.onPhaseComplete(currentPhase);
+                phaseListener.onPhaseComplete(phaseManager.getCurrentPhaseNum());
             }
         }
-
-        postInvalidateDelayed(16); // ~60fps
+        postInvalidateDelayed(16);
     }
 
-    private void updateEnemyPositions() {
-        long currentTime = System.currentTimeMillis();
-        long deltaTimeMillis = currentTime - lastUpdateTime;
-        lastUpdateTime = currentTime;
-        float deltaTimeSeconds = deltaTimeMillis / 1000f;
-
-        Iterator<BalloonEnemy> iterator = enemies.iterator();
-        while (iterator.hasNext()) {
-            BalloonEnemy enemy = iterator.next();
-            if (enemy.currentWaypointIndex >= path.size()) {
-                iterator.remove();
+    private void updateEnemyPositions(float deltaSec) {
+        Iterator<BalloonEnemy> it = enemies.iterator();
+        while (it.hasNext()) {
+            BalloonEnemy e = it.next();
+            if (e.currentWaypointIndex >= path.size()) {
+                if (escapeListener != null) escapeListener.onBalloonEscaped();
+                it.remove();
                 continue;
             }
-
-            Point target = path.get(enemy.currentWaypointIndex);
-            float dx = target.x - enemy.position.x;
-            float dy = target.y - enemy.position.y;
-            float distance = (float) Math.sqrt(dx * dx + dy * dy);
-
-            // Calculate movement using delta time
-            float distanceToMove = enemy.getSpeedPixelsPerSecond() * deltaTimeSeconds;
-
-            if (distance <= distanceToMove) {
-                enemy.position.set(target.x, target.y);
-                enemy.currentWaypointIndex++;
+            Point tgt = path.get(e.currentWaypointIndex);
+            float dx = tgt.x - e.position.x;
+            float dy = tgt.y - e.position.y;
+            float dist = (float) Math.hypot(dx, dy);
+            float move = e.getSpeedPixelsPerSecond() * deltaSec;
+            if (dist <= move) {
+                e.position.set(tgt.x, tgt.y);
+                e.currentWaypointIndex++;
             } else {
-                float ratio = distanceToMove / distance;
-                enemy.position.x += dx * ratio;
-                enemy.position.y += dy * ratio;
+                e.position.x += dx / dist * move;
+                e.position.y += dy / dist * move;
             }
         }
     }
-    public boolean isOnPath(float viewX, float viewY) {
 
+    public boolean isOnPath(float viewX, float viewY) {
         float mapX = viewX / scaleX;
         float mapY = viewY / scaleY;
-
         final float threshold = 26f;
-
         for (int i = 0; i < path.size() - 1; i++) {
-            Point a = path.get(i);
-            Point b = path.get(i + 1);
-            if (distToSegment(mapX, mapY, a, b) < threshold) {
-                return true;
-            }
+            Point a = path.get(i), b = path.get(i + 1);
+            if (distToSegment(mapX, mapY, a, b) < threshold) return true;
         }
         return false;
     }
+
     private float distToSegment(float px, float py, Point a, Point b) {
         float dx = b.x - a.x, dy = b.y - a.y;
         float len2 = dx*dx + dy*dy;
-        float t = ((px - a.x)*dx + (py - a.y)*dy) / (len2 == 0 ? 1 : len2);
+        float t = ((px - a.x)*dx + (py - a.y)*dy)/(len2==0?1:len2);
         t = Math.max(0, Math.min(1, t));
         float cx = a.x + t*dx, cy = a.y + t*dy;
         return (float)Math.hypot(px - cx, py - cy);
@@ -210,4 +188,11 @@ public class GameView extends View {
         showPathOverlay = show;
         invalidate();
     }
+
+
+    List<BalloonEnemy> getEnemies() { return enemies; }
+    void removeEnemy(BalloonEnemy e) { enemies.remove(e); }
+    public void registerTower(Tower t) { shooter.addTower(t); }
+    public float getMapScaleX() { return scaleX; }
+    public float getMapScaleY() { return scaleY; }
 }

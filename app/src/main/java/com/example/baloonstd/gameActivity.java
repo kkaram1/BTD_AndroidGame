@@ -22,6 +22,8 @@ public class gameActivity extends AppCompatActivity {
     private GameView gameView;
     private ImageView mapImageView;
     private PhaseManager phaseManager;
+    private int health = 100;
+    private TextView livesTextView;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -49,6 +51,17 @@ public class gameActivity extends AppCompatActivity {
         gameView.setPhase(phaseManager);
         gameContainer.addView(gameView);
         updateMapImage(mapNum);
+
+        livesTextView = findViewById(R.id.health);
+        livesTextView.setText("Health: " + health);
+
+        gameView.setOnBalloonEscapeListener(() -> runOnUiThread(() -> {
+            health--;
+            livesTextView.setText("health: " + health);
+            if (health <= 0) {
+                // game over
+            }
+        }));
 
         DragDropController controller = new DragDropController(
                 dragLayer,
@@ -89,4 +102,6 @@ public class gameActivity extends AppCompatActivity {
             case 2: mapImageView.setImageResource(R.drawable.red_balloon); break;
         }
     }
+
+
 }

@@ -39,6 +39,7 @@
             android:layout_marginTop="8dp"
             android:text="Start Phase 2"
             android:visibility="visible" />
+
     </FrameLayout>
 
     <FrameLayout
@@ -78,7 +79,7 @@
             android:id="@+id/towerSniperIcon"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/dartmonkey"
+            android:src="@drawable/sniper"
             android:padding="8dp" />
     </LinearLayout>
 
@@ -103,4 +104,15 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="240dp" />
+    <TextView
+        android:id="@+id/health"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Health: 100"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
