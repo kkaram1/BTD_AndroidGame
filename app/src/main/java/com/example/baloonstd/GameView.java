@@ -34,6 +34,7 @@ public class GameView extends View {
     private Point spawnPos;
     private long lastUpdateTime;
     private PhaseManager phaseManager;
+    private int health = 100;
 
     public interface OnPhaseCompleteListener { void onPhaseComplete(int phase); }
     private OnPhaseCompleteListener phaseListener;

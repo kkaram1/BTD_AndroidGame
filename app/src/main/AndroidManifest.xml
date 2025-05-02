@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BaloonsTD"
         tools:targetApi="31">
+        <activity android:name=".GameOverActivity" />
+
         <activity
             android:name=".gameActivity"
             android:screenOrientation="landscape"

@@ -32,6 +32,8 @@ public class gameActivity extends AppCompatActivity {
     private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
     private int money = 95;
+    private int health = 100;
+    private TextView healthText;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -47,6 +49,8 @@ public class gameActivity extends AppCompatActivity {
         phaseAnnouncement = findViewById(R.id.phaseAnnouncement);
         nextPhaseButton   = findViewById(R.id.nextPhaseButton);
         moneyText         = findViewById(R.id.moneyText);
+        healthText = findViewById(R.id.health);
+        updateHealthUI();
 
         FrameLayout gameContainer = findViewById(R.id. gameContainer);
         FrameLayout dragLayer     = findViewById(R.id.dragLayer);
@@ -97,7 +101,7 @@ public class gameActivity extends AppCompatActivity {
         }));
 
         gameView.setOnBalloonEscapeListener(() -> runOnUiThread(() -> {
-            // lost life logic
+            onBalloonReachedEnd();
         }));
 
         gameView.setOnBalloonPopListener(() -> runOnUiThread(() -> {
@@ -148,5 +152,20 @@ public class gameActivity extends AppCompatActivity {
             case 1: mapImageView.setImageResource(R.drawable.btdmap2); break;
             case 2: mapImageView.setImageResource(R.drawable.red_balloon); break;
         }
+    }
+
+    private void onBalloonReachedEnd() {
+        health--;
+        updateHealthUI();
+        if (health <= 0) {
+            Intent intent = new Intent(this, GameOverActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void updateHealthUI() {
+        healthText.setText("Health: " + health);
     }
 }
