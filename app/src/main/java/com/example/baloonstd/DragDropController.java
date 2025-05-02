@@ -17,12 +17,14 @@ import java.util.List;
 
 public class DragDropController {
     private static final String MONKEY_TAG = "DART_MONKEY";
+    private static final String SNIPER_TAG  = "SNIPER_MONKEY";
     private final FrameLayout dragLayer;
     private final LinearLayout towerPanel;
     private final ImageView towerMonkeyIcon;
     private final ImageView towerSniperIcon;
     private final GameView gameView;
     private final List<Tower> placedTowers = new ArrayList<>();
+    private final gameActivity  activity;
 
     @SuppressLint("ClickableViewAccessibility")
     public DragDropController(FrameLayout dragLayer,
@@ -35,6 +37,7 @@ public class DragDropController {
         this.towerMonkeyIcon = towerMonkeyIcon;
         this.towerSniperIcon = towerSniperIcon;
         this.gameView        = activity.getGameView();
+        this.activity = activity;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -42,17 +45,8 @@ public class DragDropController {
         towerMonkeyIcon.setOnTouchListener((v, e) -> {
             if (e.getAction() == MotionEvent.ACTION_DOWN) {
                 ClipData.Item item = new ClipData.Item((CharSequence)MONKEY_TAG);
-                ClipData data = new ClipData(
-                        MONKEY_TAG,
-                        new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN },
-                        item
-                );
-                v.startDragAndDrop(
-                        data,
-                        new View.DragShadowBuilder(towerMonkeyIcon),
-                        null,
-                        0
-                );
+                ClipData data = new ClipData(MONKEY_TAG, new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN }, item);
+                v.startDragAndDrop(data, new View.DragShadowBuilder(towerMonkeyIcon), null, 0);
                 return true;
             }
             return false;
@@ -61,17 +55,8 @@ public class DragDropController {
         towerSniperIcon.setOnTouchListener((v, e) -> {
             if (e.getAction() == MotionEvent.ACTION_DOWN) {
                 ClipData.Item item = new ClipData.Item("SNIPER_MONKEY");
-                ClipData data = new ClipData(
-                        "SNIPER_MONKEY",
-                        new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN },
-                        item
-                );
-                v.startDragAndDrop(
-                        data,
-                        new View.DragShadowBuilder(towerSniperIcon),
-                        null,
-                        0
-                );
+                ClipData data = new ClipData("SNIPER_MONKEY", new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN }, item);
+                v.startDragAndDrop(data, new View.DragShadowBuilder(towerSniperIcon), null, 0);
                 return true;
             }
             return false;
@@ -116,6 +101,14 @@ public class DragDropController {
 
                 case DragEvent.ACTION_DROP:
                     int w, h;
+                    String tag = event.getClipDescription().getLabel().toString();
+                    Towers type = Towers.fromTag(tag);
+                    int cost = type.getPrice();
+                    if (!activity.spendMoney(cost)) {
+                        towerPanel.setVisibility(View.VISIBLE);
+                        activity.getGameView().showPathOverlay(false);
+                        return true;
+                    }
                     if (event.getLocalState() instanceof View) {
                         View localView = (View) event.getLocalState();
                         w = localView.getWidth();
