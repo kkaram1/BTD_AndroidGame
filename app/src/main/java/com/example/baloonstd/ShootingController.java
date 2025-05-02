@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ShootingController {
     private final GameView gameView;
-    private final List<Tower> towers = new ArrayList<>();
+    private final List<TowerWrapper> towers = new ArrayList<>();
     private final List<projectile> projectiles = new ArrayList<>();
     private long lastShotTime = 0;
     private  long SHOT_COOLDOWN_MS;
@@ -17,15 +17,12 @@ public class ShootingController {
     }
 
     public void addTower(final Tower tower) {
-        SHOT_COOLDOWN_MS=tower.getShotCooldown();
-        towers.add(tower);
-        if (tower.getTowerType() == Towers.DART_MONKEY) {
-            tower.setImageResource(R.drawable.angrymonkey);
-        }
+        TowerWrapper wrapper = new TowerWrapper(tower);
+        towers.add(wrapper);
         tower.post(new Runnable() {
             @Override
             public void run() {
-                lastShotTime = System.currentTimeMillis() - SHOT_COOLDOWN_MS;
+                wrapper.lastShotTime = System.currentTimeMillis() - wrapper.cooldown;
                 tryToShoot();
             }
         });
@@ -50,9 +47,12 @@ public class ShootingController {
 
     private void tryToShoot() {
         long now = System.currentTimeMillis();
-        if (now - lastShotTime < SHOT_COOLDOWN_MS) return;
 
-        for (Tower tower : towers) {
+        for (TowerWrapper wrapper : towers) {
+            Tower tower = wrapper.tower;
+
+            if (now - wrapper.lastShotTime < wrapper.cooldown) continue;
+
             float tx = tower.getX() + tower.getWidth()/2f;
             float ty = tower.getY() + tower.getHeight()/2f;
             for (BalloonEnemy e : gameView.getEnemies()) {
@@ -74,10 +74,21 @@ public class ShootingController {
                     }
 
                     projectiles.add(new projectile(tx, ty, e, 1000f));
-                    lastShotTime = now;
-                    return;
+                    wrapper.lastShotTime = now;
+                    break;
                 }
             }
+        }
+    }
+    private static class TowerWrapper {
+        Tower tower;
+        long lastShotTime;
+        long cooldown;
+
+        TowerWrapper(Tower tower) {
+            this.tower = tower;
+            this.lastShotTime = System.currentTimeMillis();
+            this.cooldown = tower.getShotCooldown();
         }
     }
 }
