@@ -29,7 +29,7 @@ public class gameActivity extends AppCompatActivity {
     private GameView gameView;
     private ImageView mapImageView;
     private PhaseManager phaseManager;
-
+    private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
     private int money = 95;
 
@@ -47,8 +47,6 @@ public class gameActivity extends AppCompatActivity {
         phaseAnnouncement = findViewById(R.id.phaseAnnouncement);
         nextPhaseButton   = findViewById(R.id.nextPhaseButton);
         moneyText         = findViewById(R.id.moneyText);
-        towerMonkeyIcon   = findViewById(R.id.towerMonkeyIcon);
-        towerSniperIcon   = findViewById(R.id.towerSniperIcon);
 
         FrameLayout gameContainer = findViewById(R.id. gameContainer);
         FrameLayout dragLayer     = findViewById(R.id.dragLayer);
@@ -118,16 +116,14 @@ public class gameActivity extends AppCompatActivity {
     private void updateMoneyDisplay() {
         moneyText.setText("Money: " + money);
 
-        if (money < Towers.DART_MONKEY.getPrice()) {
-            towerMonkeyIcon.setImageResource(R.drawable.greybasic);
-        } else {
-            towerMonkeyIcon.setImageResource(Towers.DART_MONKEY.getResourceId());
-        }
-
-        if (money < Towers.SNIPER_MONKEY.getPrice()) {
-            towerSniperIcon.setImageResource(R.drawable.greyedsnipercorr);
-        } else {
-            towerSniperIcon.setImageResource(Towers.SNIPER_MONKEY.getResourceId());
+        for(Pair<Towers, ImageView> pair : pairList) {
+            if (pair.first.getPrice() > money) {
+                pair.second.setAlpha(0.5f); // make icon semi-transparent to show it's unaffordable
+                pair.second.setEnabled(false); // optional: prevent clicking
+            } else {
+                pair.second.setAlpha(1.0f);
+                pair.second.setEnabled(true);
+            }
         }
     }
 

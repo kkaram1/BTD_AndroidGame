@@ -22,6 +22,7 @@ public class DragDropController {
     private final ArrayList<ImageView> towerIcons;
     private final GameView gameView;
     private final List<Tower> placedTowers = new ArrayList<>();
+    private final gameActivity activity;
 
     @SuppressLint("ClickableViewAccessibility")
     public DragDropController(FrameLayout dragLayer,
@@ -32,6 +33,7 @@ public class DragDropController {
         this.towerPanel = towerPanel;
         this.gameView   = activity.getGameView();
         this.towerIcons = new ArrayList<>();
+        this.activity = activity;
         for (Pair<Towers, ImageView> pair : towerIconList) {
             Towers towerType = pair.first;
             ImageView icon = pair.second;
@@ -141,6 +143,7 @@ public class DragDropController {
                     if (!onPath && !overlap) {
                         int towerTag2 = Integer.parseInt(event.getClipDescription().getLabel().toString());
                         Towers selectedType = getTowerByTag(towerTag2);
+                        activity.spendMoney(selectedType.getPrice());
                         Tower placed = new Tower(dragLayer.getContext(), selectedType);
                         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, h);
                         placed.setLayoutParams(lp);

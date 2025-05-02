@@ -1,9 +1,9 @@
 package com.example.baloonstd;
 
 public enum Towers {
-    DART_MONKEY("dart_monkey", R.drawable.angrymonkey, "Dart Monkey", 250,1000),
-    SNIPER_MONKEY("sniper_monkey", R.drawable.sniper, "Sniper Monkey", 9000,1000),
-    ICE_MONKEY("ice_monkey", R.drawable.dartmonkey, "Ice Monkey", 180,1000);
+    DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000,50),
+    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9000,1000,100),
+    ICE_MONKEY(3, R.drawable.dartmonkey, "Ice Monkey", 180,1000,75);
 
     private final int tag;
     private final String displayName;
