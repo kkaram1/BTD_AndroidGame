@@ -9,7 +9,7 @@ public class projectile {
     private final PointF pos;
     private final BalloonEnemy target;
     private final float speed;
-    private final float radius = 8f;
+    private final float radius = 16f;
     private final Paint paint = new Paint();
     private final PointF velocity = new PointF();
 
