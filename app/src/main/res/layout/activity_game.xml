@@ -75,7 +75,7 @@
             android:id="@+id/towerMonkeyIcon"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/dartmonkey"
+            android:src="@drawable/angrymonkey"
             android:padding="8dp" />
         <ImageView
             android:id="@+id/towerSniperIcon"

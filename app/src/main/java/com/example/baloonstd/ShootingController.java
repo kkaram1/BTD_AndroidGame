@@ -1,4 +1,3 @@
-
 package com.example.baloonstd;
 
 import android.graphics.Canvas;
@@ -17,10 +16,12 @@ public class ShootingController {
         this.gameView = gameView;
     }
 
-
     public void addTower(final Tower tower) {
         SHOT_COOLDOWN_MS=tower.getShotCooldown();
         towers.add(tower);
+        if (tower.getTowerType() == Towers.DART_MONKEY) {
+            tower.setImageResource(R.drawable.angrymonkey);
+        }
         tower.post(new Runnable() {
             @Override
             public void run() {
@@ -59,10 +60,18 @@ public class ShootingController {
                 float ey = e.position.y * gameView.getMapScaleY();
                 float dx = ex - tx, dy = ey - ty;
                 if (Math.hypot(dx, dy) <= tower.getRadius()) {
-                    float angle = (float)Math.toDegrees(Math.atan2(dy, dx)) + 180f;
+                    float angle = (float)Math.toDegrees(Math.atan2(dy, dx)) + 220f;
                     tower.setPivotX(tower.getWidth()/2f);
                     tower.setPivotY(tower.getHeight()/2f);
                     tower.setRotation(angle);
+
+                    if (tower.getTowerType() == Towers.DART_MONKEY) {
+                        tower.setImageResource(R.drawable.angrythrown);
+                        tower.postDelayed(
+                                () -> tower.setImageResource(R.drawable.angrymonkey),
+                                900
+                        );
+                    }
 
                     projectiles.add(new projectile(tx, ty, e, 1000f));
                     lastShotTime = now;
