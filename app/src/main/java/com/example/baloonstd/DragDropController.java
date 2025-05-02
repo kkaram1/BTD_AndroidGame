@@ -17,10 +17,12 @@ import java.util.List;
 
 public class DragDropController {
     private static final String MONKEY_TAG = "DART_MONKEY";
+    private static final String SNIPER_TAG = "SNIPER_MONKEY";
     private final FrameLayout dragLayer;
     private final LinearLayout towerPanel;
     private final ImageView towerMonkeyIcon;
     private final ImageView towerSniperIcon;
+    private final gameActivity activity;
     private final GameView gameView;
     private final List<Tower> placedTowers = new ArrayList<>();
 
@@ -29,30 +31,25 @@ public class DragDropController {
                               LinearLayout towerPanel,
                               ImageView towerMonkeyIcon,
                               ImageView towerSniperIcon,
-                              GameView gameView) {
-        this.dragLayer       = dragLayer;
-        this.towerPanel      = towerPanel;
-        this.towerMonkeyIcon = towerMonkeyIcon;
-        this.towerSniperIcon = towerSniperIcon;
-        this.gameView        = gameView;
+                              gameActivity activity) {
+        this.dragLayer        = dragLayer;
+        this.towerPanel       = towerPanel;
+        this.towerMonkeyIcon  = towerMonkeyIcon;
+        this.towerSniperIcon  = towerSniperIcon;
+        this.activity         = activity;
+        this.gameView         = activity.getGameView();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     public void init() {
         towerMonkeyIcon.setOnTouchListener((v, e) -> {
             if (e.getAction() == MotionEvent.ACTION_DOWN) {
-                ClipData.Item item = new ClipData.Item((CharSequence)MONKEY_TAG);
                 ClipData data = new ClipData(
                         MONKEY_TAG,
                         new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN },
-                        item
+                        new ClipData.Item(MONKEY_TAG)
                 );
-                v.startDragAndDrop(
-                        data,
-                        new View.DragShadowBuilder(towerMonkeyIcon),
-                        null,
-                        0
-                );
+                v.startDragAndDrop(data, new View.DragShadowBuilder(v), null, 0);
                 return true;
             }
             return false;
@@ -60,18 +57,12 @@ public class DragDropController {
 
         towerSniperIcon.setOnTouchListener((v, e) -> {
             if (e.getAction() == MotionEvent.ACTION_DOWN) {
-                ClipData.Item item = new ClipData.Item("SNIPER_MONKEY");
                 ClipData data = new ClipData(
-                        "SNIPER_MONKEY",
+                        SNIPER_TAG,
                         new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN },
-                        item
+                        new ClipData.Item(SNIPER_TAG)
                 );
-                v.startDragAndDrop(
-                        data,
-                        new View.DragShadowBuilder(towerSniperIcon),
-                        null,
-                        0
-                );
+                v.startDragAndDrop(data, new View.DragShadowBuilder(v), null, 0);
                 return true;
             }
             return false;
@@ -85,128 +76,50 @@ public class DragDropController {
                         return false;
                     towerPanel.setVisibility(View.GONE);
                     gameView.showPathOverlay(true);
-
-                    // Show temporary range circle at drag position
-                    String dragType = event.getClipDescription().getLabel().toString();
-                    Towers previewType = getTowerTypeFromLabel(dragType);
-                    int previewRange = previewType.getRange();
-                    RangeView previewRangeView = new RangeView(dragLayer.getContext(), previewRange);
-                    FrameLayout.LayoutParams previewParams = new FrameLayout.LayoutParams(
-                            previewRange * 2 + (int)previewRangeView.getPaint().getStrokeWidth(),
-                            previewRange * 2 + (int)previewRangeView.getPaint().getStrokeWidth()
-                    );
-                    previewRangeView.setLayoutParams(previewParams);
-                    previewRangeView.setX(-1000); // Off-screen initially
-                    previewRangeView.setY(-1000);
-                    previewRangeView.setTag("PREVIEW_RANGE");
-                    dragLayer.addView(previewRangeView);
-
                     return true;
 
                 case DragEvent.ACTION_DRAG_LOCATION:
-                    View previewView = dragLayer.findViewWithTag("PREVIEW_RANGE");
-                    if (previewView != null) {
-                        int radius = ((RangeView) previewView).getRadius();
-                        float px = event.getX() - radius;
-                        float py = event.getY() - radius;
-                        previewView.setX(px);
-                        previewView.setY(py);
-                    }
                     return true;
 
                 case DragEvent.ACTION_DROP:
-                    int w, h;
-                    if (event.getLocalState() instanceof View) {
-                        View localView = (View) event.getLocalState();
-                        w = localView.getWidth();
-                        h = localView.getHeight();
-                    } else {
-                        w = towerMonkeyIcon.getWidth();
-                        h = towerMonkeyIcon.getHeight();
-                    }
-                    float x = event.getX() - w / 2f;
-                    float y = event.getY() - h / 2f;
+                    String label = event.getClipDescription().getLabel().toString();
+                    Towers type = Towers.fromTag(label);
+                    int cost = (type == Towers.DART_MONKEY) ? 50 : 100;
 
-                    Rect dropRect = new Rect(
-                            (int)x,
-                            (int)y,
-                            (int)(x + w),
-                            (int)(y + h)
-                    );
-
-                    int shrinkPx = 35;
-                    dropRect.inset(shrinkPx, shrinkPx);
-
-                    boolean overlap = false;
-                    for (Tower m : placedTowers) {
-                        Rect r2 = m.getBounds();
-                        r2.inset(shrinkPx, shrinkPx);
-                        if (Rect.intersects(dropRect, r2)) {
-                            overlap = true;
-                            break;
-                        }
+                    if (!activity.spendMoney(cost)) {
+                        towerPanel.setVisibility(View.VISIBLE);
+                        gameView.showPathOverlay(false);
+                        return true;
                     }
 
-                    boolean onPath = gameView.isOnPath(
-                            x + w/2f,
-                            y + h/2f
-                    );
+                    int w = towerMonkeyIcon.getWidth();
+                    int h = towerMonkeyIcon.getHeight();
+                    float x = event.getX() - w/2f;
+                    float y = event.getY() - h/2f;
 
-                    if (!onPath && !overlap) {
-                        String clipLabel = event.getClipDescription().getLabel().toString();
-                        Towers selectedType = getTowerTypeFromLabel(clipLabel);
-                        Tower placed = new Tower(dragLayer.getContext(), selectedType);
-                        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, h);
-                        placed.setLayoutParams(lp);
-                        placed.setX(x);
-                        placed.setY(y);
+                    Tower placed = new Tower(dragLayer.getContext(), type);
+                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, h);
+                    placed.setLayoutParams(lp);
+                    placed.setX(x);
+                    placed.setY(y);
 
-                        // Add range view
-                        int rangeRadius = selectedType.getRange(); // Customize this value as needed
-                        RangeView rangeView = new RangeView(dragLayer.getContext(), rangeRadius);
-                        FrameLayout.LayoutParams rangeParams = new FrameLayout.LayoutParams(
-                                rangeRadius * 2 + (int)rangeView.getPaint().getStrokeWidth(),
-                                rangeRadius * 2 + (int)rangeView.getPaint().getStrokeWidth()
-                        );
-                        rangeView.setLayoutParams(rangeParams);
-                        rangeView.setX(x + w/2f - rangeRadius);
-                        rangeView.setY(y + h/2f - rangeRadius);
+                    dragLayer.addView(placed);
+                    placedTowers.add(placed);
+                    gameView.registerTower(placed);
+                    Log.d("DDC", "Bought " + type + " for " + cost + " at ("+x+","+y+")");
 
-                        rangeView.setVisibility(View.INVISIBLE);
-
-                        // Add range and monkey
-                        dragLayer.addView(rangeView);
-                        dragLayer.addView(placed);
-                        placedTowers.add(placed);
-                        Log.d("DDC", "Tower geplaatst: " + selectedType + " op (" + x + "," + y + ")");
-                        gameView.registerTower(placed);
-
-                        placed.setOnClickListener(v1 -> {
-                            rangeView.setVisibility(rangeView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
-                        });
-                    }
+                    towerPanel.setVisibility(View.VISIBLE);
+                    gameView.showPathOverlay(false);
                     return true;
 
                 case DragEvent.ACTION_DRAG_ENDED:
                     towerPanel.setVisibility(View.VISIBLE);
                     gameView.showPathOverlay(false);
-
-                    // Remove preview range view
-                    View preview = dragLayer.findViewWithTag("PREVIEW_RANGE");
-                    if (preview != null) {
-                        dragLayer.removeView(preview);
-                    }
-
                     return true;
 
                 default:
                     return false;
             }
         });
-    }
-
-
-    private Towers getTowerTypeFromLabel(String label) {
-        return Towers.fromTag(label);
     }
 }
