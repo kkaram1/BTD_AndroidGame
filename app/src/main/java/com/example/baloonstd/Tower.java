@@ -32,9 +32,7 @@ public class Tower extends AppCompatImageView {
         return new Rect(left, top, left + getWidth(), top + getHeight());
     }
 
-    public long getShotCooldown() {
-        return shotCooldown;
-    }
+    public long getShotCooldown() {return shotCooldown;}
 
     public void setShotCooldown(long shotCooldown) {towerType.setShotCooldownMs(shotCooldown);}
 

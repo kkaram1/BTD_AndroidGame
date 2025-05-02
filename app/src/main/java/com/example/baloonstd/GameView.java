@@ -108,7 +108,7 @@ public class GameView extends View {
             }
             canvas.drawPath(drawPath, p);
         }
-        float uniformScale = Math.min(scaleX, scaleY) * 0.4f;
+        float uniformScale = Math.min(scaleX, scaleY) * 0.3f;
         for (BalloonEnemy e : enemies) {
             Bitmap b = e.balloonImage;
             float bmpW = b.getWidth();
