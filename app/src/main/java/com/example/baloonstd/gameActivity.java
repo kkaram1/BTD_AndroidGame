@@ -1,4 +1,3 @@
-// gameActivity.java
 package com.example.baloonstd;
 
 import static com.example.baloonstd.Towers.DART_MONKEY;
@@ -30,9 +29,9 @@ public class gameActivity extends AppCompatActivity {
     private GameView gameView;
     private ImageView mapImageView;
     private PhaseManager phaseManager;
-    ArrayList<Pair<Towers, ImageView>> pairList;
+
     private TextView moneyText;
-    private int money = 100;
+    private int money = 95;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -48,8 +47,10 @@ public class gameActivity extends AppCompatActivity {
         phaseAnnouncement = findViewById(R.id.phaseAnnouncement);
         nextPhaseButton   = findViewById(R.id.nextPhaseButton);
         moneyText         = findViewById(R.id.moneyText);
+        towerMonkeyIcon   = findViewById(R.id.towerMonkeyIcon);
+        towerSniperIcon   = findViewById(R.id.towerSniperIcon);
 
-        FrameLayout gameContainer = findViewById(R.id.gameContainer);
+        FrameLayout gameContainer = findViewById(R.id. gameContainer);
         FrameLayout dragLayer     = findViewById(R.id.dragLayer);
         pairList = new ArrayList<>();
         pairList.add( new Pair<>(DART_MONKEY,findViewById(R.id.towerMonkeyIcon)));
@@ -74,6 +75,7 @@ public class gameActivity extends AppCompatActivity {
         controller.init();
 
         openPanel.setOnClickListener(v -> {
+            updateMoneyDisplay();
             boolean vis = towerPanel.getVisibility() == LinearLayout.VISIBLE;
             towerPanel.setVisibility(vis ? LinearLayout.GONE : LinearLayout.VISIBLE);
         });
@@ -109,8 +111,26 @@ public class gameActivity extends AppCompatActivity {
         if (money < amount) return false;
         money -= amount;
         updateMoney(0);
+        updateMoneyDisplay();
         return true;
     }
+
+    private void updateMoneyDisplay() {
+        moneyText.setText("Money: " + money);
+
+        if (money < Towers.DART_MONKEY.getPrice()) {
+            towerMonkeyIcon.setImageResource(R.drawable.greybasic);
+        } else {
+            towerMonkeyIcon.setImageResource(Towers.DART_MONKEY.getResourceId());
+        }
+
+        if (money < Towers.SNIPER_MONKEY.getPrice()) {
+            towerSniperIcon.setImageResource(R.drawable.greyedsnipercorr);
+        } else {
+            towerSniperIcon.setImageResource(Towers.SNIPER_MONKEY.getResourceId());
+        }
+    }
+
 
     public GameView getGameView() {
         return gameView;
@@ -118,7 +138,9 @@ public class gameActivity extends AppCompatActivity {
     public void addMoney(int amount) {
         money += amount;
         updateMoney(amount);
+        updateMoneyDisplay();
     }
+
 
     private void updateMoney(int delta) {
         moneyText.setText("Money: " + money);
