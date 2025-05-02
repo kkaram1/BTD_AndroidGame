@@ -11,7 +11,7 @@ public class ShootingController {
     private final List<Tower> towers = new ArrayList<>();
     private final List<projectile> projectiles = new ArrayList<>();
     private long lastShotTime = 0;
-    private static final long SHOT_COOLDOWN_MS = 1000;
+    private  long SHOT_COOLDOWN_MS;
 
     public ShootingController(GameView gameView) {
         this.gameView = gameView;
@@ -19,6 +19,7 @@ public class ShootingController {
 
 
     public void addTower(final Tower tower) {
+        SHOT_COOLDOWN_MS=tower.getShotCooldown();
         towers.add(tower);
         tower.post(new Runnable() {
             @Override

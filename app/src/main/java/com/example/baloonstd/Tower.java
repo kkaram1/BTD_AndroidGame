@@ -7,10 +7,12 @@ import androidx.appcompat.widget.AppCompatImageView;
 public class Tower extends AppCompatImageView {
     private int radius;
     private final Towers towerType;
+    private long shotCooldown;
 
     public Tower(Context context, Towers towerType) {
         super(context);
         this.towerType = towerType;
+        shotCooldown=towerType.getShotCooldownMs();
         this.radius = towerType.getRange();
         setImageResource(towerType.getResourceId());
         setClickable(true);
@@ -29,4 +31,11 @@ public class Tower extends AppCompatImageView {
         int top = (int) getY();
         return new Rect(left, top, left + getWidth(), top + getHeight());
     }
+
+    public long getShotCooldown() {
+        return shotCooldown;
+    }
+
+    public void setShotCooldown(long shotCooldown) {towerType.setShotCooldownMs(shotCooldown);}
+
 }
