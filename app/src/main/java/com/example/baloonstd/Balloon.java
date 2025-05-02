@@ -3,8 +3,8 @@ package com.example.baloonstd;
 import android.graphics.Point;
 
 public enum Balloon {
-    RED(R.drawable.red_balloon, 1200f, 1),BLUE(R.drawable.blue_balloon_correct, 1400f, 2)
-    ,GREEN(R.drawable.red_balloon, 1600f, 3);
+    RED(R.drawable.red_balloon, 120f, 1),BLUE(R.drawable.blue_balloon_correct, 140f, 2)
+    ,GREEN(R.drawable.red_balloon, 160f, 3);
 
     private int resourceId;
     private float speed;
