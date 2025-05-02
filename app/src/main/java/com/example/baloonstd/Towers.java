@@ -1,17 +1,17 @@
 package com.example.baloonstd;
 
 public enum Towers {
-    DART_MONKEY("dart_monkey", R.drawable.angrymonkey, "Dart Monkey", 250,1000),
-    SNIPER_MONKEY("sniper_monkey", R.drawable.sniper, "Sniper Monkey", 9000,1000),
-    ICE_MONKEY("ice_monkey", R.drawable.dartmonkey, "Ice Monkey", 180,1000);
+    DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000),
+    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9000,1000),
+    ICE_MONKEY(3, R.drawable.dartmonkey, "Ice Monkey", 180,1000);
 
-    private final String tag;
+    private final int tag;
     private final String displayName;
     private final int range;
     private final int resourceId;
     private long ShotCooldownMs;
 
-    Towers(String tag, int resourceId, String displayName, int range,long ShotCooldownMs) {
+    Towers(int tag, int resourceId, String displayName, int range,long ShotCooldownMs) {
         this.tag = tag;
         this.resourceId = resourceId;
         this.displayName = displayName;
@@ -27,7 +27,7 @@ public enum Towers {
         ShotCooldownMs = shotCooldownMs;
     }
 
-    public String getTag() {
+    public int getTag() {
         return tag;
     }
 
@@ -43,12 +43,5 @@ public enum Towers {
         return range;
     }
 
-    public static Towers fromTag(String tag) {
-        for (Towers t : values()) {
-            if (t.tag.equalsIgnoreCase(tag)) {
-                return t;
-            }
-        }
-        throw new IllegalArgumentException("Unknown tower tag: " + tag);
-    }
+
 }

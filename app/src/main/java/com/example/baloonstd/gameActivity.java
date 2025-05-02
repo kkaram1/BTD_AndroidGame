@@ -1,6 +1,9 @@
 // gameActivity.java
 package com.example.baloonstd;
 
+import static com.example.baloonstd.Towers.DART_MONKEY;
+import static com.example.baloonstd.Towers.SNIPER_MONKEY;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +13,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import android.util.Pair;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 
 import com.example.baloonstd.Phase.PhaseManager;
+
+import java.util.ArrayList;
 
 public class gameActivity extends AppCompatActivity {
     private LinearLayout towerPanel;
@@ -25,7 +30,7 @@ public class gameActivity extends AppCompatActivity {
     private GameView gameView;
     private ImageView mapImageView;
     private PhaseManager phaseManager;
-
+    ArrayList<Pair<Towers, ImageView>> pairList;
     private TextView moneyText;
     private int money = 100;
 
@@ -46,8 +51,9 @@ public class gameActivity extends AppCompatActivity {
 
         FrameLayout gameContainer = findViewById(R.id.gameContainer);
         FrameLayout dragLayer     = findViewById(R.id.dragLayer);
-        ImageView towerMonkeyIcon = findViewById(R.id.towerMonkeyIcon);
-        ImageView towerSniperIcon = findViewById(R.id.towerSniperIcon);
+        pairList = new ArrayList<>();
+        pairList.add( new Pair<>(DART_MONKEY,findViewById(R.id.towerMonkeyIcon)));
+        pairList.add( new Pair<>(SNIPER_MONKEY,findViewById(R.id.towerSniperIcon)));
 
         Intent intent = getIntent();
         int mapNum = intent.getIntExtra("mapNum", -1);
@@ -62,8 +68,7 @@ public class gameActivity extends AppCompatActivity {
         DragDropController controller = new DragDropController(
                 dragLayer,
                 towerPanel,
-                towerMonkeyIcon,
-                towerSniperIcon,
+                pairList,
                 this
         );
         controller.init();
