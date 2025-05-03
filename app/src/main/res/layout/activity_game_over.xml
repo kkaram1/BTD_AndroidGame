@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <ImageView
+        android:id="@+id/imgGameOver"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/gameover3" />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="142dp"
+        android:layout_height="69dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="316dp"
+        android:layout_marginTop="99dp"
+        android:layout_marginEnd="273dp"
+        android:layout_marginBottom="243dp"
+        android:backgroundTint="@android:color/white"
+        android:text="Back to start"
+        android:textColor="@android:color/black" />
+</RelativeLayout>
