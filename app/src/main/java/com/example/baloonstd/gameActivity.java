@@ -6,7 +6,6 @@ import static com.example.baloonstd.Towers.SNIPER_MONKEY;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.util.Pair;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 
 import com.example.baloonstd.Phase.PhaseManager;
@@ -92,7 +90,8 @@ public class gameActivity extends AppCompatActivity {
         });
 
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
-            nextPhaseButton.setText("Start Phase "+ phaseManager.getCurrentPhaseNum());
+            int phaseDispaly = phase +1;
+            nextPhaseButton.setText("Start Phase "+ phaseDispaly);
             nextPhaseButton.setVisibility(Button.VISIBLE);
         }));
 
