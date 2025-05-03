@@ -30,30 +30,30 @@ public class MapManager {
         path.add(new Point(224, 320));
         list.add(new Map(R.drawable.btdmap1, path));
         ArrayList<Point> path1 = new ArrayList<>();
-        path1.add(new Point(0, 166));
-        path1.add(new Point(98, 166));
-        path1.add(new Point(119, 97));
-        path1.add(new Point(156, 77));
-        path1.add(new Point(202, 97));
-        path1.add(new Point(221, 162));
-        path1.add(new Point(313, 167));
-        path1.add(new Point(330, 242));
-        path1.add(new Point(381, 270));
-        path1.add(new Point(418, 225));
-        path1.add(new Point(434, 170));
-        path1.add(new Point(485, 170));
-        path1.add(new Point(485, 170));
-        path1.add(new Point(434, 170));
-        path1.add(new Point(418, 225));
-        path1.add(new Point(381, 250));
-        path1.add(new Point(344, 242));
-        path1.add(new Point(313, 167));
-        path1.add(new Point(221, 162));
-        path1.add(new Point(202, 97));
-        path1.add(new Point(156, 77));
-        path1.add(new Point(119, 97));
-        path1.add(new Point(98, 166));
-        path1.add(new Point(0, 166));
+        path1.add(new Point(0, 173));//1
+        path1.add(new Point(98, 173));//2
+        path1.add(new Point(115, 102));//3
+        path1.add(new Point(156, 74));//4
+        path1.add(new Point(199, 102));//5
+        path1.add(new Point(212, 175));//6
+        path1.add(new Point(305, 175));//7
+        path1.add(new Point(320, 255));//8
+        path1.add(new Point(375, 283));//9
+        path1.add(new Point(418, 236));//10
+        path1.add(new Point(422, 178));//11
+        path1.add(new Point(485, 178));//12
+        path1.add(new Point(485, 178));    //12
+        path1.add(new Point(422, 178));    //11
+        path1.add(new Point(418, 236));    //10
+        path1.add(new Point(375, 283));    //9
+        path1.add(new Point(320, 255));    //8
+        path1.add(new Point(305, 175));    //7
+        path1.add(new Point(212, 175));    //6
+        path1.add(new Point(199, 102));    //5
+        path1.add(new Point(156, 74));     //4
+        path1.add(new Point(115, 102));    //3
+        path1.add(new Point(98, 173));     //2
+        path1.add(new Point(0, 173));      //1
         list.add(new Map(R.drawable.btdmap2, path1));
         list.add(new Map(R.drawable.red_balloon, path));
         return list.get(mapNum);
