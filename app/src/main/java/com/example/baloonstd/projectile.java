@@ -1,6 +1,7 @@
 
 package com.example.baloonstd;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -35,10 +36,17 @@ public class projectile {
         updateVelocity(scaleX, scaleY);
         pos.x += velocity.x * deltaSec;
         pos.y += velocity.y * deltaSec;
+
         float tx = target.position.x * scaleX;
         float ty = target.position.y * scaleY;
-        return Math.hypot(pos.x - tx, pos.y - ty) < radius + (target.balloonImage.getWidth() / 2f);
+
+        // gebruik nu de getter ipv target.balloonImage
+        Bitmap img = target.getImage();
+        float half = img.getWidth()/2f;
+
+        return Math.hypot(pos.x - tx, pos.y - ty) < radius + half;
     }
+
 
     public void draw(Canvas canvas) {
         canvas.drawCircle(pos.x, pos.y, radius, paint);

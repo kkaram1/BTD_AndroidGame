@@ -2,6 +2,7 @@ package com.example.baloonstd;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -40,7 +41,7 @@ public class GameView extends View {
     private OnPhaseCompleteListener phaseListener;
     public void setOnPhaseCompleteListener(OnPhaseCompleteListener l) { phaseListener = l; }
 
-    public interface OnBalloonEscapeListener { void onBalloonEscaped(); }
+    public interface OnBalloonEscapeListener { void onBalloonEscaped(int layer); }
     private OnBalloonEscapeListener escapeListener;
     public void setOnBalloonEscapeListener(OnBalloonEscapeListener l) { escapeListener = l; }
 
@@ -120,11 +121,14 @@ public class GameView extends View {
         }
         float uniformScale = Math.min(scaleX, scaleY) * 0.3f;
         for (BalloonEnemy e : enemies) {
-            Bitmap b = e.balloonImage;
-            float bmpW = b.getWidth(), bmpH = b.getHeight();
+            Bitmap b = e.getImage();
+            float bmpW = b.getWidth();
+            float bmpH = b.getHeight();
+
             float left = e.position.x * scaleX - (bmpW * uniformScale) / 2f;
             float top  = e.position.y * scaleY - (bmpH * uniformScale) / 2f;
-            RectF dst = new RectF(left, top, left + bmpW * uniformScale, top + bmpH * uniformScale);
+            RectF dst = new RectF(left, top, left + bmpW * uniformScale, top  + bmpH * uniformScale);
+
             canvas.drawBitmap(b, null, dst, null);
         }
         updateEnemyPositions(deltaSec);
@@ -144,7 +148,7 @@ public class GameView extends View {
         while (it.hasNext()) {
             BalloonEnemy e = it.next();
             if (e.currentWaypointIndex >= path.size()) {
-                if (escapeListener != null) escapeListener.onBalloonEscaped();
+                if (escapeListener != null) escapeListener.onBalloonEscaped(e.getLayer());
                 it.remove();
                 continue;
             }
@@ -184,9 +188,14 @@ public class GameView extends View {
     }
 
     public void removeEnemy(BalloonEnemy e) {
-        enemies.remove(e);
-        if (popListener != null) popListener.onBalloonPop();
+        if (e.getLayer() > 1) {
+            e.downgrade(getContext());
+        } else {
+            enemies.remove(e);
+            if (popListener != null) popListener.onBalloonPop();
+        }
     }
+
     List<BalloonEnemy> getEnemies() { return enemies; }
     public void registerTower(Tower t) { shooter.addTower(t); }
     public float getMapScaleX() { return scaleX; }

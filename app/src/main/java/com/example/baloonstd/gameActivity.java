@@ -96,9 +96,10 @@ public class gameActivity extends AppCompatActivity {
             nextPhaseButton.setVisibility(Button.VISIBLE);
         }));
 
-        gameView.setOnBalloonEscapeListener(() -> runOnUiThread(() -> {
-            onBalloonReachedEnd();
-        }));
+        gameView.setOnBalloonEscapeListener(layer ->
+                runOnUiThread(() -> onBalloonReachedEnd(layer))
+        );
+
 
         gameView.setOnBalloonPopListener(() -> runOnUiThread(() -> {
             addMoney(5);
@@ -150,8 +151,8 @@ public class gameActivity extends AppCompatActivity {
         }
     }
 
-    private void onBalloonReachedEnd() {
-        health--;
+    private void onBalloonReachedEnd(int damage) {
+        health -= damage;       // subtract by layer
         updateHealthUI();
         if (health <= 0) {
             Intent intent = new Intent(this, GameOverActivity.class);

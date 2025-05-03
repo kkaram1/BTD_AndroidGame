@@ -1,9 +1,9 @@
 package com.example.baloonstd;
 
 public enum Towers {
-    DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000,50),
-    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9000,1000,100),
-    ICE_MONKEY(3, R.drawable.dartmonkey, "Ice Monkey", 180,1000,75);
+    DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000,50,1000f),
+    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9000,1000,100,5000f),
+    ICE_MONKEY(3, R.drawable.dartmonkey, "Ice Monkey", 180,1000,75, 1000f);
 
     private final int tag;
     private final String displayName;
@@ -11,18 +11,21 @@ public enum Towers {
     private final int resourceId;
     private final int price;
     private long ShotCooldownMs;
+    private final float  bulletspeed;
 
 
 
-    Towers(int tag, int resourceId, String displayName, int range,long ShotCooldownMs, int price) {
+    Towers(int tag, int resourceId, String displayName, int range,long ShotCooldownMs, int price, float bulletspeed) {
         this.tag = tag;
         this.resourceId = resourceId;
         this.displayName = displayName;
         this.range = range;
         this.ShotCooldownMs=ShotCooldownMs;
         this.price=price;
+        this.bulletspeed=bulletspeed;
     }
 
+    public float getBulletSpeed() { return bulletspeed; }
     public int getPrice(){
         return price;
     }

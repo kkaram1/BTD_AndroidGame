@@ -56,17 +56,11 @@ public class PhaseFactory {
         for (Map.Entry<Balloon, Integer> entry : balloonSetup.entrySet()) {
             Balloon balloonType = entry.getKey();
             int count = entry.getValue();
-
-            // Decode and scale ONCE per balloon type
-            Bitmap original = BitmapFactory.decodeResource(context.getResources(), balloonType.getResourceId());
-            Bitmap scaled = Bitmap.createScaledBitmap(original, 100, 100, true); // Your desired size
-
             for (int i = 0; i < count; i++) {
                 balloonList.add(new BalloonEnemy(
-                        scaled,
-                        balloonType.getSpeed(),
-                        balloonType.getLayer(),
-                        new Point(0, 0)
+                        context,
+                        balloonType,
+                        new Point(0,0)
                 ));
             }
         }
