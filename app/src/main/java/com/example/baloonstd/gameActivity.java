@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 public class gameActivity extends AppCompatActivity {
     private LinearLayout towerPanel;
-    private TextView phaseAnnouncement;
     private Button nextPhaseButton;
     private GameView gameView;
     private ImageView mapImageView;
@@ -46,7 +45,7 @@ public class gameActivity extends AppCompatActivity {
         mapImageView      = findViewById(R.id.mapImageView);
         towerPanel        = findViewById(R.id.towerPanel);
         Button openPanel  = findViewById(R.id.towerButton);
-        phaseAnnouncement = findViewById(R.id.phaseAnnouncement);
+
         nextPhaseButton   = findViewById(R.id.nextPhaseButton);
         moneyText         = findViewById(R.id.moneyText);
         healthText = findViewById(R.id.health);
@@ -86,17 +85,14 @@ public class gameActivity extends AppCompatActivity {
             if (phaseManager.hasNextPhase()) {
                 phaseManager.moveToNextPhase();
                 gameView.setPhase(phaseManager);
-                phaseAnnouncement.setText("Phase " + phaseManager.getCurrentPhaseNum());
                 nextPhaseButton.setVisibility(Button.GONE);
             } else {
-                phaseAnnouncement.setText("No more phases!");
                 nextPhaseButton.setVisibility(Button.GONE);
             }
         });
 
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
-            phaseAnnouncement.setText("End of Phase " + phase);
-            nextPhaseButton.setText("Start Next Phase");
+            nextPhaseButton.setText("Start Phase "+ phaseManager.getCurrentPhaseNum());
             nextPhaseButton.setVisibility(Button.VISIBLE);
         }));
 
@@ -118,7 +114,7 @@ public class gameActivity extends AppCompatActivity {
     }
 
     private void updateMoneyDisplay() {
-        moneyText.setText("Money: " + money);
+        moneyText.setText( ""+money);
 
         for(Pair<Towers, ImageView> pair : pairList) {
             if (pair.first.getPrice() > money) {
@@ -143,7 +139,7 @@ public class gameActivity extends AppCompatActivity {
 
 
     private void updateMoney(int delta) {
-        moneyText.setText("Money: " + money);
+        moneyText.setText(""+ money);
     }
 
     private void updateMapImage(int mapNum) {
