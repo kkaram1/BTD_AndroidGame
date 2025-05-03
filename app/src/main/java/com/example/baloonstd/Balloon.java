@@ -36,4 +36,11 @@ public enum Balloon {
     public void setPosition(Point position) {
         this.position = position;
     }
+
+    public static Balloon fromLayer(int layer) {
+        for (Balloon b : values()) {
+            if (b.layer == layer) return b;
+        }
+        throw new IllegalArgumentException("Unknown layer: " + layer);
+    }
 }

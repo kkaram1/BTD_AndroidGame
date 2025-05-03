@@ -74,8 +74,8 @@ public class ShootingController {
                                 500
                         );
                     }
-
-                    projectiles.add(new projectile(tx, ty, e, 1000f));
+                    float speed = tower.getTowerType().getBulletSpeed();
+                    projectiles.add(new projectile(tx, ty, e, speed));
                     lastShotTimes.put(tower, now);
                     break;
                 }
