@@ -166,6 +166,6 @@ public class gameActivity extends AppCompatActivity {
     }
 
     private void updateHealthUI() {
-        healthText.setText("Health: " + health);
+        healthText.setText("" + health);
     }
 }
