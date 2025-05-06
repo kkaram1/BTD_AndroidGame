@@ -120,6 +120,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="50dp"/>
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_healthText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+
     <TextView
         android:id="@+id/health"
         android:layout_width="43dp"
@@ -134,25 +142,45 @@
         android:shadowDx="5"
         android:shadowDy="5"
         android:shadowRadius="7"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_healthText"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_heart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.01" />
 
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/heart"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_heart"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="880dp"/>
+        android:layout_marginTop="3dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_goldIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/gold_icon"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="3dp"
-        android:layout_marginEnd="780dp"/>
+        app:layout_constraintStart_toStartOf="@id/guideline_goldIcon" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_goldText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.14" />
 
     <TextView
         android:id="@+id/moneyText"
@@ -168,7 +196,7 @@
         android:shadowDx="15"
         android:shadowDy="15"
         android:shadowRadius="17"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_goldText"
         app:layout_constraintTop_toTopOf="parent" />
 
 
