@@ -47,7 +47,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleText"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="NotSibling" />
 
     <TextView
         android:id="@+id/titleText"
@@ -90,7 +91,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/btd_button_background_new_game"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@font/luckiestguy"
             android:onClick="goToMenu"
             android:text="New Game"
             android:textColor="@color/white"
@@ -105,7 +106,7 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/btd_button_background_continue"
             android:enabled="false"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@font/luckiestguy"
             android:onClick="goToMenu"
             android:text="Continue"
             android:textColor="@color/white"
@@ -119,8 +120,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/btd_button_background_settings"
-            android:fontFamily="sans-serif-medium"
-            android:onClick="goToMenu"
+            android:fontFamily="@font/luckiestguy"
+            android:onClick="goToSettings"
             android:text="Settings"
             android:textColor="@color/white"
             android:textSize="18sp"

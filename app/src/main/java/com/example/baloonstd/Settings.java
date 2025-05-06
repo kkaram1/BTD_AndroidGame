@@ -1,37 +1,31 @@
 package com.example.baloonstd;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.SeekBar;
+import android.widget.Switch;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class Settings extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.settings);
+        SeekBar musicSeekBar = findViewById(R.id.musicVolumeSeekBar);
+        SwitchCompat vibrationSwitch = findViewById(R.id.vibrationSwitch);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-
         });
-    }
-    public void goToMenu(View v){
-        Intent i = new Intent(MainActivity.this, MenuSelect.class);
-        startActivity(i);
-    }
-    public void goToSettings(View v){
-        Intent i = new Intent(MainActivity.this, Settings.class);
-        startActivity(i);
     }
 }
