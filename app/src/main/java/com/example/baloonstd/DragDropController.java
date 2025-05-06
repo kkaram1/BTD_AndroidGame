@@ -5,16 +5,15 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.graphics.Rect;
 import android.util.Log;
+import android.util.Pair;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class DragDropController {
     private final FrameLayout dragLayer;
@@ -33,10 +32,10 @@ public class DragDropController {
         this.towerPanel = towerPanel;
         this.gameView   = activity.getGameView();
         this.towerIcons = new ArrayList<>();
-        this.activity = activity;
+        this.activity   = activity;
         for (Pair<Towers, ImageView> pair : towerIconList) {
             Towers towerType = pair.first;
-            ImageView icon = pair.second;
+            ImageView icon   = pair.second;
             this.towerIcons.add(icon);
 
             icon.setOnTouchListener((v, e) -> {
@@ -151,7 +150,7 @@ public class DragDropController {
                         placed.setY(y);
 
                         // Add range view
-                        int rangeRadius = selectedType.getRange(); // Customize this value as needed
+                        int rangeRadius = selectedType.getRange();
                         RangeView rangeView = new RangeView(dragLayer.getContext(), rangeRadius);
                         FrameLayout.LayoutParams rangeParams = new FrameLayout.LayoutParams(
                                 rangeRadius * 2 + (int)rangeView.getPaint().getStrokeWidth(),
@@ -163,7 +162,7 @@ public class DragDropController {
 
                         rangeView.setVisibility(View.INVISIBLE);
 
-                        // Add range and monkey
+
                         dragLayer.addView(rangeView);
                         dragLayer.addView(placed);
                         placedTowers.add(placed);
@@ -171,8 +170,22 @@ public class DragDropController {
                         gameView.registerTower(placed);
 
                         placed.setOnClickListener(v1 -> {
-                            rangeView.setVisibility(rangeView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
+
+                            if (activity.selectedTower == placed) {
+                                rangeView.setVisibility(View.INVISIBLE);
+                                activity.upgradeOptionsContainer.setVisibility(View.GONE);
+                                activity.upgradeToggleButton.setVisibility(View.GONE);
+                                activity.selectedTower = null;
+                            }
+
+                            else {
+                                activity.selectedTower = placed;
+                                rangeView.setVisibility(View.VISIBLE);
+                                new UpgradeMenu(activity, placed).show();
+                            }
                         });
+
+
                     }
                     return true;
 
@@ -202,5 +215,4 @@ public class DragDropController {
         }
         throw new IllegalArgumentException("Invalid tower tag: " + tag);
     }
-
 }

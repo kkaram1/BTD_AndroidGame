@@ -12,6 +12,7 @@ public class ShootingController {
     private final List<Tower> towers = new ArrayList<>();
     private final List<projectile> projectiles = new ArrayList<>();
     private final Map<Tower, Long> lastShotTimes = new HashMap<>();
+
     private static final long SHOT_COOLDOWN_MS = 1000;
 
     public ShootingController(GameView gameView) {
@@ -20,7 +21,8 @@ public class ShootingController {
 
     public void addTower(final Tower tower) {
         towers.add(tower);
-        lastShotTimes.put(tower, System.currentTimeMillis() - SHOT_COOLDOWN_MS);
+        long cooldown = tower.getShotCooldown();
+        lastShotTimes.put(tower, System.currentTimeMillis() - cooldown);
         if (tower.getTowerType() == Towers.DART_MONKEY) {
             tower.setImageResource(R.drawable.angrymonkey);
         }
@@ -52,8 +54,9 @@ public class ShootingController {
     private void tryToShoot() {
         long now = System.currentTimeMillis();
         for (Tower tower : towers) {
+            long cooldown = tower.getShotCooldown();
             long last = lastShotTimes.getOrDefault(tower, 0L);
-            if (now - last < SHOT_COOLDOWN_MS) continue;
+            if (now - last < cooldown) continue;
 
             float tx = tower.getX() + tower.getWidth() / 2f;
             float ty = tower.getY() + tower.getHeight() / 2f;

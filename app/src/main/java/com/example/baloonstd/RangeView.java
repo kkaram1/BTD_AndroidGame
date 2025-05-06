@@ -35,4 +35,11 @@ public class RangeView extends View {
     public int getRadius() {
         return radius;
     }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+        requestLayout();
+        invalidate();
+    }
+
 }

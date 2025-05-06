@@ -210,6 +210,38 @@
         android:shadowRadius="17"
         app:layout_constraintStart_toStartOf="@id/guideline_goldText"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/upgradeToggleButton"
+        android:layout_width="55dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:text="⬆️"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <LinearLayout
+        android:id="@+id/upgradeOptionsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp"
+        android:background="#CCFFFFFF"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/upgradeToggleButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp">
+
+        <Button
+            android:id="@+id/btnIncreaseRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Increase Range"
+            android:textSize="14sp"/>
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/pauseMenu"
         android:layout_width="match_parent"

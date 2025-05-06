@@ -4,8 +4,10 @@ import static com.example.baloonstd.Towers.DART_MONKEY;
 import static com.example.baloonstd.Towers.SNIPER_MONKEY;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -13,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.util.Pair;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
@@ -34,6 +38,10 @@ public class gameActivity extends AppCompatActivity {
     private int money = 95;
     private int health = 100;
     private TextView healthText;
+    Button upgradeToggleButton;
+    LinearLayout upgradeOptionsContainer;
+    Button btnIncreaseRange;
+    Tower selectedTower;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -54,7 +62,30 @@ public class gameActivity extends AppCompatActivity {
         LinearLayout pauseMenu = findViewById(R.id.pauseMenu);
         Button exitButton = findViewById(R.id.exitButton);
         updateHealthUI();
+        upgradeToggleButton       = findViewById(R.id.upgradeToggleButton);
+        upgradeOptionsContainer   = findViewById(R.id.upgradeOptionsContainer);
+        btnIncreaseRange          = findViewById(R.id.btnIncreaseRange);
+        upgradeToggleButton.setVisibility(View.GONE);
+        upgradeOptionsContainer.setVisibility(View.GONE);
 
+
+        upgradeToggleButton.setOnClickListener(v -> {
+            boolean vis = upgradeOptionsContainer.getVisibility() == View.VISIBLE;
+            upgradeOptionsContainer.setVisibility(vis ? View.GONE : View.VISIBLE);
+        });
+        btnIncreaseRange.setOnClickListener(v -> {
+            if (selectedTower == null) return;
+            int cost = 50;
+            if (!spendMoney(cost)) {
+                Toast.makeText(this, "Not enough money", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            selectedTower.setRadius(selectedTower.getRadius() + 200);
+            selectedTower.setShotCooldown(800);
+            Toast.makeText(this, "Range increased", Toast.LENGTH_SHORT).show();
+            upgradeOptionsContainer.setVisibility(View.GONE);
+            upgradeToggleButton.setVisibility(View.GONE);
+        });
         FrameLayout gameContainer = findViewById(R.id. gameContainer);
         FrameLayout dragLayer     = findViewById(R.id.dragLayer);
         pairList = new ArrayList<>();
@@ -188,6 +219,9 @@ public class gameActivity extends AppCompatActivity {
     private void updateHealthUI() {
         healthText.setText("" + health);
     }
+    public int getMoney(){
+        return money;
+    }
 
     @Override
     public void onBackPressed() {
@@ -198,4 +232,28 @@ public class gameActivity extends AppCompatActivity {
             gameView.setPaused(true);
         }
     }
+
+
+    public void updateRangeOverlayFor(Tower tower) {
+        for (int i = 0; i < ((FrameLayout)findViewById(R.id.dragLayer)).getChildCount(); i++) {
+            View child = ((FrameLayout)findViewById(R.id.dragLayer)).getChildAt(i);
+            if (child instanceof RangeView) {
+                float cx = tower.getX() + tower.getWidth()/2f;
+                float cy = tower.getY() + tower.getHeight()/2f;
+
+                float rvx = child.getX() + ((RangeView) child).getRadius();
+                float rvy = child.getY() + ((RangeView) child).getRadius();
+                if (Math.hypot(cx - rvx, cy - rvy) < 1f) {
+                    RangeView rv = (RangeView) child;
+                    rv.setRadius(tower.getRadius());
+                    float r = rv.getRadius();
+                    rv.setX(cx - r);
+                    rv.setY(cy - r);
+                    break;
+                }
+            }
+        }
+    }
+
+
 }

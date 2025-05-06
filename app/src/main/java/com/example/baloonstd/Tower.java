@@ -34,6 +34,14 @@ public class Tower extends AppCompatImageView {
 
     public long getShotCooldown() {return shotCooldown;}
 
-    public void setShotCooldown(long shotCooldown) {towerType.setShotCooldownMs(shotCooldown);}
+    public void setRadius(int newRadius) {
+        this.radius = newRadius;
+    }
+
+    public void setShotCooldown(long ms) {
+        this.shotCooldown = ms;
+        towerType.setShotCooldownMs(ms);
+    }
+
 
 }
