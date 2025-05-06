@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 public class gameActivity extends AppCompatActivity {
     private LinearLayout towerPanel;
     private Button nextPhaseButton;
+    private ImageButton pauseButton;
+    private Button resumeButton;
     private GameView gameView;
     private ImageView mapImageView;
     private PhaseManager phaseManager;
@@ -43,10 +46,13 @@ public class gameActivity extends AppCompatActivity {
         mapImageView      = findViewById(R.id.mapImageView);
         towerPanel        = findViewById(R.id.towerPanel);
         Button openPanel  = findViewById(R.id.towerButton);
-
+        pauseButton       = findViewById(R.id.pauseButton);
         nextPhaseButton   = findViewById(R.id.nextPhaseButton);
         moneyText         = findViewById(R.id.moneyText);
-        healthText = findViewById(R.id.health);
+        healthText        = findViewById(R.id.health);
+        resumeButton      = findViewById(R.id.resumeButton);
+        LinearLayout pauseMenu = findViewById(R.id.pauseMenu);
+        Button exitButton = findViewById(R.id.exitButton);
         updateHealthUI();
 
         FrameLayout gameContainer = findViewById(R.id. gameContainer);
@@ -73,6 +79,11 @@ public class gameActivity extends AppCompatActivity {
         );
         controller.init();
 
+        pauseButton.setOnClickListener(v -> {
+            pauseMenu.setVisibility(LinearLayout.VISIBLE);
+            gameView.setPaused(true); // Assuming GameView has a pause flag
+        });
+
         openPanel.setOnClickListener(v -> {
             updateMoneyDisplay();
             boolean vis = towerPanel.getVisibility() == LinearLayout.VISIBLE;
@@ -89,6 +100,7 @@ public class gameActivity extends AppCompatActivity {
             }
         });
 
+
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
             int phaseDispaly = phase +1;
             nextPhaseButton.setText("Start Phase "+ phaseDispaly);
@@ -103,6 +115,19 @@ public class gameActivity extends AppCompatActivity {
         gameView.setOnBalloonPopListener(() -> runOnUiThread(() -> {
             addMoney(5);
         }));
+
+        resumeButton.setOnClickListener(v -> {
+            pauseMenu.setVisibility(LinearLayout.GONE);
+            gameView.setPaused(false);
+        });
+
+        exitButton.setOnClickListener(v -> {
+            Intent intent2 = new Intent(this, MainActivity.class);
+            intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent2);
+            finish();
+        });
+
     }
 
     public boolean spendMoney(int amount) {
@@ -160,8 +185,17 @@ public class gameActivity extends AppCompatActivity {
             finish();
         }
     }
-
     private void updateHealthUI() {
         healthText.setText("" + health);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        LinearLayout pauseMenu = findViewById(R.id.pauseMenu);
+        if (pauseMenu.getVisibility() != LinearLayout.VISIBLE) {
+            pauseMenu.setVisibility(LinearLayout.VISIBLE);
+            gameView.setPaused(true);
+        }
     }
 }

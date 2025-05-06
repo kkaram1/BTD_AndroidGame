@@ -36,6 +36,7 @@ public class GameView extends View {
     private long lastUpdateTime;
     private PhaseManager phaseManager;
     private int health = 100;
+    private boolean isPaused = false;
 
     public interface OnPhaseCompleteListener { void onPhaseComplete(int phase); }
     private OnPhaseCompleteListener phaseListener;
@@ -105,6 +106,10 @@ public class GameView extends View {
         float deltaSec = (now - lastUpdateTime) / 1000f;
         lastUpdateTime = now;
         super.onDraw(canvas);
+        if (isPaused) {
+            postInvalidateDelayed(16);
+            return;
+        }
         if (showPathOverlay && path.size() > 1) {
             Paint p = new Paint();
             p.setColor(Color.RED);
@@ -195,7 +200,18 @@ public class GameView extends View {
             if (popListener != null) popListener.onBalloonPop();
         }
     }
-
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+        if (paused) {
+            spawnHandler.removeCallbacks(spawnRunnable);
+        } else {
+            if (spawnCount < enemiesToSpawn.size()) {
+                spawnHandler.postDelayed(spawnRunnable, 500);
+            }
+            lastUpdateTime = System.currentTimeMillis();
+            invalidate();
+        }
+    }
     List<BalloonEnemy> getEnemies() { return enemies; }
     public void registerTower(Tower t) { shooter.addTower(t); }
     public float getMapScaleX() { return scaleX; }
