@@ -37,7 +37,7 @@ public class gameActivity extends BaseActivity {
     Button upgradeToggleButton;
     LinearLayout towerUpgradePopup;
     Button btnUpgradeRange;
-    Button closeButton;
+    ImageButton closeButton;
     Tower selectedTower;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -106,6 +106,7 @@ public class gameActivity extends BaseActivity {
                 towerPanel,
                 pairList,
                 towerUpgradePopup,
+                closeButton,
                 this
         );
         controller.init();
@@ -151,9 +152,7 @@ public class gameActivity extends BaseActivity {
             pauseMenu.setVisibility(LinearLayout.GONE);
             gameView.setPaused(false);
         });
-        closeButton.setOnClickListener(v -> {
-            towerUpgradePopup.setVisibility(LinearLayout.GONE);
-        });
+
 
         exitButton.setOnClickListener(v -> {
             Intent intent2 = new Intent(this, MainActivity.class);
@@ -257,30 +256,6 @@ public class gameActivity extends BaseActivity {
             }
         }
     }
-    /**
-            * Dynamically shows the upgrade UI for a specific tower.
-     * Call this method to show the upgrade popup for the given tower.
-     */
-    public void showUpgradePopupForTower (Tower tower) {
-        this.selectedTower = tower;
-        upgradeToggleButton.setVisibility(View.VISIBLE);
-        towerUpgradePopup.setVisibility(View.GONE);
-        upgradeToggleButton.setX(tower.getX());
-        upgradeToggleButton.setY(tower.getY() - 100); // Offset for visibility
-
-        upgradeToggleButton.setOnClickListener(v -> {
-            boolean vis = towerUpgradePopup.getVisibility() == View.VISIBLE;
-            towerUpgradePopup.setVisibility(vis ? View.GONE : View.VISIBLE);
-            if (!vis) {
-                towerUpgradePopup.setX(tower.getX());
-                towerUpgradePopup.setY(tower.getY() - 300); // Offset to appear above the tower
-            }
-        });
-    }
 
 
 }
-
-    // Example method you should call when a tower is tapped:
-    // Tower tappedTower = ... // however you detect it in GameView
-    // ((gameActivity) getContext()).showUpgradePopupForTower(tappedTower);

@@ -251,7 +251,7 @@
         android:layout_width="200dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:background="#CCFFFFFF"
+        android:background="@drawable/wooden_background"
         android:padding="8dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
@@ -263,33 +263,52 @@
             android:id="@+id/upgradeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upgrade Monkey"
-            android:textSize="18sp"
+            android:text="Upgrade Tower"
+            android:textColor="@color/white"
+            android:textSize="24sp"
             android:textStyle="bold"
+            android:fontFamily="@font/luckiestguy"
             android:layout_gravity="center"/>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/long_range_darts_upgrade_icon" />
 
         <Button
             android:id="@+id/btnUpgradeRange"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Upgrade Range"/>
+            android:text="Long Range Darts"
+            android:background="@color/transparent_white"
+            android:fontFamily="@font/luckiestguy"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/razor_sharp_shots_upgrade_icon"
+          />
+
 
         <Button
             android:id="@+id/btnUpgradeDamage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Upgrade Damage"/>
+            android:fontFamily="@font/luckiestguy"
+            android:background="@color/transparent_white"
+            android:text="Sharp Shots"/>
 
-        <Button
-            android:id="@+id/btnUpgradeSpeed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Upgrade Speed"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/btnCloseUpgrade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:src="@drawable/exit_button_"
+            android:scaleType="fitEnd"
+            android:background="@color/transparent_white"
             android:text="Close"/>
     </LinearLayout>
 

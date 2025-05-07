@@ -10,6 +10,7 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class DragDropController {
     private final LinearLayout towerUpgradePopup;
     private final ArrayList<ImageView> towerIcons;
     private final GameView gameView;
+    private final ImageButton closeButton;
     private final List<Tower> placedTowers = new ArrayList<>();
     private final gameActivity activity;
 
@@ -28,11 +30,12 @@ public class DragDropController {
     public DragDropController(FrameLayout dragLayer,
                               LinearLayout towerPanel,
                               List<android.util.Pair<Towers, ImageView>> towerIconList, LinearLayout towerUpgradePopup,
-                              gameActivity activity) {
+                              ImageButton closeButton, gameActivity activity) {
         this.dragLayer  = dragLayer;
         this.towerPanel = towerPanel;
         this.towerUpgradePopup = towerUpgradePopup;
         this.gameView   = activity.getGameView();
+        this.closeButton = closeButton;
         this.towerIcons = new ArrayList<>();
         this.activity   = activity;
 
@@ -185,6 +188,11 @@ public class DragDropController {
                                 rangeView.setVisibility(View.VISIBLE);
                                 towerUpgradePopup.setVisibility(View.VISIBLE);
                             }
+                        });
+                        closeButton.setOnClickListener(v2 -> {
+                            activity.selectedTower = null;
+                            towerUpgradePopup.setVisibility(LinearLayout.GONE);
+                            rangeView.setVisibility(LinearLayout.GONE);
                         });
 
 

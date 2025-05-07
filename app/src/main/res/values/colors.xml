@@ -5,4 +5,7 @@
     <color name="yellow">#FFBF00</color>
     <color name="green">#3f9b0b</color>
     <color name="gold">#FFD700</color>
+    <color name="semi_transparent_black">#88000000</color>  <!-- 50% black -->
+    <color name="transparent_white">#00FFFFFF</color>       <!-- Fully transparent white -->
+    <color name="light_transparent_brown">#88A0522D</color> <!-- 50% brown -->
 </resources>
