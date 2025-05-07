@@ -25,7 +25,7 @@ import com.example.baloonstd.Phase.PhaseManager;
 
 import java.util.ArrayList;
 
-public class gameActivity extends AppCompatActivity {
+public class gameActivity extends BaseActivity {
     private LinearLayout towerPanel;
     private Button nextPhaseButton;
     private ImageButton pauseButton;

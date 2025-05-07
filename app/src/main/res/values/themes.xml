@@ -1,9 +1,19 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.BaloonsTD" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.BaloonsTD" parent="Base.Theme.BaloonsTD" />
+    <!-- Jouw bestaande thema’s -->
+    <style name="Base.Theme.BaloonsTD" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- … -->
+    </style>
+    <style name="Theme.BaloonsTD" parent="Base.Theme.BaloonsTD"/>
+
+    <!-- Nieuw: fullscreen-variant -->
+    <style name="Theme.BaloonsTD.Fullscreen" parent="Theme.BaloonsTD">
+        <!-- verberg status‐bar -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- negeer lint-waarschuwing dat dit pas vanaf API 27 is -->
+        <item name="android:windowLayoutInDisplayCutoutMode"
+            tools:targetApi="27">shortEdges</item>
+        <item name="android:fitsSystemWindows">false</item>
+    </style>
 </resources>
