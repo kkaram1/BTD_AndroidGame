@@ -4,7 +4,6 @@ import static com.example.baloonstd.Towers.DART_MONKEY;
 import static com.example.baloonstd.Towers.SNIPER_MONKEY;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,13 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.util.Pair;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
-
 import com.example.baloonstd.Phase.PhaseManager;
-
 import java.util.ArrayList;
 
 public class gameActivity extends BaseActivity {
@@ -39,8 +35,9 @@ public class gameActivity extends BaseActivity {
     private int health = 100;
     private TextView healthText;
     Button upgradeToggleButton;
-    LinearLayout upgradeOptionsContainer;
-    Button btnIncreaseRange;
+    LinearLayout towerUpgradePopup;
+    Button btnUpgradeRange;
+    Button closeButton;
     Tower selectedTower;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -59,21 +56,21 @@ public class gameActivity extends BaseActivity {
         moneyText         = findViewById(R.id.moneyText);
         healthText        = findViewById(R.id.health);
         resumeButton      = findViewById(R.id.resumeButton);
+        closeButton       =findViewById(R.id.btnCloseUpgrade);
         LinearLayout pauseMenu = findViewById(R.id.pauseMenu);
         Button exitButton = findViewById(R.id.exitButton);
         updateHealthUI();
-        upgradeToggleButton       = findViewById(R.id.upgradeToggleButton);
-        upgradeOptionsContainer   = findViewById(R.id.upgradeOptionsContainer);
-        btnIncreaseRange          = findViewById(R.id.btnIncreaseRange);
+        upgradeToggleButton  = findViewById(R.id.upgradeToggleButton);
+        towerUpgradePopup   = findViewById(R.id.towerUpgradePopup);
+        btnUpgradeRange = findViewById(R.id.btnUpgradeRange);
         upgradeToggleButton.setVisibility(View.GONE);
-        upgradeOptionsContainer.setVisibility(View.GONE);
 
 
         upgradeToggleButton.setOnClickListener(v -> {
-            boolean vis = upgradeOptionsContainer.getVisibility() == View.VISIBLE;
-            upgradeOptionsContainer.setVisibility(vis ? View.GONE : View.VISIBLE);
+            boolean vis = towerUpgradePopup.getVisibility() == View.VISIBLE;
+            towerUpgradePopup.setVisibility(vis ? View.GONE : View.VISIBLE);
         });
-        btnIncreaseRange.setOnClickListener(v -> {
+        btnUpgradeRange.setOnClickListener(v -> {
             if (selectedTower == null) return;
             int cost = 50;
             if (!spendMoney(cost)) {
@@ -83,9 +80,11 @@ public class gameActivity extends BaseActivity {
             selectedTower.setRadius(selectedTower.getRadius() + 200);
             selectedTower.setShotCooldown(800);
             Toast.makeText(this, "Range increased", Toast.LENGTH_SHORT).show();
-            upgradeOptionsContainer.setVisibility(View.GONE);
+            towerUpgradePopup.setVisibility(View.GONE);
             upgradeToggleButton.setVisibility(View.GONE);
+            updateRangeOverlayFor(selectedTower);
         });
+
         FrameLayout gameContainer = findViewById(R.id. gameContainer);
         FrameLayout dragLayer     = findViewById(R.id.dragLayer);
         pairList = new ArrayList<>();
@@ -106,6 +105,7 @@ public class gameActivity extends BaseActivity {
                 dragLayer,
                 towerPanel,
                 pairList,
+                towerUpgradePopup,
                 this
         );
         controller.init();
@@ -150,6 +150,9 @@ public class gameActivity extends BaseActivity {
         resumeButton.setOnClickListener(v -> {
             pauseMenu.setVisibility(LinearLayout.GONE);
             gameView.setPaused(false);
+        });
+        closeButton.setOnClickListener(v -> {
+            towerUpgradePopup.setVisibility(LinearLayout.GONE);
         });
 
         exitButton.setOnClickListener(v -> {
@@ -223,9 +226,9 @@ public class gameActivity extends BaseActivity {
         return money;
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         LinearLayout pauseMenu = findViewById(R.id.pauseMenu);
         if (pauseMenu.getVisibility() != LinearLayout.VISIBLE) {
             pauseMenu.setVisibility(LinearLayout.VISIBLE);
@@ -254,6 +257,30 @@ public class gameActivity extends BaseActivity {
             }
         }
     }
+    /**
+            * Dynamically shows the upgrade UI for a specific tower.
+     * Call this method to show the upgrade popup for the given tower.
+     */
+    public void showUpgradePopupForTower (Tower tower) {
+        this.selectedTower = tower;
+        upgradeToggleButton.setVisibility(View.VISIBLE);
+        towerUpgradePopup.setVisibility(View.GONE);
+        upgradeToggleButton.setX(tower.getX());
+        upgradeToggleButton.setY(tower.getY() - 100); // Offset for visibility
+
+        upgradeToggleButton.setOnClickListener(v -> {
+            boolean vis = towerUpgradePopup.getVisibility() == View.VISIBLE;
+            towerUpgradePopup.setVisibility(vis ? View.GONE : View.VISIBLE);
+            if (!vis) {
+                towerUpgradePopup.setX(tower.getX());
+                towerUpgradePopup.setY(tower.getY() - 300); // Offset to appear above the tower
+            }
+        });
+    }
 
 
 }
+
+    // Example method you should call when a tower is tapped:
+    // Tower tappedTower = ... // however you detect it in GameView
+    // ((gameActivity) getContext()).showUpgradePopupForTower(tappedTower);

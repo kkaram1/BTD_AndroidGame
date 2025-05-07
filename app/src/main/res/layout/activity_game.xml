@@ -223,26 +223,6 @@
 
 
     <LinearLayout
-        android:id="@+id/upgradeOptionsContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="4dp"
-        android:background="#CCFFFFFF"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/upgradeToggleButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp">
-
-        <Button
-            android:id="@+id/btnIncreaseRange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Increase Range"
-            android:textSize="14sp"/>
-    </LinearLayout>
-    <LinearLayout
         android:id="@+id/pauseMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -265,6 +245,52 @@
             android:fontFamily="@font/luckiestguy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/towerUpgradePopup"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:background="#CCFFFFFF"
+        android:padding="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+        <TextView
+            android:id="@+id/upgradeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upgrade Monkey"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btnUpgradeRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upgrade Range"/>
+
+        <Button
+            android:id="@+id/btnUpgradeDamage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upgrade Damage"/>
+
+        <Button
+            android:id="@+id/btnUpgradeSpeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upgrade Speed"/>
+
+        <Button
+            android:id="@+id/btnCloseUpgrade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Close"/>
     </LinearLayout>
 
 

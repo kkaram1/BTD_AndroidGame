@@ -18,6 +18,7 @@ import java.util.List;
 public class DragDropController {
     private final FrameLayout dragLayer;
     private final LinearLayout towerPanel;
+    private final LinearLayout towerUpgradePopup;
     private final ArrayList<ImageView> towerIcons;
     private final GameView gameView;
     private final List<Tower> placedTowers = new ArrayList<>();
@@ -26,13 +27,15 @@ public class DragDropController {
     @SuppressLint("ClickableViewAccessibility")
     public DragDropController(FrameLayout dragLayer,
                               LinearLayout towerPanel,
-                              List<android.util.Pair<Towers, ImageView>> towerIconList,
+                              List<android.util.Pair<Towers, ImageView>> towerIconList, LinearLayout towerUpgradePopup,
                               gameActivity activity) {
         this.dragLayer  = dragLayer;
         this.towerPanel = towerPanel;
+        this.towerUpgradePopup = towerUpgradePopup;
         this.gameView   = activity.getGameView();
         this.towerIcons = new ArrayList<>();
         this.activity   = activity;
+
         for (Pair<Towers, ImageView> pair : towerIconList) {
             Towers towerType = pair.first;
             ImageView icon   = pair.second;
@@ -166,22 +169,21 @@ public class DragDropController {
                         dragLayer.addView(rangeView);
                         dragLayer.addView(placed);
                         placedTowers.add(placed);
-                        Log.d("DDC", "Tower geplaatst: " + selectedType + " op (" + x + "," + y + ")");
+                        Log.d("DDC", "Tower placed: " + selectedType + " op (" + x + "," + y + ")");
                         gameView.registerTower(placed);
 
                         placed.setOnClickListener(v1 -> {
 
                             if (activity.selectedTower == placed) {
                                 rangeView.setVisibility(View.INVISIBLE);
-                                activity.upgradeOptionsContainer.setVisibility(View.GONE);
-                                activity.upgradeToggleButton.setVisibility(View.GONE);
+                                activity.towerUpgradePopup.setVisibility(View.GONE);
                                 activity.selectedTower = null;
                             }
 
                             else {
                                 activity.selectedTower = placed;
                                 rangeView.setVisibility(View.VISIBLE);
-                                new UpgradeMenu(activity, placed).show();
+                                towerUpgradePopup.setVisibility(View.VISIBLE);
                             }
                         });
 
