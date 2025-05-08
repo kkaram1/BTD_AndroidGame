@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -31,19 +30,19 @@ public class MenuSelect extends BaseActivity {
 
     public void goToGame0(View v) {
         mapNum=0;
-        Intent i = new Intent(MenuSelect.this, gameActivity.class);
+        Intent i = new Intent(MenuSelect.this, GameActivity.class);
         i.putExtra("mapNum", mapNum);
         startActivity(i);
     }
     public void goToGame1(View v) {
         mapNum=1;
-        Intent i = new Intent(MenuSelect.this, gameActivity.class);
+        Intent i = new Intent(MenuSelect.this, GameActivity.class);
         i.putExtra("mapNum", mapNum);
         startActivity(i);
     }
     public void goToGame2(View v) {
         mapNum=2;
-        Intent i = new Intent(MenuSelect.this, gameActivity.class);
+        Intent i = new Intent(MenuSelect.this, GameActivity.class);
         i.putExtra("mapNum", mapNum);
         startActivity(i);
     }

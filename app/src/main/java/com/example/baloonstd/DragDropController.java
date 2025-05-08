@@ -28,13 +28,13 @@ public class DragDropController {
     private final GameView gameView;
     private final ImageButton closeButton;
     private final List<Tower> placedTowers = new ArrayList<>();
-    private final gameActivity activity;
+    private final GameActivity activity;
 
     @SuppressLint("ClickableViewAccessibility")
     public DragDropController(FrameLayout dragLayer,
                               LinearLayout towerPanel,
                               List<android.util.Pair<Towers, ImageView>> towerIconList, LinearLayout towerUpgradePopup,
-                              ImageButton closeButton, gameActivity activity) {
+                              ImageButton closeButton, GameActivity activity) {
         this.dragLayer  = dragLayer;
         this.towerPanel = towerPanel;
         this.towerUpgradePopup = towerUpgradePopup;

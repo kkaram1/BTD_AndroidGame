@@ -18,12 +18,11 @@ import android.widget.TextView;
 import android.util.Pair;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import com.example.baloonstd.Phase.PhaseManager;
 import java.util.ArrayList;
 
-public class gameActivity extends BaseActivity {
+public class GameActivity extends BaseActivity {
     private LinearLayout towerPanel;
     private Button nextPhaseButton;
     private Button firstPhaseButton;
