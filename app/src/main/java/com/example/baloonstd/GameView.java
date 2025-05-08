@@ -138,7 +138,8 @@ public class GameView extends View {
         }
         updateEnemyPositions(deltaSec);
         shooter.updateAndDraw(deltaSec, scaleX, scaleY, canvas);
-        if (spawnCount >= enemiesToSpawn.size()
+        if (enemiesToSpawn != null
+                && spawnCount >= enemiesToSpawn.size()
                 && enemies.isEmpty()
                 && !phaseCompleteNotified) {
             phaseCompleteNotified = true;

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class gameActivity extends BaseActivity {
     private LinearLayout towerPanel;
     private Button nextPhaseButton;
+    private Button firstPhaseButton;
     private ImageButton pauseButton;
     private Button resumeButton;
     private GameView gameView;
@@ -39,8 +40,8 @@ public class gameActivity extends BaseActivity {
     Button btnUpgradeRange;
     ImageButton closeButton;
     Tower selectedTower;
+    Boolean firstRound;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,7 @@ public class gameActivity extends BaseActivity {
         Button openPanel  = findViewById(R.id.towerButton);
         pauseButton       = findViewById(R.id.pauseButton);
         nextPhaseButton   = findViewById(R.id.nextPhaseButton);
+        firstPhaseButton  = findViewById(R.id.firstPhaseButton);
         moneyText         = findViewById(R.id.moneyText);
         healthText        = findViewById(R.id.health);
         resumeButton      = findViewById(R.id.resumeButton);
@@ -95,10 +97,8 @@ public class gameActivity extends BaseActivity {
         int mapNum = intent.getIntExtra("mapNum", -1);
         gameView = new GameView(this, mapNum);
         phaseManager = new PhaseManager(this);
-        gameView.setPhase(phaseManager);
         gameContainer.addView(gameView);
         updateMapImage(mapNum);
-
         updateMoney(0);
 
         DragDropController controller = new DragDropController(
@@ -110,6 +110,11 @@ public class gameActivity extends BaseActivity {
                 this
         );
         controller.init();
+
+        firstPhaseButton.setOnClickListener(v3 -> {
+            gameView.setPhase(phaseManager);
+            firstPhaseButton.setVisibility(LinearLayout.GONE);
+        });
 
         pauseButton.setOnClickListener(v -> {
             pauseMenu.setVisibility(LinearLayout.VISIBLE);

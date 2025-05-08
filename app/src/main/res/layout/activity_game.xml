@@ -39,6 +39,14 @@
             android:layout_marginHorizontal="550dp"
             android:text="Start Phase 2"
             android:visibility="gone" />
+        <Button
+            android:id="@+id/firstPhaseButton"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginHorizontal="550dp"
+            android:text="Start First Phase"
+            android:visibility="visible" />
 
 
     </FrameLayout>
@@ -57,7 +65,7 @@
         android:layout_width="200dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:background="#CCFFFFFF"
+        android:background="@drawable/wooden_background"
         android:padding="8dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
@@ -67,7 +75,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Toweroptions"
+            android:text="Tower options"
+            android:textColor="@color/white"
+            android:fontFamily="@font/luckiestguy"
             android:textStyle="bold"
             android:textSize="18sp"/>
 
@@ -87,6 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="50"
+                android:fontFamily="@font/luckiestguy"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -106,7 +118,9 @@
                 android:id="@+id/sniperPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/luckiestguy"
                 android:text="100"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -124,11 +138,10 @@
 
     <ImageButton
         android:id="@+id/pauseButton"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:layout_marginEnd="20dp"
         android:src="@drawable/ic_pause"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
