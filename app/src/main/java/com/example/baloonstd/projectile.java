@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
+import com.example.baloonstd.Balloon.BalloonEnemy;
+
 public class projectile {
     private final PointF pos;
     private final BalloonEnemy target;
@@ -22,8 +24,8 @@ public class projectile {
     }
 
     private void updateVelocity(float scaleX, float scaleY) {
-        float tx = target.position.x * scaleX;
-        float ty = target.position.y * scaleY;
+        float tx = target.getPosition().x * scaleX;
+        float ty = target.getPosition().y * scaleY;
         float dx = tx - pos.x, dy = ty - pos.y;
         float dist = (float) Math.hypot(dx, dy);
         if (dist > 0) {
@@ -37,10 +39,9 @@ public class projectile {
         pos.x += velocity.x * deltaSec;
         pos.y += velocity.y * deltaSec;
 
-        float tx = target.position.x * scaleX;
-        float ty = target.position.y * scaleY;
+        float tx = target.getPosition().x * scaleX;
+        float ty = target.getPosition().y * scaleY;
 
-        // gebruik nu de getter ipv target.balloonImage
         Bitmap img = target.getImage();
         float half = img.getWidth()/2f;
 

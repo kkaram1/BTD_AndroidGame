@@ -2,7 +2,6 @@ package com.example.baloonstd;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,9 +12,11 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.example.baloonstd.Balloon.BalloonEnemy;
 import com.example.baloonstd.Map.MapManager;
 import com.example.baloonstd.Phase.Phase;
 import com.example.baloonstd.Phase.PhaseManager;
+import com.example.baloonstd.Tower.Tower;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -130,8 +131,8 @@ public class GameView extends View {
             float bmpW = b.getWidth();
             float bmpH = b.getHeight();
 
-            float left = e.position.x * scaleX - (bmpW * uniformScale) / 2f;
-            float top  = e.position.y * scaleY - (bmpH * uniformScale) / 2f;
+            float left = e.getPosition().x * scaleX - (bmpW * uniformScale) / 2f;
+            float top  = e.getPosition().y * scaleY - (bmpH * uniformScale) / 2f;
             RectF dst = new RectF(left, top, left + bmpW * uniformScale, top  + bmpH * uniformScale);
 
             canvas.drawBitmap(b, null, dst, null);
@@ -153,21 +154,21 @@ public class GameView extends View {
         Iterator<BalloonEnemy> it = enemies.iterator();
         while (it.hasNext()) {
             BalloonEnemy e = it.next();
-            if (e.currentWaypointIndex >= path.size()) {
+            if (e.getCurrentWaypointIndex() >= path.size()) {
                 if (escapeListener != null) escapeListener.onBalloonEscaped(e.getLayer());
                 it.remove();
                 continue;
             }
-            Point tgt = path.get(e.currentWaypointIndex);
-            float dx = tgt.x - e.position.x, dy = tgt.y - e.position.y;
+            Point tgt = path.get(e.getCurrentWaypointIndex());
+            float dx = tgt.x - e.getPosition().x, dy = tgt.y - e.getPosition().y;
             float dist = (float) Math.hypot(dx, dy);
             float move = e.getSpeedPixelsPerSecond() * deltaSec;
             if (dist <= move) {
-                e.position.set(tgt.x, tgt.y);
-                e.currentWaypointIndex++;
+                e.getPosition().set(tgt.x, tgt.y);
+                e.incCurrentWayPointIndex(1);
             } else {
-                e.position.x += dx / dist * move;
-                e.position.y += dy / dist * move;
+                e.getPosition().x += dx / dist * move;
+                e.getPosition().y += dy / dist * move;
             }
         }
     }

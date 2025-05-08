@@ -1,6 +1,8 @@
-package com.example.baloonstd;
+package com.example.baloonstd.Balloon;
 
 import android.graphics.Point;
+
+import com.example.baloonstd.R;
 
 public enum Balloon {
     RED(R.drawable.red_balloon, 120f, 1),BLUE(R.drawable.blue_balloon, 140f, 2)
@@ -31,11 +33,6 @@ public enum Balloon {
         return layer;
     }
 
-    public Point getPosition() {return position;}
-
-    public void setPosition(Point position) {
-        this.position = position;
-    }
 
     public static Balloon fromLayer(int layer) {
         for (Balloon b : values()) {

@@ -1,6 +1,11 @@
 package com.example.baloonstd;
 
 import android.graphics.Canvas;
+
+import com.example.baloonstd.Balloon.BalloonEnemy;
+import com.example.baloonstd.Tower.Tower;
+import com.example.baloonstd.Tower.Towers;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,8 +66,8 @@ public class ShootingController {
             float tx = tower.getX() + tower.getWidth() / 2f;
             float ty = tower.getY() + tower.getHeight() / 2f;
             for (BalloonEnemy e : gameView.getEnemies()) {
-                float ex = e.position.x * gameView.getMapScaleX();
-                float ey = e.position.y * gameView.getMapScaleY();
+                float ex = e.getPosition().x * gameView.getMapScaleX();
+                float ey = e.getPosition().y * gameView.getMapScaleY();
                 float dx = ex - tx, dy = ey - ty;
                 if (Math.hypot(dx, dy) <= tower.getRadius()) {
                     float angle = (float)Math.toDegrees(Math.atan2(dy, dx)) + 220f;

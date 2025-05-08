@@ -1,4 +1,6 @@
-package com.example.baloonstd;
+package com.example.baloonstd.Tower;
+
+import com.example.baloonstd.R;
 
 public enum Towers {
     DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000,50,1000f),

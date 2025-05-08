@@ -1,4 +1,4 @@
-package com.example.baloonstd;
+package com.example.baloonstd.Balloon;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,9 +9,9 @@ public class BalloonEnemy {
     private Balloon type;
     private Bitmap balloonImage;
     private float speedPixelsPerSecond;
-    int layer;
-    Point position;
-    int currentWaypointIndex;
+    private int layer;
+    private Point position;
+    private int currentWaypointIndex;
 
     public BalloonEnemy(Context ctx, Balloon type, Point position) {
         this.type = type;
@@ -37,6 +37,15 @@ public class BalloonEnemy {
     }
     public int getLayer() {
         return layer;
+    }
+
+    public int getCurrentWaypointIndex() {
+        return currentWaypointIndex;
+    }
+    public void incCurrentWayPointIndex(int x){currentWaypointIndex+=x;}
+
+    public Point getPosition() {
+        return position;
     }
 
     public void setPosition(Point position) {

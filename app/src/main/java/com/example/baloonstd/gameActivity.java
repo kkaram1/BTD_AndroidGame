@@ -1,8 +1,10 @@
 package com.example.baloonstd;
 
-import static com.example.baloonstd.Towers.DART_MONKEY;
-import static com.example.baloonstd.Towers.SNIPER_MONKEY;
+import static com.example.baloonstd.Tower.Towers.DART_MONKEY;
+import static com.example.baloonstd.Tower.Towers.SNIPER_MONKEY;
 
+import com.example.baloonstd.Tower.Tower;
+import  com.example.baloonstd.Tower.Towers;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
