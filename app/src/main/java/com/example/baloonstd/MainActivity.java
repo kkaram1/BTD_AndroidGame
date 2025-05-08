@@ -10,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.example.baloonstd.MusicManager;
 
 public class MainActivity extends BaseActivity {
 
@@ -19,6 +20,7 @@ public class MainActivity extends BaseActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        MusicManager.start(this, R.raw.main_menu_music); // Replace with correct map music
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -33,5 +35,23 @@ public class MainActivity extends BaseActivity {
     public void goToSettings(View v){
         Intent i = new Intent(MainActivity.this, Settings.class);
         startActivity(i);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MusicManager.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MusicManager.resume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MusicManager.stop();
     }
 }
