@@ -37,21 +37,4 @@ public class MainActivity extends BaseActivity {
         startActivity(i);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MusicManager.pause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MusicManager.resume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        MusicManager.stop();
-    }
 }
