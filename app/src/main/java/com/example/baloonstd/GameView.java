@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.example.baloonstd.Balloon.Balloon;
 import com.example.baloonstd.Balloon.BalloonEnemy;
 import com.example.baloonstd.Map.MapManager;
 import com.example.baloonstd.Phase.Phase;
@@ -36,7 +37,6 @@ public class GameView extends View {
     private Point spawnPos;
     private long lastUpdateTime;
     private PhaseManager phaseManager;
-    private int health = 100;
     private boolean isPaused = false;
 
     public interface OnPhaseCompleteListener { void onPhaseComplete(int phase); }
@@ -195,6 +195,24 @@ public class GameView extends View {
     }
 
     public void removeEnemy(BalloonEnemy e) {
+        if (e.getType() == Balloon.ZEPPLIN) {
+            if (!e.applyHit()) return;
+
+            int idx = e.getCurrentWaypointIndex();
+
+            for (int i = 0; i < 10; i++) {
+                Point spawnPoint = new Point(e.getPosition());
+                BalloonEnemy green = new BalloonEnemy(
+                        getContext(),
+                        Balloon.GREEN,
+                        spawnPoint
+                );
+                green.setCurrentWaypointIndex(idx);
+                enemies.add(green);
+            }
+            enemies.remove(e);
+            return;
+        }
         if (e.getLayer() > 1) {
             e.downgrade(getContext());
         } else {

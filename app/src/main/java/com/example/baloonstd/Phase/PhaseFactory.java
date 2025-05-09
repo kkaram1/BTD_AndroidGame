@@ -22,21 +22,32 @@ public class PhaseFactory {
 
         switch (phaseNumber) {
             case 1:
-                balloonSetup.put(Balloon.RED, 10);
+                balloonSetup.put(Balloon.RED, 5);
                 break;
             case 2:
-                balloonSetup.put(Balloon.RED, 20);
+                balloonSetup.put(Balloon.RED, 25);
                 break;
             case 3:
                 balloonSetup.put(Balloon.RED, 10);
-                balloonSetup.put(Balloon.BLUE, 5);
+                balloonSetup.put(Balloon.BLUE, 30);
                 break;
             case 4:
                 balloonSetup.put(Balloon.BLUE, 15);
                 balloonSetup.put(Balloon.GREEN, 10);
                 break;
             case 5:
+                balloonSetup.put(Balloon.BLUE, 10);
                 balloonSetup.put(Balloon.GREEN, 20);
+                break;
+            case 6:
+                balloonSetup.put(Balloon.BLUE, 15);
+                balloonSetup.put(Balloon.GREEN, 30);
+                break;
+            case 7:
+                balloonSetup.put(Balloon.GREEN, 50);
+                break;
+            case 8:
+                balloonSetup.put(Balloon.ZEPPLIN, 3);
                 break;
             // Add more phases easily here
             default:

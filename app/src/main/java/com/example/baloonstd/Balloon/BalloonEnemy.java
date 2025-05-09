@@ -3,6 +3,7 @@ package com.example.baloonstd.Balloon;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Point;
 
 public class BalloonEnemy {
@@ -12,12 +13,15 @@ public class BalloonEnemy {
     private int layer;
     private Point position;
     private int currentWaypointIndex;
+    private int hitsRemaining;
 
     public BalloonEnemy(Context ctx, Balloon type, Point position) {
         this.type = type;
         this.position = position;
         this.currentWaypointIndex = 0;
         applyType(ctx, type);
+        this.hitsRemaining = (type == Balloon.ZEPPLIN ? type.getLayer() : 1);
+
     }
 
     private void applyType(Context ctx, Balloon b) {
@@ -25,13 +29,21 @@ public class BalloonEnemy {
         this.layer = b.getLayer();
         this.speedPixelsPerSecond = b.getSpeed();
         Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), b.getResourceId());
-        this.balloonImage = Bitmap.createScaledBitmap(raw, 100, 100, true);
+        int size = (b == Balloon.ZEPPLIN ? 300 : 100);
+        if (b == Balloon.ZEPPLIN) {
+            Matrix m = new Matrix();
+            m.postRotate(90);
+            raw = Bitmap.createBitmap(raw, 0, 0, raw.getWidth(), raw.getHeight(), m, true);
+        }
+        this.balloonImage = Bitmap.createScaledBitmap(raw, size, size, true);
     }
 
     public float getSpeedPixelsPerSecond() {
         return speedPixelsPerSecond;
     }
-
+    public void setSpeedPixelsPerSecond(float speed) {
+        this.speedPixelsPerSecond = speed;
+    }
     public Bitmap getImage() {
         return balloonImage;
     }
@@ -41,6 +53,9 @@ public class BalloonEnemy {
 
     public int getCurrentWaypointIndex() {
         return currentWaypointIndex;
+    }
+    public void setCurrentWaypointIndex(int idx) {
+        this.currentWaypointIndex = idx;
     }
     public void incCurrentWayPointIndex(int x){currentWaypointIndex+=x;}
 
@@ -58,4 +73,12 @@ public class BalloonEnemy {
             applyType(ctx, next);
         }
     }
+    public boolean applyHit() {
+        hitsRemaining--;
+        return hitsRemaining <= 0;
+    }
+    public Balloon getType() {
+        return type;
+    }
+
 }

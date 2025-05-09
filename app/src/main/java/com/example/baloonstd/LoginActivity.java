@@ -18,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private EditText usernameInput;
     private EditText passwordInput;
     private Button loginButton;

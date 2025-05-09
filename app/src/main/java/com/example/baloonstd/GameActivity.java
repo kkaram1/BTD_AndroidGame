@@ -33,8 +33,8 @@ public class GameActivity extends BaseActivity {
     private PhaseManager phaseManager;
     private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
-    private int money = 95;
-    private int health = 100;
+    private int money = 90;
+    private int health = 50;
     private TextView healthText;
     Button upgradeToggleButton;
     LinearLayout towerUpgradePopup;
@@ -80,7 +80,7 @@ public class GameActivity extends BaseActivity {
                 Toast.makeText(this, "Not enough money", Toast.LENGTH_SHORT).show();
                 return;
             }
-            selectedTower.setRadius(selectedTower.getRadius() + 200);
+            selectedTower.setRadius(selectedTower.getRadius() + 70);
             selectedTower.setShotCooldown(800);
             Toast.makeText(this, "Range increased", Toast.LENGTH_SHORT).show();
             towerUpgradePopup.setVisibility(View.GONE);
@@ -151,7 +151,7 @@ public class GameActivity extends BaseActivity {
 
 
         gameView.setOnBalloonPopListener(() -> runOnUiThread(() -> {
-            addMoney(5);
+            addMoney(2);
         }));
 
         resumeButton.setOnClickListener(v -> {
