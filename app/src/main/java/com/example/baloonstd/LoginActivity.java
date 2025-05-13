@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity {
                         PlayerManager.getInstance().setPlayer(new Player(enteredUsername));
 
                     } catch (JSONException e) {
-                        Toast.makeText(this, "Login failed: " + response, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Login failed: wrong username/password", Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> Toast.makeText(this, "Volley error: " + error.getMessage(), Toast.LENGTH_LONG).show()

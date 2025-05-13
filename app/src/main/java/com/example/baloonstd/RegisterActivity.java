@@ -58,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
                         editor.apply();
                         finish();
                     } else {
-                        Toast.makeText(this, "Registration failed: " + response, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Registration failed: username taken" , Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> Toast.makeText(this, "Volley error: " + error.getMessage(), Toast.LENGTH_LONG).show()
