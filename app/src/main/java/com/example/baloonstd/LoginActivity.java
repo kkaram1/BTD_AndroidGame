@@ -18,6 +18,10 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends BaseActivity {
     private EditText usernameInput;
     private EditText passwordInput;
@@ -39,7 +43,7 @@ public class LoginActivity extends BaseActivity {
         if (username != null) {
             // Auto-login
             PlayerManager.getInstance().setPlayer(new Player(username));
-            startActivity(new Intent(this, GameActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             finish();
         }
 
@@ -56,18 +60,22 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
 
-            String url = "https://yourserver.com/login.php"; // Replace with actual URL
+            String url = "https://studev.groept.be/api/a24pt301/Login/"+enteredUsername+"/"+password; // Replace with actual URL
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
-                    if (response.trim().equals("success")) {
-                        SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
-                        prefs1.edit().putString("username", enteredUsername).apply();
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        int playerId = jsonObject.getInt("idPlayer");
 
+                        SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
+                        prefs1.edit().putString("username", enteredUsername).putInt("playerId", playerId).apply();
+                        Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                        startActivity(i);
                         PlayerManager.getInstance().setPlayer(new Player(enteredUsername));
-                        startActivity(new Intent(this, GameActivity.class));
-                        finish();
-                    } else {
+
+                    } catch (JSONException e) {
                         Toast.makeText(this, "Login failed: " + response, Toast.LENGTH_LONG).show();
                     }
                 },
@@ -88,5 +96,6 @@ public class LoginActivity extends BaseActivity {
     public void goToMainMenu(View v)
     {Intent i = new Intent(LoginActivity.this,MainActivity.class);
     startActivity(i);}
+
 
 }
