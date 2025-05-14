@@ -61,6 +61,9 @@ public class GameActivity extends BaseActivity {
         upgradeToggleButton  = findViewById(R.id.upgradeToggleButton);
         towerUpgradePopup   = findViewById(R.id.towerUpgradePopup);
         Button btnUpgradeRange = findViewById(R.id.btnUpgradeRange);
+        LinearLayout gameWonScreen = findViewById(R.id.gameWonScreen);
+        Button exitMain = findViewById(R.id.btnExitToMainMenu);
+        Button endless = findViewById(R.id.btnEndlessMode);
         upgradeToggleButton.setVisibility(View.GONE);
 
 
@@ -135,6 +138,7 @@ public class GameActivity extends BaseActivity {
 
 
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
+            if(phase == 2){gameWonScreen.setVisibility(LinearLayout.VISIBLE);}
             int phaseDispaly = phase +1;
             nextPhaseButton.setText("Start Phase "+ phaseDispaly);
             nextPhaseButton.setVisibility(Button.VISIBLE);
@@ -151,6 +155,12 @@ public class GameActivity extends BaseActivity {
                     balloonsPopped += layer;
                 })
         );
+        endless.setOnClickListener(v -> {
+            gameWonScreen.setVisibility(LinearLayout.GONE);
+            int phaseDispaly = 3;
+            nextPhaseButton.setText("Start Phase "+ phaseDispaly);
+            nextPhaseButton.setVisibility(Button.VISIBLE);
+        });
         resumeButton.setOnClickListener(v -> {
             pauseMenu.setVisibility(LinearLayout.GONE);
             gameView.setPaused(false);
@@ -158,6 +168,12 @@ public class GameActivity extends BaseActivity {
 
 
         exitButton.setOnClickListener(v -> {
+            Intent intent2 = new Intent(this, MainActivity.class);
+            intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent2);
+            finish();
+        });
+        exitMain.setOnClickListener(v -> {
             Intent intent2 = new Intent(this, MainActivity.class);
             intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent2);
