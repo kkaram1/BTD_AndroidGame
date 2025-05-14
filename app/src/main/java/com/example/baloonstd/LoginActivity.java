@@ -68,12 +68,20 @@ public class LoginActivity extends BaseActivity {
                         JSONArray jsonArray = new JSONArray(response);
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
                         int playerId = jsonObject.getInt("idPlayer");
+                        int balloonsPopped = jsonObject.getInt("balloonsPopped");  // Get balloonsPopped from server response
 
+                        // Save username and playerId to SharedPreferences
                         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
                         prefs1.edit().putString("username", enteredUsername).putInt("playerId", playerId).apply();
-                        Intent i = new Intent(LoginActivity.this,MainActivity.class);
+
+                        Player player = new Player(enteredUsername);
+                        player.setBalloonsPopped(balloonsPopped);
+
+                        PlayerManager.getInstance().setPlayer(player);
+
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(i);
-                        PlayerManager.getInstance().setPlayer(new Player(enteredUsername));
+                        finish();
 
                     } catch (JSONException e) {
                         Toast.makeText(this, "Login failed: wrong username/password", Toast.LENGTH_LONG).show();

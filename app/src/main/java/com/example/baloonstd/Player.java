@@ -9,9 +9,7 @@ public class Player {
         this.balloonsPopped = 0;
     }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getUsername() {return username;}
 
     public int getBalloonsPopped() {
         return balloonsPopped;
@@ -20,4 +18,6 @@ public class Player {
     public void incrementBalloonsPopped(int amount) {
         this.balloonsPopped += amount;
     }
+
+    public void setBalloonsPopped(int balloonsPopped) {this.balloonsPopped = balloonsPopped;}
 }
