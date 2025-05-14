@@ -89,13 +89,7 @@ public class LoginActivity extends BaseActivity {
                 },
                 error -> Toast.makeText(this, "Volley error: " + error.getMessage(), Toast.LENGTH_LONG).show()
             ) {
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("username", enteredUsername);
-                    params.put("password", password);
-                    return params;
-                }
+
             };
 
             Volley.newRequestQueue(this).add(stringRequest);

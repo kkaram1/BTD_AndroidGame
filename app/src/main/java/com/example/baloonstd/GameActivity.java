@@ -285,9 +285,9 @@ public class GameActivity extends BaseActivity {
         }
     }
     private void saveBalloonPop() {
-        //todo make sure this works
+        //todo make sure this works it adds not set
         int popped = balloonsPopped;
-        String url = "https://studev.groept.be/api/a24pt301/incBalloons/"+popped+"/"+ PlayerManager.getInstance().getUsername();
+        String url = "https://studev.groept.be/api/a24pt301/incBalloons";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     response = response.trim();
@@ -297,7 +297,13 @@ public class GameActivity extends BaseActivity {
                 },
                 error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
         ) {
-
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("a", String.valueOf(popped));
+                params.put("b", PlayerManager.getInstance().getUsername());
+                return params;
+            }
         };
         Volley.newRequestQueue(this).add(stringRequest);
     }

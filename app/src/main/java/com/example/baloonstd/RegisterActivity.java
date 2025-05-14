@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(String username, String password) {
-        String url = "https://studev.groept.be/api/a24pt301/Register/"+username+"/"+password;
+        String url = "https://studev.groept.be/api/a24pt301/Register";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
