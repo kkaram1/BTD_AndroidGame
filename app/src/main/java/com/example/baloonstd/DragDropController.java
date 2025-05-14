@@ -179,6 +179,7 @@ public class DragDropController {
                         Log.d("DDC", "Tower placed: " + selectedType + " op (" + x + "," + y + ")");
                         gameView.registerTower(placed);
 
+
                         placed.setOnClickListener(v1 -> {
 
                             if (activity.selectedTower == placed) {

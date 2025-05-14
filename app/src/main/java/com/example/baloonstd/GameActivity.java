@@ -43,7 +43,7 @@ public class GameActivity extends BaseActivity {
     private int balloonsPopped;
     LinearLayout towerUpgradePopup;
     private  SharedPreferences prefs;
-    Tower selectedTower;
+    protected Tower selectedTower;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,8 +191,6 @@ public class GameActivity extends BaseActivity {
         });
 
     }
-
-
     public boolean spendMoney(int amount) {
         if (money < amount) return false;
         money -= amount;
@@ -291,6 +289,7 @@ public class GameActivity extends BaseActivity {
         String url = "https://studev.groept.be/api/a24pt301/incBalloons";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
+
                 },
                 error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
         ) {

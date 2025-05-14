@@ -57,8 +57,6 @@ public class RegisterActivity extends AppCompatActivity {
                         editor.putString("username", username);
                         editor.apply();
                         finish();
-                        Player player = new Player(username,0);
-                        PlayerManager.getInstance().setPlayer(player);
                     } else {
                         Toast.makeText(this, "Registration failed: username taken" , Toast.LENGTH_LONG).show();
                     }

@@ -41,9 +41,10 @@ public class LoginActivity extends BaseActivity {
         SharedPreferences prefs = getSharedPreferences("player_session", MODE_PRIVATE);
         String username = prefs.getString("username", null);
         int balloonsPopped2 = prefs.getInt("balloonsPopped",0);
+        int towersPlaced2 = prefs.getInt("towersPlaced",0);
         if (username != null) {
             // Auto-login
-            Player player = new Player(username,balloonsPopped2);
+            Player player = new Player(username,balloonsPopped2,towersPlaced2);
             PlayerManager.getInstance().setPlayer(player);
             startActivity(new Intent(this, MainActivity.class));
             finish();
@@ -62,7 +63,7 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
 
-            String url = "https://studev.groept.be/api/a24pt301/Login/"+enteredUsername+"/"+password; // Replace with actual URL
+            String url = "https://studev.groept.be/api/a24pt301/Login/"+enteredUsername+"/"+password;
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
@@ -71,17 +72,16 @@ public class LoginActivity extends BaseActivity {
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
                         int playerId = jsonObject.getInt("idPlayer");
                         int balloonsPopped = jsonObject.getInt("balloonsPopped");
-
+                        int towersPlaced = jsonObject.getInt("towersPlaced");
                         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
                         prefs1.edit()
                                 .putString("username", enteredUsername)
                                 .putInt("playerId", playerId)
                                 .putInt("balloonsPopped", balloonsPopped)
+                                .putInt("towersPlaced",towersPlaced)
                                 .apply();
 
-                        Player player = new Player(enteredUsername,balloonsPopped);
-                        player.setBalloonsPopped(balloonsPopped);
-
+                        Player player = new Player(enteredUsername,balloonsPopped,towersPlaced);
                         PlayerManager.getInstance().setPlayer(player);
 
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);

@@ -1,6 +1,9 @@
 package com.example.baloonstd;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,7 +14,11 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.baloonstd.Balloon.Balloon;
 import com.example.baloonstd.Balloon.BalloonEnemy;
 import com.example.baloonstd.Map.MapManager;
@@ -21,8 +28,10 @@ import com.example.baloonstd.Shooting.ShootingController;
 import com.example.baloonstd.Tower.Tower;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class GameView extends View {
     private final int nativeWidth = 500, nativeHeight = 322;
@@ -39,6 +48,7 @@ public class GameView extends View {
     private long lastUpdateTime;
     private PhaseManager phaseManager;
     private boolean isPaused = false;
+
 
     public interface OnPhaseCompleteListener { void onPhaseComplete(int phase); }
     private OnPhaseCompleteListener phaseListener;
@@ -236,7 +246,36 @@ public class GameView extends View {
         }
     }
     public List<BalloonEnemy> getEnemies() { return enemies; }
-    public void registerTower(Tower t) { shooter.addTower(t); }
+    public void registerTower(Tower t)
+    {
+        PlayerManager.getInstance().getPlayer().incTowers(1);
+        SharedPreferences prefs = getContext().getSharedPreferences("player_session", Context.MODE_PRIVATE);
+        prefs.edit().putInt("towersPlaced", PlayerManager.getInstance().getPlayer().getTowersPlaced()).apply();
+
+        updateTowersPlaced();
+        shooter.addTower(t);
+    }
+
+    private void updateTowersPlaced() {
+        String url = "https://studev.groept.be/api/a24pt301/incTowers";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+
+                },
+                error -> Toast.makeText(this.getContext(), "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("a", String.valueOf(PlayerManager.getInstance().getPlayer().getTowersPlaced()));
+                params.put("b", PlayerManager.getInstance().getUsername());
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this.getContext()).add(stringRequest);
+    }
+
     public float getMapScaleX() { return scaleX; }
     public float getMapScaleY() { return scaleY; }
+
 }
