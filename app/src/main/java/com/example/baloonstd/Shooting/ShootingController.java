@@ -1,8 +1,10 @@
-package com.example.baloonstd;
+package com.example.baloonstd.Shooting;
 
 import android.graphics.Canvas;
 
 import com.example.baloonstd.Balloon.BalloonEnemy;
+import com.example.baloonstd.GameView;
+import com.example.baloonstd.R;
 import com.example.baloonstd.Tower.Tower;
 import com.example.baloonstd.Tower.Towers;
 
@@ -17,8 +19,6 @@ public class ShootingController {
     private final List<Tower> towers = new ArrayList<>();
     private final List<projectile> projectiles = new ArrayList<>();
     private final Map<Tower, Long> lastShotTimes = new HashMap<>();
-
-    private static final long SHOT_COOLDOWN_MS = 1000;
 
     public ShootingController(GameView gameView) {
         this.gameView = gameView;

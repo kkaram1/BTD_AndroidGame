@@ -17,6 +17,7 @@ import com.example.baloonstd.Balloon.BalloonEnemy;
 import com.example.baloonstd.Map.MapManager;
 import com.example.baloonstd.Phase.Phase;
 import com.example.baloonstd.Phase.PhaseManager;
+import com.example.baloonstd.Shooting.ShootingController;
 import com.example.baloonstd.Tower.Tower;
 
 import java.util.ArrayList;
@@ -47,9 +48,11 @@ public class GameView extends View {
     private OnBalloonEscapeListener escapeListener;
     public void setOnBalloonEscapeListener(OnBalloonEscapeListener l) { escapeListener = l; }
 
-    public interface OnBalloonPopListener { void onBalloonPop(); }
-    private OnBalloonPopListener popListener;
-    public void setOnBalloonPopListener(OnBalloonPopListener l) { popListener = l; }
+    public interface OnLayerPopListener {
+        void onLayerPopped(int layer);
+    }
+    private OnLayerPopListener layerPopListener;
+    public void setOnLayerPopListener(OnLayerPopListener l) { layerPopListener = l; }
 
     private ShootingController shooter;
 
@@ -217,7 +220,7 @@ public class GameView extends View {
             e.downgrade(getContext());
         } else {
             enemies.remove(e);
-            if (popListener != null) popListener.onBalloonPop();
+            if (layerPopListener != null) layerPopListener.onLayerPopped(e.getLayer());
         }
     }
     public void setPaused(boolean paused) {
@@ -232,7 +235,7 @@ public class GameView extends View {
             invalidate();
         }
     }
-    List<BalloonEnemy> getEnemies() { return enemies; }
+    public List<BalloonEnemy> getEnemies() { return enemies; }
     public void registerTower(Tower t) { shooter.addTower(t); }
     public float getMapScaleX() { return scaleX; }
     public float getMapScaleY() { return scaleY; }

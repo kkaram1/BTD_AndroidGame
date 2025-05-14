@@ -2,7 +2,6 @@ package com.example.baloonstd;
 
 import static com.example.baloonstd.Tower.Towers.DART_MONKEY;
 import static com.example.baloonstd.Tower.Towers.SNIPER_MONKEY;
-
 import com.example.baloonstd.Tower.Tower;
 import  com.example.baloonstd.Tower.Towers;
 import android.annotation.SuppressLint;
@@ -26,8 +25,6 @@ public class GameActivity extends BaseActivity {
     private LinearLayout towerPanel;
     private Button nextPhaseButton;
     private Button firstPhaseButton;
-    private ImageButton pauseButton;
-    private Button resumeButton;
     private GameView gameView;
     private ImageView mapImageView;
     private PhaseManager phaseManager;
@@ -36,12 +33,10 @@ public class GameActivity extends BaseActivity {
     private int money = 90;
     private int health = 50;
     private TextView healthText;
-    Button upgradeToggleButton;
+    private Button upgradeToggleButton;
+    private int balloonsPopped;
     LinearLayout towerUpgradePopup;
-    Button btnUpgradeRange;
-    ImageButton closeButton;
     Tower selectedTower;
-    Boolean firstRound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +48,19 @@ public class GameActivity extends BaseActivity {
         mapImageView      = findViewById(R.id.mapImageView);
         towerPanel        = findViewById(R.id.towerPanel);
         Button openPanel  = findViewById(R.id.towerButton);
-        pauseButton       = findViewById(R.id.pauseButton);
+        ImageButton pauseButton = findViewById(R.id.pauseButton);
         nextPhaseButton   = findViewById(R.id.nextPhaseButton);
         firstPhaseButton  = findViewById(R.id.firstPhaseButton);
         moneyText         = findViewById(R.id.moneyText);
         healthText        = findViewById(R.id.health);
-        resumeButton      = findViewById(R.id.resumeButton);
-        closeButton       =findViewById(R.id.btnCloseUpgrade);
+        Button resumeButton = findViewById(R.id.resumeButton);
+        ImageButton closeButton = findViewById(R.id.btnCloseUpgrade);
         LinearLayout pauseMenu = findViewById(R.id.pauseMenu);
         Button exitButton = findViewById(R.id.exitButton);
         updateHealthUI();
         upgradeToggleButton  = findViewById(R.id.upgradeToggleButton);
         towerUpgradePopup   = findViewById(R.id.towerUpgradePopup);
-        btnUpgradeRange = findViewById(R.id.btnUpgradeRange);
+        Button btnUpgradeRange = findViewById(R.id.btnUpgradeRange);
         upgradeToggleButton.setVisibility(View.GONE);
 
 
@@ -150,10 +145,12 @@ public class GameActivity extends BaseActivity {
         );
 
 
-        gameView.setOnBalloonPopListener(() -> runOnUiThread(() -> {
-            addMoney(2);
-        }));
-
+        gameView.setOnLayerPopListener(layer ->
+                runOnUiThread(() -> {
+                    addMoney(2 * layer);
+                    balloonsPopped += layer;
+                })
+        );
         resumeButton.setOnClickListener(v -> {
             pauseMenu.setVisibility(LinearLayout.GONE);
             gameView.setPaused(false);
@@ -183,7 +180,7 @@ public class GameActivity extends BaseActivity {
         for(Pair<Towers, ImageView> pair : pairList) {
             if (pair.first.getPrice() > money) {
                 pair.second.setAlpha(0.5f); // make icon semi-transparent to show it's unaffordable
-                pair.second.setEnabled(false); // optional: prevent clicking
+                pair.second.setEnabled(false); // prevent clicking
             } else {
                 pair.second.setAlpha(1.0f);
                 pair.second.setEnabled(true);

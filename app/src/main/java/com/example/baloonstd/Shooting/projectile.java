@@ -1,5 +1,5 @@
 
-package com.example.baloonstd;
+package com.example.baloonstd.Shooting;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
