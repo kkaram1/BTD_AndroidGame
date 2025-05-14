@@ -4,9 +4,9 @@ public class Player {
     private String username;
     private int balloonsPopped;
 
-    public Player(String username) {
+    public Player(String username,int balloonsPopped) {
         this.username = username;
-        this.balloonsPopped = 0;
+        this.balloonsPopped = balloonsPopped;
     }
 
     public String getUsername() {return username;}

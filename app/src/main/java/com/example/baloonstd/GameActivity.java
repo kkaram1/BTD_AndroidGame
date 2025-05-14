@@ -2,7 +2,6 @@ package com.example.baloonstd;
 
 import static com.example.baloonstd.Tower.Towers.DART_MONKEY;
 import static com.example.baloonstd.Tower.Towers.SNIPER_MONKEY;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -43,6 +42,7 @@ public class GameActivity extends BaseActivity {
     private Button upgradeToggleButton;
     private int balloonsPopped;
     LinearLayout towerUpgradePopup;
+    private  SharedPreferences prefs;
     Tower selectedTower;
 
     @Override
@@ -72,6 +72,8 @@ public class GameActivity extends BaseActivity {
         Button exitMain = findViewById(R.id.btnExitToMainMenu);
         Button endless = findViewById(R.id.btnEndlessMode);
         upgradeToggleButton.setVisibility(View.GONE);
+        prefs  = getSharedPreferences("player_session", MODE_PRIVATE);
+        balloonsPopped = prefs.getInt("balloonsPopped",0);
 
 
         upgradeToggleButton.setOnClickListener(v -> {
@@ -285,22 +287,17 @@ public class GameActivity extends BaseActivity {
         }
     }
     private void saveBalloonPop() {
-        //todo make sure this works it adds not set
-        int popped = balloonsPopped;
+        prefs.edit().putInt("balloonsPopped",balloonsPopped).apply();
         String url = "https://studev.groept.be/api/a24pt301/incBalloons";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
-                    response = response.trim();
-                    if (response.equals("[]")) {
-
-                    }
                 },
                 error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
         ) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("a", String.valueOf(popped));
+                params.put("a", String.valueOf(balloonsPopped));
                 params.put("b", PlayerManager.getInstance().getUsername());
                 return params;
             }

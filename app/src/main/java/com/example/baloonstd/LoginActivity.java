@@ -40,9 +40,11 @@ public class LoginActivity extends BaseActivity {
 
         SharedPreferences prefs = getSharedPreferences("player_session", MODE_PRIVATE);
         String username = prefs.getString("username", null);
+        int balloonsPopped2 = prefs.getInt("balloonsPopped",0);
         if (username != null) {
             // Auto-login
-            PlayerManager.getInstance().setPlayer(new Player(username));
+            Player player = new Player(username,balloonsPopped2);
+            PlayerManager.getInstance().setPlayer(player);
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
@@ -68,13 +70,16 @@ public class LoginActivity extends BaseActivity {
                         JSONArray jsonArray = new JSONArray(response);
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
                         int playerId = jsonObject.getInt("idPlayer");
-                        int balloonsPopped = jsonObject.getInt("balloonsPopped");  // Get balloonsPopped from server response
+                        int balloonsPopped = jsonObject.getInt("balloonsPopped");
 
-                        // Save username and playerId to SharedPreferences
                         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
-                        prefs1.edit().putString("username", enteredUsername).putInt("playerId", playerId).apply();
+                        prefs1.edit()
+                                .putString("username", enteredUsername)
+                                .putInt("playerId", playerId)
+                                .putInt("balloonsPopped", balloonsPopped)
+                                .apply();
 
-                        Player player = new Player(enteredUsername);
+                        Player player = new Player(enteredUsername,balloonsPopped);
                         player.setBalloonsPopped(balloonsPopped);
 
                         PlayerManager.getInstance().setPlayer(player);
