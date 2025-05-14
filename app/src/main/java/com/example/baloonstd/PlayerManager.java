@@ -14,4 +14,5 @@ public class PlayerManager {
     }
     public void setPlayer(Player player) {this.player = player;}
     public Player getPlayer() {return player;}
+    public String getUsername(){return player.getUsername();}
 }

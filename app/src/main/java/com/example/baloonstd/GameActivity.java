@@ -2,10 +2,15 @@ package com.example.baloonstd;
 
 import static com.example.baloonstd.Tower.Towers.DART_MONKEY;
 import static com.example.baloonstd.Tower.Towers.SNIPER_MONKEY;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.baloonstd.Tower.Tower;
 import  com.example.baloonstd.Tower.Towers;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +25,8 @@ import androidx.activity.EdgeToEdge;
 import androidx.core.view.WindowCompat;
 import com.example.baloonstd.Phase.PhaseManager;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameActivity extends BaseActivity {
     private LinearLayout towerPanel;
@@ -138,6 +145,7 @@ public class GameActivity extends BaseActivity {
 
 
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
+            saveBalloonPop();
             if(phase == 2){gameWonScreen.setVisibility(LinearLayout.VISIBLE);}
             int phaseDispaly = phase +1;
             nextPhaseButton.setText("Start Phase "+ phaseDispaly);
@@ -181,6 +189,7 @@ public class GameActivity extends BaseActivity {
         });
 
     }
+
 
     public boolean spendMoney(int amount) {
         if (money < amount) return false;
@@ -275,6 +284,22 @@ public class GameActivity extends BaseActivity {
             }
         }
     }
+    private void saveBalloonPop() {
+        //todo make sure this works
+        int popped = balloonsPopped;
+        String url = "https://studev.groept.be/api/a24pt301/incBalloons/"+popped+"/"+ PlayerManager.getInstance().getUsername();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    response = response.trim();
+                    if (response.equals("[]")) {
 
+                    }
+                },
+                error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
+        ) {
+
+        };
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
 
 }
