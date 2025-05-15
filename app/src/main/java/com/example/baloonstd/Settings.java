@@ -1,7 +1,9 @@
 package com.example.baloonstd;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
@@ -42,10 +44,26 @@ public class Settings extends BaseActivity {
             public void onStopTrackingTouch(SeekBar seekBar) { }
         });
         SwitchCompat vibrationSwitch = findViewById(R.id.vibrationSwitch);
+        boolean vibrationEnabled = sharedPreferences.getBoolean("vibrationEnabled", true);
+        vibrationSwitch.setChecked(vibrationEnabled);
+
+        vibrationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("vibrationEnabled", isChecked);
+            editor.apply();
+        });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+    public void goToLogin(View v){
+        SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
+        prefs1.edit()
+                .putString("username", null)
+                .apply();
+        Intent i = new Intent(Settings.this, LoginActivity.class);
+        startActivity(i);
     }
 }

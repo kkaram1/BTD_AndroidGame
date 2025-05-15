@@ -10,6 +10,7 @@ import  com.example.baloonstd.Tower.Towers;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,9 @@ import com.example.baloonstd.Phase.PhaseManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.content.Context;
 
 public class GameActivity extends BaseActivity {
     private LinearLayout towerPanel;
@@ -155,7 +159,8 @@ public class GameActivity extends BaseActivity {
         }));
 
         gameView.setOnBalloonEscapeListener(layer ->
-                runOnUiThread(() -> onBalloonReachedEnd(layer))
+                runOnUiThread(() -> onBalloonReachedEnd(layer)
+                )
         );
 
 
@@ -237,7 +242,20 @@ public class GameActivity extends BaseActivity {
     }
 
     private void onBalloonReachedEnd(int damage) {
-        health -= damage;       // subtract by layer
+        SharedPreferences prefs = getSharedPreferences("SettingsPrefs", MODE_PRIVATE);
+        boolean vibrationEnabled = prefs.getBoolean("vibrationEnabled", true);
+        if (vibrationEnabled) {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (vibrator != null && vibrator.hasVibrator()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    VibrationEffect effect = VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE);
+                    vibrator.vibrate(effect);
+                } else {
+                    vibrator.vibrate(200);
+                }
+            }
+        }
+        health -= damage;
         updateHealthUI();
         if (health <= 0) {
             Intent intent = new Intent(this, GameOverActivity.class);
