@@ -31,12 +31,7 @@ public class ShootingController {
         if (tower.getTowerType() == Towers.DART_MONKEY) {
             tower.setImageResource(R.drawable.angrymonkey);
         }
-        tower.post(new Runnable() {
-            @Override
-            public void run() {
-                tryToShoot();
-            }
-        });
+        tower.post(this::tryToShoot);
     }
 
     public void updateAndDraw(float deltaSec,
@@ -47,7 +42,21 @@ public class ShootingController {
         while (it.hasNext()) {
             projectile p = it.next();
             if (p.update(deltaSec, scaleX, scaleY)) {
-                gameView.removeEnemy(p.getTarget());
+                BalloonEnemy target = p.getTarget();
+
+                if (p.isIceProjectile()) {
+                    target.freeze(gameView.getContext());
+                } else {
+                    int damage = p.getDamage();
+                    for (int i = 0; i < damage; i++) {
+                        if (target.applyHit()) {
+                            gameView.removeEnemy(target);
+                            break;
+                        } else {
+                            target.downgrade(gameView.getContext());
+                        }
+                    }
+                }
                 it.remove();
             } else {
                 p.draw(canvas);
@@ -79,21 +88,22 @@ public class ShootingController {
 
                     if (tower.getTowerType() == Towers.DART_MONKEY) {
                         tower.setImageResource(R.drawable.angrythrown);
-                        tower.postDelayed(
-                                () -> tower.setImageResource(R.drawable.angrymonkey),
-                                500
-                        );
+                        tower.postDelayed(() -> tower.setImageResource(R.drawable.angrymonkey), 500);
                     }
 
-                    // **Hier** geven we nu het projectile-resource mee:
                     int projRes = tower.getTowerType().getProjectileResId();
+                    int damage = tower.getTowerType() == Towers.ICE_MONKEY ? 0 : 1;
+                    boolean isIce = tower.getTowerType() == Towers.ICE_MONKEY;
+
                     projectiles.add(new projectile(
-                            gameView.getContext(),   // <-- hier de Context
+                            gameView.getContext(),
                             tx,
                             ty,
                             e,
                             tower.getTowerType().getBulletSpeed(),
-                            projRes
+                            projRes,
+                            damage,
+                            isIce
                     ));
                     lastShotTimes.put(tower, now);
                     break;
@@ -101,5 +111,4 @@ public class ShootingController {
             }
         }
     }
-
 }

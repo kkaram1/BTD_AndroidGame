@@ -4,8 +4,8 @@ import com.example.baloonstd.R;
 
 public enum Towers {
     DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000,50,1000f,R.drawable.dart),
-    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9001,2000,100,5000f,R.drawable.dart),
-    ICE_MONKEY(3, R.drawable.ice_wizard, "Ice Monkey", 200,1000,75, 1000f,R.drawable.dart);
+    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9001,2000,10,4000f,R.drawable.bullet),
+    ICE_MONKEY(3, R.drawable.ice_wizard, "Ice Monkey", 200,1000,75, 1000f,R.drawable.iceball);
     private final int tag;
     private final String displayName;
     private final int range;

@@ -1,10 +1,12 @@
 package com.example.baloonstd.Shooting;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.content.Context;
+import android.util.TypedValue;
 
 import com.example.baloonstd.Balloon.BalloonEnemy;
 
@@ -12,23 +14,37 @@ public class projectile {
     private final PointF pos;
     private final BalloonEnemy target;
     private final float speed;
-    private final float radius = 16f;
     private final PointF velocity = new PointF();
     private final Bitmap bulletImage;
+    private final float halfW, halfH;
+
+    private final boolean isIce;
+    private final int damage;
 
     public projectile(Context ctx,
                       float startX,
                       float startY,
                       BalloonEnemy target,
                       float speed,
-                      int projectileResId) {
-        this.pos         = new PointF(startX, startY);
-        this.target      = target;
-        this.speed       = speed;
-        this.bulletImage = BitmapFactory.decodeResource(
-                ctx.getResources(),
-                projectileResId
+                      int projectileResId,
+                      int damage,
+                      boolean isIce) {
+        this.pos    = new PointF(startX, startY);
+        this.target = target;
+        this.speed  = speed;
+        this.damage = damage;
+        this.isIce  = isIce;
+
+        Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), projectileResId);
+        int sizePx = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 16, ctx.getResources().getDisplayMetrics()
         );
+        Bitmap scaled = Bitmap.createScaledBitmap(raw, sizePx, sizePx, true);
+        raw.recycle();
+
+        this.bulletImage = scaled;
+        this.halfW = scaled.getWidth()  / 2f;
+        this.halfH = scaled.getHeight() / 2f;
     }
 
     private void updateVelocity(float scaleX, float scaleY) {
@@ -49,18 +65,28 @@ public class projectile {
 
         float tx = target.getPosition().x * scaleX;
         float ty = target.getPosition().y * scaleY;
-
-        float half = bulletImage.getWidth() / 2f;
-        return Math.hypot(pos.x - tx, pos.y - ty) < radius + half;
+        return Math.hypot(pos.x - tx, pos.y - ty) < halfW;
     }
 
     public void draw(Canvas canvas) {
-        float halfW = bulletImage.getWidth() / 2f;
-        float halfH = bulletImage.getHeight() / 2f;
+        float angle = (float) Math.toDegrees(Math.atan2(velocity.y, velocity.x));
+        float drawAngle = angle - 90f;
+
+        canvas.save();
+        canvas.rotate(drawAngle, pos.x, pos.y);
         canvas.drawBitmap(bulletImage, pos.x - halfW, pos.y - halfH, null);
+        canvas.restore();
     }
 
     public BalloonEnemy getTarget() {
         return target;
+    }
+
+    public boolean isIceProjectile() {
+        return isIce;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 }

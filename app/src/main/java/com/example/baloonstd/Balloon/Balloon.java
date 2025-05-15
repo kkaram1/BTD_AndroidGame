@@ -9,40 +9,47 @@ import android.graphics.Point;
 import com.example.baloonstd.R;
 
 public enum Balloon {
-    RED(R.drawable.red_balloon, 120f, 1,100),BLUE(R.drawable.blue_balloon, 140f, 2,100)
-    ,GREEN(R.drawable.green_balloon, 160f, 3,100),ZEPPLIN(R.drawable.zepplin,80f,10,300);
+    RED(R.drawable.red_balloon,R.drawable.icered, 120f, 1,100),BLUE(R.drawable.blue_balloon,R.drawable.iceblue, 140f, 2,100)
+    ,GREEN(R.drawable.green_balloon,R.drawable.iceblue, 160f, 3,100),ZEPPLIN(R.drawable.zepplin,R.drawable.icezepplin,80f,10,300);
 
-    private int resourceId;
+
     private float speed;
     private int layer;
     private Point position;
     private final int displaySize;
+    private final int resNormal, resIce;
 
-    private Bitmap cachedBitmap;
-    Balloon(int resourceId, float speed, int layer,int displaySize) {
-        this.resourceId = resourceId;
+    private Bitmap cachedNormal, cachedIce;
+    Balloon(int resNormal, int resIce, float speed, int layer,int displaySize) {
+        this.resNormal = resNormal;
+        this.resIce = resIce;
         this.speed = speed;
         this.layer = layer;
         this.position=position;
         this.displaySize = displaySize;
     }
 
-    public Bitmap getBitmap(Context ctx) {
-        if (cachedBitmap == null) {
-            Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), resourceId);
-            if (this == ZEPPLIN) {
-                Matrix m = new Matrix();
-                m.postRotate(90);
-                raw = Bitmap.createBitmap(raw, 0, 0, raw.getWidth(), raw.getHeight(), m, true);
+    public Bitmap getBitmap(Context ctx, boolean iced) {
+        if (iced) {
+            if (cachedIce == null) {
+                cachedIce = Bitmap.createScaledBitmap(
+                        BitmapFactory.decodeResource(ctx.getResources(), resIce),
+                        displaySize, displaySize, true
+                );
             }
-
-            cachedBitmap = Bitmap.createScaledBitmap(raw, displaySize, displaySize, true);
-            raw.recycle();
+            return cachedIce;
+        } else {
+            if (cachedNormal == null) {
+                cachedNormal = Bitmap.createScaledBitmap(
+                        BitmapFactory.decodeResource(ctx.getResources(), resNormal),
+                        displaySize, displaySize, true
+                );
+            }
+            return cachedNormal;
         }
-        return cachedBitmap;
     }
-    public int getResourceId() {
-        return resourceId;
+    public int getFrozenResId() {
+        return resIce;
     }
 
     public float getSpeed() {
