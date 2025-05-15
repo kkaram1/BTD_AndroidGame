@@ -1,5 +1,6 @@
 package com.example.baloonstd;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -21,6 +22,25 @@ public class Settings extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.settings);
         SeekBar musicSeekBar = findViewById(R.id.musicVolumeSeekBar);
+        SharedPreferences sharedPreferences = getSharedPreferences("SettingsPrefs", MODE_PRIVATE);
+        int savedVolume = sharedPreferences.getInt("musicVolume", 50); // default to 50
+        musicSeekBar.setProgress(savedVolume);
+        musicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float volume = progress / 100f;
+                MusicManager.setVolume(volume);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("musicVolume", progress);
+                editor.apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
         SwitchCompat vibrationSwitch = findViewById(R.id.vibrationSwitch);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

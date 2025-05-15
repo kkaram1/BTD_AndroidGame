@@ -1,6 +1,5 @@
 package com.example.baloonstd;
 
-import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,7 +14,6 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -26,7 +24,6 @@ import com.example.baloonstd.Phase.Phase;
 import com.example.baloonstd.Phase.PhaseManager;
 import com.example.baloonstd.Shooting.ShootingController;
 import com.example.baloonstd.Tower.Tower;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
