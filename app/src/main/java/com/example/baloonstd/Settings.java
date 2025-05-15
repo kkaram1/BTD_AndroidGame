@@ -1,7 +1,9 @@
 package com.example.baloonstd;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
@@ -55,5 +57,13 @@ public class Settings extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+    public void goToLogin(View v){
+        SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
+        prefs1.edit()
+                .putString("username", null)
+                .apply();
+        Intent i = new Intent(Settings.this, LoginActivity.class);
+        startActivity(i);
     }
 }
