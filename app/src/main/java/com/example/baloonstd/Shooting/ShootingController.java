@@ -65,10 +65,12 @@ public class ShootingController {
 
             float tx = tower.getX() + tower.getWidth() / 2f;
             float ty = tower.getY() + tower.getHeight() / 2f;
+
             for (BalloonEnemy e : gameView.getEnemies()) {
                 float ex = e.getPosition().x * gameView.getMapScaleX();
                 float ey = e.getPosition().y * gameView.getMapScaleY();
                 float dx = ex - tx, dy = ey - ty;
+
                 if (Math.hypot(dx, dy) <= tower.getRadius()) {
                     float angle = (float)Math.toDegrees(Math.atan2(dy, dx)) + 220f;
                     tower.setPivotX(tower.getWidth() / 2f);
@@ -82,12 +84,22 @@ public class ShootingController {
                                 500
                         );
                     }
-                    float speed = tower.getTowerType().getBulletSpeed();
-                    projectiles.add(new projectile(tx, ty, e, speed));
+
+                    // **Hier** geven we nu het projectile-resource mee:
+                    int projRes = tower.getTowerType().getProjectileResId();
+                    projectiles.add(new projectile(
+                            gameView.getContext(),   // <-- hier de Context
+                            tx,
+                            ty,
+                            e,
+                            tower.getTowerType().getBulletSpeed(),
+                            projRes
+                    ));
                     lastShotTimes.put(tower, now);
                     break;
                 }
             }
         }
     }
+
 }

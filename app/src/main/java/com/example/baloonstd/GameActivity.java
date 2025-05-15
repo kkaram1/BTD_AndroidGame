@@ -2,6 +2,7 @@ package com.example.baloonstd;
 
 import static com.example.baloonstd.Tower.Towers.DART_MONKEY;
 import static com.example.baloonstd.Tower.Towers.SNIPER_MONKEY;
+import static com.example.baloonstd.Tower.Towers.ICE_MONKEY;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -106,6 +107,7 @@ public class GameActivity extends BaseActivity {
         pairList = new ArrayList<>();
         pairList.add( new Pair<>(DART_MONKEY,findViewById(R.id.towerMonkeyIcon)));
         pairList.add( new Pair<>(SNIPER_MONKEY,findViewById(R.id.towerSniperIcon)));
+        pairList.add( new Pair<>(ICE_MONKEY,findViewById(R.id.towerIceIcon)));
 
         Intent intent = getIntent();
         int mapNum = intent.getIntExtra("mapNum", -1);

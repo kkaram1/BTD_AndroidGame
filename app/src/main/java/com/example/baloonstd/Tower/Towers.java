@@ -3,10 +3,9 @@ package com.example.baloonstd.Tower;
 import com.example.baloonstd.R;
 
 public enum Towers {
-    DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000,50,1000f),
-    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9001,2000,100,5000f),
-    ICE_MONKEY(3, R.drawable.dartmonkey, "Ice Monkey", 180,1000,75, 1000f);
-
+    DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000,50,1000f,R.drawable.dart),
+    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9001,2000,100,5000f,R.drawable.dart),
+    ICE_MONKEY(3, R.drawable.ice_wizard, "Ice Monkey", 200,1000,75, 1000f,R.drawable.dart);
     private final int tag;
     private final String displayName;
     private final int range;
@@ -14,10 +13,11 @@ public enum Towers {
     private final int price;
     private long ShotCooldownMs;
     private final float  bulletspeed;
+    private final int projectileResId;
 
 
 
-    Towers(int tag, int resourceId, String displayName, int range,long ShotCooldownMs, int price, float bulletspeed) {
+    Towers(int tag, int resourceId, String displayName, int range,long ShotCooldownMs, int price, float bulletspeed,int projectileResId) {
         this.tag = tag;
         this.resourceId = resourceId;
         this.displayName = displayName;
@@ -25,8 +25,10 @@ public enum Towers {
         this.ShotCooldownMs=ShotCooldownMs;
         this.price=price;
         this.bulletspeed=bulletspeed;
+        this.projectileResId=projectileResId;
     }
 
+    public int getProjectileResId() { return projectileResId; }
     public float getBulletSpeed() { return bulletspeed; }
     public int getPrice(){
         return price;

@@ -1,10 +1,10 @@
-
 package com.example.baloonstd.Shooting;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PointF;
+import android.content.Context;
 
 import com.example.baloonstd.Balloon.BalloonEnemy;
 
@@ -13,14 +13,22 @@ public class projectile {
     private final BalloonEnemy target;
     private final float speed;
     private final float radius = 16f;
-    private final Paint paint = new Paint();
     private final PointF velocity = new PointF();
+    private final Bitmap bulletImage;
 
-    public projectile(float startX, float startY, BalloonEnemy target, float speed) {
-        this.pos = new PointF(startX, startY);
-        this.target = target;
-        this.speed = speed;
-        paint.setColor(0xffffaa00);
+    public projectile(Context ctx,
+                      float startX,
+                      float startY,
+                      BalloonEnemy target,
+                      float speed,
+                      int projectileResId) {
+        this.pos         = new PointF(startX, startY);
+        this.target      = target;
+        this.speed       = speed;
+        this.bulletImage = BitmapFactory.decodeResource(
+                ctx.getResources(),
+                projectileResId
+        );
     }
 
     private void updateVelocity(float scaleX, float scaleY) {
@@ -42,15 +50,14 @@ public class projectile {
         float tx = target.getPosition().x * scaleX;
         float ty = target.getPosition().y * scaleY;
 
-        Bitmap img = target.getImage();
-        float half = img.getWidth()/2f;
-
+        float half = bulletImage.getWidth() / 2f;
         return Math.hypot(pos.x - tx, pos.y - ty) < radius + half;
     }
 
-
     public void draw(Canvas canvas) {
-        canvas.drawCircle(pos.x, pos.y, radius, paint);
+        float halfW = bulletImage.getWidth() / 2f;
+        float halfH = bulletImage.getHeight() / 2f;
+        canvas.drawBitmap(bulletImage, pos.x - halfW, pos.y - halfH, null);
     }
 
     public BalloonEnemy getTarget() {
