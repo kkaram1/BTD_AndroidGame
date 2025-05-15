@@ -294,5 +294,7 @@ public class GameView extends View {
 
     public float getMapScaleX() { return scaleX; }
     public float getMapScaleY() { return scaleY; }
-
+    public ShootingController getShooter() {
+        return shooter;
+    }
 }

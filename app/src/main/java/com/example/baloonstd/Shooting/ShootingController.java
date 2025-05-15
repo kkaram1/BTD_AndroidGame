@@ -111,4 +111,9 @@ public class ShootingController {
             }
         }
     }
+    public void removeTower(Tower t) {
+        towers.remove(t);
+        lastShotTimes.remove(t);
+    }
+
 }

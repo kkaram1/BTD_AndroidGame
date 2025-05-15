@@ -81,6 +81,7 @@ public class GameActivity extends BaseActivity {
         upgradeToggleButton.setVisibility(View.GONE);
         prefs  = getSharedPreferences("player_session", MODE_PRIVATE);
         balloonsPopped = prefs.getInt("balloonsPopped",0);
+        Button btnSellTower = findViewById(R.id.btnSellTower);
 
 
         upgradeToggleButton.setOnClickListener(v -> {
@@ -183,6 +184,35 @@ public class GameActivity extends BaseActivity {
         resumeButton.setOnClickListener(v -> {
             pauseMenu.setVisibility(LinearLayout.GONE);
             gameView.setPaused(false);
+        });
+
+        btnSellTower.setOnClickListener(v -> {
+            if (selectedTower == null) return;
+            int price = selectedTower.getTowerType().getPrice();
+            int refund = (int) Math.floor(price * 0.75);
+            addMoney(refund);
+            FrameLayout dragL = findViewById(R.id.dragLayer);
+            dragL.removeView(selectedTower);
+            for (int i = 0; i < dragL.getChildCount(); i++) {
+                View child = dragL.getChildAt(i);
+                if (child instanceof RangeView) {
+                    float cx = selectedTower.getX() + selectedTower.getWidth() / 2f;
+                    float cy = selectedTower.getY() + selectedTower.getHeight() / 2f;
+
+                    float rX = child.getX() + ((RangeView) child).getRadius();
+                    float rY = child.getY() + ((RangeView) child).getRadius();
+
+                    if (Math.hypot(cx - rX, cy - rY) < 1f) {
+                        dragL.removeView(child);
+                        break;
+                    }
+                }
+            }
+            gameView.getShooter().removeTower(selectedTower);
+            selectedTower = null;
+            towerUpgradePopup.setVisibility(View.GONE);
+            upgradeToggleButton.setVisibility(View.GONE);
+            Toast.makeText(this, "Tower sold for " + refund, Toast.LENGTH_SHORT).show();
         });
 
 
