@@ -21,12 +21,11 @@ public class MainActivity extends BaseActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        MusicManager.start(this, R.raw.main_menu_music); // Replace with correct map music
+        MusicManager.start(this, R.raw.main_menu_music);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-
         });
     }
     public void goToMenu(View v){

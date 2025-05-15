@@ -7,7 +7,7 @@
     android:id="@+id/main">
 
 
-    <!-- Music Volume Label -->
+
     <TextView
         android:id="@+id/musicVolumeLabel"
         android:layout_width="wrap_content"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Music Volume Slider -->
+
     <SeekBar
         android:id="@+id/musicVolumeSeekBar"
         android:layout_width="0dp"
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-    <!-- Vibration Toggle Label -->
+
     <TextView
         android:id="@+id/vibrationLabel"
         android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="24dp" />
 
-    <!-- Vibration Switch -->
+
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/vibrationSwitch"
         android:layout_width="wrap_content"

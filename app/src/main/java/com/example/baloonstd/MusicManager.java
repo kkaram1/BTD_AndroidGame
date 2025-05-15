@@ -2,6 +2,8 @@ package com.example.baloonstd;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class MusicManager {
     private static MediaPlayer player;
@@ -9,12 +11,14 @@ public class MusicManager {
 
     public static void start(Context context, int resId) {
         if (player != null && currentResId == resId && player.isPlaying()) return;
-
-        stop(); // stop current if different or null
+        stop();
         player = MediaPlayer.create(context, resId);
         currentResId = resId;
         player.setLooping(true);
-        player.setVolume(0.5f, 0.5f);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int savedVolume = prefs.getInt("musicVolume", 50);
+        float volume = savedVolume / 100f;
+        player.setVolume(volume, volume);
         player.start();
     }
 
@@ -34,4 +38,6 @@ public class MusicManager {
             currentResId = -1;
         }
     }
+
+    public static void setVolume(float volume) {player.setVolume(volume, volume);}
 }
