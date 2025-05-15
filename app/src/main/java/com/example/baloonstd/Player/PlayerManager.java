@@ -1,4 +1,4 @@
-package com.example.baloonstd;
+package com.example.baloonstd.Player;
 
 public class PlayerManager {
     private static PlayerManager instance;

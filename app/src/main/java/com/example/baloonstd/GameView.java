@@ -22,6 +22,7 @@ import com.example.baloonstd.Balloon.BalloonEnemy;
 import com.example.baloonstd.Map.MapManager;
 import com.example.baloonstd.Phase.Phase;
 import com.example.baloonstd.Phase.PhaseManager;
+import com.example.baloonstd.Player.PlayerManager;
 import com.example.baloonstd.Shooting.ShootingController;
 import com.example.baloonstd.Tower.Tower;
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class GameView extends View {
     private final int nativeWidth = 500, nativeHeight = 322;
