@@ -42,6 +42,14 @@ public class Settings extends BaseActivity {
             public void onStopTrackingTouch(SeekBar seekBar) { }
         });
         SwitchCompat vibrationSwitch = findViewById(R.id.vibrationSwitch);
+        boolean vibrationEnabled = sharedPreferences.getBoolean("vibrationEnabled", true);
+        vibrationSwitch.setChecked(vibrationEnabled);
+
+        vibrationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("vibrationEnabled", isChecked);
+            editor.apply();
+        });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
