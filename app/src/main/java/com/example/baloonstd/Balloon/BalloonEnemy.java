@@ -28,14 +28,7 @@ public class BalloonEnemy {
         this.type  = b;
         this.layer = b.getLayer();
         this.speedPixelsPerSecond = b.getSpeed();
-        Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), b.getResourceId());
-        int size = (b == Balloon.ZEPPLIN ? 300 : 100);
-        if (b == Balloon.ZEPPLIN) {
-            Matrix m = new Matrix();
-            m.postRotate(90);
-            raw = Bitmap.createBitmap(raw, 0, 0, raw.getWidth(), raw.getHeight(), m, true);
-        }
-        this.balloonImage = Bitmap.createScaledBitmap(raw, size, size, true);
+        this.balloonImage = b.getBitmap(ctx);
     }
 
     public float getSpeedPixelsPerSecond() {
