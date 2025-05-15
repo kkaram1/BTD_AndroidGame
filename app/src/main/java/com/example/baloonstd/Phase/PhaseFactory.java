@@ -22,7 +22,7 @@ public class PhaseFactory {
 
         switch (phaseNumber) {
             case 1:
-                balloonSetup.put(Balloon.RED, 5);
+                balloonSetup.put(Balloon.ZEPPLIN, 5);
                 break;
             case 2:
                 balloonSetup.put(Balloon.RED, 25);

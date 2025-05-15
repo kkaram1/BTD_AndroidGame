@@ -138,17 +138,37 @@ public class GameView extends View {
             }
             canvas.drawPath(drawPath, p);
         }
-        float uniformScale = Math.min(scaleX, scaleY) * 0.3f;
         for (BalloonEnemy e : enemies) {
             Bitmap b = e.getImage();
             float bmpW = b.getWidth();
             float bmpH = b.getHeight();
-
-            float left = e.getPosition().x * scaleX - (bmpW * uniformScale) / 2f;
-            float top  = e.getPosition().y * scaleY - (bmpH * uniformScale) / 2f;
-            RectF dst = new RectF(left, top, left + bmpW * uniformScale, top  + bmpH * uniformScale);
-
-            canvas.drawBitmap(b, null, dst, null);
+            float cx = e.getPosition().x * scaleX;
+            float cy = e.getPosition().y * scaleY;
+            float uScale = Math.min(scaleX, scaleY) * 0.3f;
+            float drawW = bmpW * uScale;
+            float drawH = bmpH * uScale;
+            if (e.getType() == Balloon.ZEPPLIN) {
+                int idx = e.getCurrentWaypointIndex();
+                Point next = idx < path.size() ? path.get(idx) : path.get(path.size()-1);
+                float nx = next.x * scaleX;
+                float ny = next.y * scaleY;
+                float dx = nx - cx;
+                float dy = ny - cy;
+                float angle = (float)Math.toDegrees(Math.atan2(dy, dx));
+                canvas.save();
+                canvas.translate(cx, cy);
+                canvas.rotate(angle);
+                RectF dst = new RectF(
+                        -drawW/2, -drawH/2,
+                        drawW/2,  drawH/2);
+                canvas.drawBitmap(b, null, dst, null);
+                canvas.restore();
+            } else {
+                RectF dst = new RectF(
+                        cx - drawW/2, cy - drawH/2,
+                        cx + drawW/2, cy + drawH/2);
+                canvas.drawBitmap(b, null, dst, null);
+            }
         }
         updateEnemyPositions(deltaSec);
         shooter.updateAndDraw(deltaSec, scaleX, scaleY, canvas);
