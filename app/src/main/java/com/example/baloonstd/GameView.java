@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class GameView extends View {
     private final int nativeWidth = 500, nativeHeight = 322;
@@ -267,9 +268,8 @@ public class GameView extends View {
     {
         PlayerManager.getInstance().getPlayer().incTowers(1);
         SharedPreferences prefs = getContext().getSharedPreferences("player_session", Context.MODE_PRIVATE);
-        prefs.edit().putInt("towersPlaced", PlayerManager.getInstance().getPlayer().getTowersPlaced()).apply();
-
-        updateTowersPlaced();
+        if(!PlayerManager.getInstance().getPlayer().isGuest()){prefs.edit().putInt("towersPlaced", PlayerManager.getInstance().getPlayer().getTowersPlaced()).apply();
+            updateTowersPlaced();}
         shooter.addTower(t);
     }
 

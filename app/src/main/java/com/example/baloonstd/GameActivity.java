@@ -27,6 +27,8 @@ import com.example.baloonstd.Phase.PhaseManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.content.Context;
@@ -151,7 +153,7 @@ public class GameActivity extends BaseActivity {
 
 
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
-            saveBalloonPop();
+            if(!PlayerManager.getInstance().getPlayer().isGuest()){saveBalloonPop();}
             if(phase == 2){gameWonScreen.setVisibility(LinearLayout.VISIBLE);}
             int phaseDispaly = phase +1;
             nextPhaseButton.setText("Start Phase "+ phaseDispaly);
