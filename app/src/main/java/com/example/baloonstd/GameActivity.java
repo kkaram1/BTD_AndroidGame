@@ -130,7 +130,7 @@ public class GameActivity extends BaseActivity {
 
         pauseButton.setOnClickListener(v -> {
             pauseMenu.setVisibility(LinearLayout.VISIBLE);
-            gameView.setPaused(true); // Assuming GameView has a pause flag
+            gameView.setPaused(true);
         });
 
         openPanel.setOnClickListener(v -> {

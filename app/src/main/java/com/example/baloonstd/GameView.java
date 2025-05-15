@@ -255,7 +255,7 @@ public class GameView extends View {
         if (paused) {
             spawnHandler.removeCallbacks(spawnRunnable);
         } else {
-            if (spawnCount < enemiesToSpawn.size()) {
+            if (enemiesToSpawn != null && spawnCount < enemiesToSpawn.size()) {
                 spawnHandler.postDelayed(spawnRunnable, 500);
             }
             lastUpdateTime = System.currentTimeMillis();
