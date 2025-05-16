@@ -46,6 +46,7 @@ public class PhaseFactory {
                 break;
             case 7:
                 balloonSetup.put(Balloon.GREEN, 50);
+                balloonSetup.put(Balloon.ZEPPLIN, 1);
                 break;
             case 8:
                 balloonSetup.put(Balloon.ZEPPLIN, 3);

@@ -87,7 +87,7 @@ public class ShootingController {
 
                     if (tower.getTowerType() == Towers.DART_MONKEY) {
                         tower.setImageResource(R.drawable.angrythrown);
-                        tower.postDelayed(() -> tower.setImageResource(R.drawable.angrymonkey), 500);
+                        tower.postDelayed(() -> tower.setImageResource(R.drawable.angrymonkey), 250);
                     }
 
                     int projRes = tower.getTowerType().getProjectileResId();

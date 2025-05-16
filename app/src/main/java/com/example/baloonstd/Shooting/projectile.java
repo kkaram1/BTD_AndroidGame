@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.util.TypedValue;
 
@@ -17,7 +16,6 @@ public class projectile {
     private final PointF velocity = new PointF();
     private final Bitmap bulletImage;
     private final float halfW, halfH;
-
     private final boolean isIce;
     private final int damage;
 
@@ -29,21 +27,19 @@ public class projectile {
                       int projectileResId,
                       int damage,
                       boolean isIce) {
-        this.pos    = new PointF(startX, startY);
+        this.pos = new PointF(startX, startY);
         this.target = target;
-        this.speed  = speed;
+        this.speed = speed;
         this.damage = damage;
-        this.isIce  = isIce;
-
+        this.isIce = isIce;
         Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), projectileResId);
         int sizePx = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 16, ctx.getResources().getDisplayMetrics()
         );
         Bitmap scaled = Bitmap.createScaledBitmap(raw, sizePx, sizePx, true);
         raw.recycle();
-
         this.bulletImage = scaled;
-        this.halfW = scaled.getWidth()  / 2f;
+        this.halfW = scaled.getWidth() / 2f;
         this.halfH = scaled.getHeight() / 2f;
     }
 
@@ -59,21 +55,26 @@ public class projectile {
     }
 
     public boolean update(float deltaSec, float scaleX, float scaleY) {
+        float tx = target.getPosition().x * scaleX;
+        float ty = target.getPosition().y * scaleY;
+        float dx = tx - pos.x, dy = ty - pos.y;
+        float dist = (float) Math.hypot(dx, dy);
+        float move = speed * deltaSec;
+        if (dist <= move) {
+            pos.x = tx;
+            pos.y = ty;
+            return true;
+        }
         updateVelocity(scaleX, scaleY);
         pos.x += velocity.x * deltaSec;
         pos.y += velocity.y * deltaSec;
-
-        float tx = target.getPosition().x * scaleX;
-        float ty = target.getPosition().y * scaleY;
-        return Math.hypot(pos.x - tx, pos.y - ty) < halfW;
+        return false;
     }
 
     public void draw(Canvas canvas) {
         float angle = (float) Math.toDegrees(Math.atan2(velocity.y, velocity.x));
-        float drawAngle = angle - 90f;
-
         canvas.save();
-        canvas.rotate(drawAngle, pos.x, pos.y);
+        canvas.rotate(angle - 90f, pos.x, pos.y);
         canvas.drawBitmap(bulletImage, pos.x - halfW, pos.y - halfH, null);
         canvas.restore();
     }
