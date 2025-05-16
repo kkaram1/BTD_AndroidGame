@@ -77,9 +77,19 @@ public class BalloonEnemy {
     public void downgrade(Context ctx) {
         if (layer > 1) {
             Balloon next = Balloon.fromLayer(layer - 1);
+            boolean wasFrozen = frozen;
             applyType(ctx, next);
+            if (wasFrozen) {
+                speedPixelsPerSecond = originalSpeed * 0.3f;
+                int frozenResId = type.getFrozenResId();
+                if (frozenResId != 0) {
+                    Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), frozenResId);
+                    balloonImage = Bitmap.createScaledBitmap(raw, balloonImage.getWidth(), balloonImage.getHeight(), true);
+                }
+            }
         }
     }
+
 
     public boolean applyHit() {
         hitsRemaining--;

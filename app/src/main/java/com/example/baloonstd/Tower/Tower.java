@@ -4,10 +4,17 @@ import android.content.Context;
 import android.graphics.Rect;
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.example.baloonstd.UpgradeType;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Tower extends AppCompatImageView {
     private int radius;
     private final Towers towerType;
     private long shotCooldown;
+    private final Map<UpgradeType,Integer> upgradeLevels = new HashMap<>();
+
 
     public Tower(Context context, Towers towerType) {
         super(context);
@@ -42,6 +49,11 @@ public class Tower extends AppCompatImageView {
         this.shotCooldown = ms;
         towerType.setShotCooldownMs(ms);
     }
-
+    public int getUpgradeLevel(UpgradeType u) {
+        return upgradeLevels.getOrDefault(u, 0);
+    }
+    public void incrementUpgrade(UpgradeType u) {
+        upgradeLevels.put(u, getUpgradeLevel(u) + 1);
+    }
 
 }

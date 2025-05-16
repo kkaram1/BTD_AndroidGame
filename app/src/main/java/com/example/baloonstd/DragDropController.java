@@ -192,6 +192,7 @@ public class DragDropController {
                                 activity.selectedTower = placed;
                                 rangeView.setVisibility(View.VISIBLE);
                                 towerUpgradePopup.setVisibility(View.VISIBLE);
+                                activity.configurePopupFor(placed);
                             }
                         });
                         closeButton.setOnClickListener(v2 -> {

@@ -308,8 +308,8 @@
             android:layout_width="match_parent"
             android:layout_height="10dp"/>
 
-        <!-- Long Range Darts optie -->
         <FrameLayout
+            android:id="@+id/upgradeRangeContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -323,7 +323,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@android:color/transparent"
-                android:text="Long Range Darts"
+                android:text="Range"
                 android:fontFamily="@font/luckiestguy"
                 android:textColor="@color/purple"
                 android:gravity="bottom|center_horizontal"/>
@@ -333,8 +333,8 @@
             android:layout_width="match_parent"
             android:layout_height="16dp"/>
 
-        <!-- Sharp Shots optie -->
         <FrameLayout
+            android:id="@+id/upgradeDamageContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -348,13 +348,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@android:color/transparent"
-                android:text="Sharp Shots"
+                android:text="Damage"
                 android:fontFamily="@font/luckiestguy"
                 android:textColor="@color/purple"
                 android:gravity="bottom|center_horizontal"/>
-
         </FrameLayout>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp"/>
+
+        <FrameLayout
+            android:id="@+id/upgradeSpeedContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:src="@drawable/speedicon"/>
+
+            <Button
+                android:id="@+id/btnUpgradeSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@android:color/transparent"
+                android:text="Speed"
+                android:fontFamily="@font/luckiestguy"
+                android:textColor="@color/purple"
+                android:gravity="bottom|center_horizontal"/>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -380,8 +403,8 @@
                 android:src="@drawable/sell_button" />
         </LinearLayout>
 
-
     </LinearLayout>
+
 
 
     <LinearLayout

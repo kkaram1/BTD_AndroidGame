@@ -1,5 +1,6 @@
 package com.example.baloonstd;
 
+import static android.view.View.GONE;
 import static com.example.baloonstd.Tower.Towers.DART_MONKEY;
 import static com.example.baloonstd.Tower.Towers.SNIPER_MONKEY;
 import static com.example.baloonstd.Tower.Towers.ICE_MONKEY;
@@ -42,7 +43,7 @@ public class GameActivity extends BaseActivity {
     private PhaseManager phaseManager;
     private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
-    private int money = 90;
+    private int money = 700;
     private int health = 50;
     private TextView healthText;
     private Button upgradeToggleButton;
@@ -50,6 +51,13 @@ public class GameActivity extends BaseActivity {
     LinearLayout towerUpgradePopup;
     private  SharedPreferences prefs;
     protected Tower selectedTower;
+    private Button btnRange;
+    private Button btnDamage;
+    private Button btnSpeed;
+    private FrameLayout upgradeRangeContainer;
+    private FrameLayout upgradeDamageContainer;
+    private FrameLayout upgradeSpeedContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +85,22 @@ public class GameActivity extends BaseActivity {
         LinearLayout gameWonScreen = findViewById(R.id.gameWonScreen);
         Button exitMain = findViewById(R.id.btnExitToMainMenu);
         Button endless = findViewById(R.id.btnEndlessMode);
-        upgradeToggleButton.setVisibility(View.GONE);
+        upgradeToggleButton.setVisibility(GONE);
         prefs  = getSharedPreferences("player_session", MODE_PRIVATE);
         balloonsPopped = prefs.getInt("balloonsPopped",0);
         ImageButton btnSellTower = findViewById(R.id.btnSellTower);
+        btnRange  = findViewById(R.id.btnUpgradeRange);
+        btnDamage = findViewById(R.id.btnUpgradeDamage);
+        btnSpeed  = findViewById(R.id.btnUpgradeSpeed);
+        upgradeRangeContainer  = findViewById(R.id.upgradeRangeContainer);
+        upgradeDamageContainer = findViewById(R.id.upgradeDamageContainer);
+        upgradeSpeedContainer  = findViewById(R.id.upgradeSpeedContainer);
+
 
 
         upgradeToggleButton.setOnClickListener(v -> {
             boolean vis = towerUpgradePopup.getVisibility() == View.VISIBLE;
-            towerUpgradePopup.setVisibility(vis ? View.GONE : View.VISIBLE);
+            towerUpgradePopup.setVisibility(vis ? GONE : View.VISIBLE);
         });
         btnUpgradeRange.setOnClickListener(v -> {
             if (selectedTower == null) return;
@@ -97,8 +112,8 @@ public class GameActivity extends BaseActivity {
             selectedTower.setRadius(selectedTower.getRadius() + 70);
             selectedTower.setShotCooldown(800);
             Toast.makeText(this, "Range increased", Toast.LENGTH_SHORT).show();
-            towerUpgradePopup.setVisibility(View.GONE);
-            upgradeToggleButton.setVisibility(View.GONE);
+            towerUpgradePopup.setVisibility(GONE);
+            upgradeToggleButton.setVisibility(GONE);
             updateRangeOverlayFor(selectedTower);
         });
 
@@ -129,7 +144,7 @@ public class GameActivity extends BaseActivity {
 
         firstPhaseButton.setOnClickListener(v3 -> {
             gameView.setPhase(phaseManager);
-            firstPhaseButton.setVisibility(LinearLayout.GONE);
+            firstPhaseButton.setVisibility(GONE);
         });
 
         pauseButton.setOnClickListener(v -> {
@@ -140,16 +155,16 @@ public class GameActivity extends BaseActivity {
         openPanel.setOnClickListener(v -> {
             updateMoneyDisplay();
             boolean vis = towerPanel.getVisibility() == LinearLayout.VISIBLE;
-            towerPanel.setVisibility(vis ? LinearLayout.GONE : LinearLayout.VISIBLE);
+            towerPanel.setVisibility(vis ? GONE : LinearLayout.VISIBLE);
         });
 
         nextPhaseButton.setOnClickListener(v -> {
             if (phaseManager.hasNextPhase()) {
                 phaseManager.moveToNextPhase();
                 gameView.setPhase(phaseManager);
-                nextPhaseButton.setVisibility(Button.GONE);
+                nextPhaseButton.setVisibility(GONE);
             } else {
-                nextPhaseButton.setVisibility(Button.GONE);
+                nextPhaseButton.setVisibility(GONE);
             }
         });
 
@@ -175,13 +190,13 @@ public class GameActivity extends BaseActivity {
                 })
         );
         endless.setOnClickListener(v -> {
-            gameWonScreen.setVisibility(LinearLayout.GONE);
+            gameWonScreen.setVisibility(GONE);
             int phaseDispaly = 3;
             nextPhaseButton.setText("Start Phase "+ phaseDispaly);
             nextPhaseButton.setVisibility(Button.VISIBLE);
         });
         resumeButton.setOnClickListener(v -> {
-            pauseMenu.setVisibility(LinearLayout.GONE);
+            pauseMenu.setVisibility(GONE);
             gameView.setPaused(false);
         });
 
@@ -209,8 +224,8 @@ public class GameActivity extends BaseActivity {
             }
             gameView.getShooter().removeTower(selectedTower);
             selectedTower = null;
-            towerUpgradePopup.setVisibility(View.GONE);
-            upgradeToggleButton.setVisibility(View.GONE);
+            towerUpgradePopup.setVisibility(GONE);
+            upgradeToggleButton.setVisibility(GONE);
             Toast.makeText(this, "Tower sold for " + refund, Toast.LENGTH_SHORT).show();
         });
 
@@ -227,6 +242,29 @@ public class GameActivity extends BaseActivity {
             startActivity(intent2);
             finish();
         });
+        btnDamage.setOnClickListener(v -> {
+            Tower tower = selectedTower;
+            if (tower == null) return;
+            Towers type = tower.getTowerType();
+            if (!type.supports(UpgradeType.DAMAGE)) return;
+
+            int lvl  = tower.getUpgradeLevel(UpgradeType.DAMAGE);
+            int cost = type.getUpgradeCost(UpgradeType.DAMAGE, lvl);
+            if (!spendMoney(cost)) {
+                Toast.makeText(this, "Niet genoeg geld", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            tower.incrementUpgrade(UpgradeType.DAMAGE);
+            Toast.makeText(this, "Damage +1 (lvl " + tower.getUpgradeLevel(UpgradeType.DAMAGE) + ")", Toast.LENGTH_SHORT).show();
+            int currentLvl = tower.getUpgradeLevel(UpgradeType.DAMAGE);
+            int maxLvl     = type.getMaxUpgradeLevel(UpgradeType.DAMAGE);
+            if (currentLvl >= maxLvl) {
+                btnDamage.setEnabled(false);
+            }
+            towerUpgradePopup.setVisibility(GONE);
+            upgradeToggleButton.setVisibility(GONE);
+        });
+
 
     }
     public boolean spendMoney(int amount) {
@@ -354,5 +392,24 @@ public class GameActivity extends BaseActivity {
         };
         Volley.newRequestQueue(this).add(stringRequest);
     }
+
+
+    public void configurePopupFor(Tower tower) {
+        Towers t = tower.getTowerType();
+        upgradeRangeContainer.setVisibility(t.supports(UpgradeType.RANGE)   ? View.VISIBLE : View.GONE);
+        upgradeDamageContainer.setVisibility(t.supports(UpgradeType.DAMAGE)  ? View.VISIBLE : View.GONE);
+        upgradeSpeedContainer.setVisibility(t.supports(UpgradeType.SPEED)   ? View.VISIBLE : View.GONE);
+
+        if (t.supports(UpgradeType.RANGE)) {
+            btnRange.setEnabled(tower.getUpgradeLevel(UpgradeType.RANGE) < t.getMaxUpgradeLevel(UpgradeType.RANGE));
+        }
+        if (t.supports(UpgradeType.DAMAGE)) {
+            btnDamage.setEnabled(tower.getUpgradeLevel(UpgradeType.DAMAGE) < t.getMaxUpgradeLevel(UpgradeType.DAMAGE));
+        }
+        if (t.supports(UpgradeType.SPEED)) {
+            btnSpeed.setEnabled(tower.getUpgradeLevel(UpgradeType.SPEED) < t.getMaxUpgradeLevel(UpgradeType.SPEED));
+        }
+    }
+
 
 }

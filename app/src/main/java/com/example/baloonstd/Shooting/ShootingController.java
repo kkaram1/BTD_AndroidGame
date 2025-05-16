@@ -7,6 +7,7 @@ import com.example.baloonstd.GameView;
 import com.example.baloonstd.R;
 import com.example.baloonstd.Tower.Tower;
 import com.example.baloonstd.Tower.Towers;
+import com.example.baloonstd.UpgradeType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,18 +44,16 @@ public class ShootingController {
             projectile p = it.next();
             if (p.update(deltaSec, scaleX, scaleY)) {
                 BalloonEnemy target = p.getTarget();
-
                 if (p.isIceProjectile()) {
                     target.freeze(gameView.getContext());
-                } else {
-                    int damage = p.getDamage();
-                    for (int i = 0; i < damage; i++) {
-                        if (target.applyHit()) {
-                            gameView.removeEnemy(target);
-                            break;
-                        } else {
-                            target.downgrade(gameView.getContext());
-                        }
+                }
+                int damage = p.getDamage();
+                if (damage > 0) {
+                    for (int i = 0; i < damage - 1; i++) {
+                        target.downgrade(gameView.getContext());
+                    }
+                    if (target.applyHit()) {
+                        gameView.removeEnemy(target);
                     }
                 }
                 it.remove();
@@ -81,7 +80,7 @@ public class ShootingController {
                 float dx = ex - tx, dy = ey - ty;
 
                 if (Math.hypot(dx, dy) <= tower.getRadius()) {
-                    float angle = (float)Math.toDegrees(Math.atan2(dy, dx)) + 220f;
+                    float angle = (float) Math.toDegrees(Math.atan2(dy, dx)) + 220f;
                     tower.setPivotX(tower.getWidth() / 2f);
                     tower.setPivotY(tower.getHeight() / 2f);
                     tower.setRotation(angle);
@@ -92,7 +91,8 @@ public class ShootingController {
                     }
 
                     int projRes = tower.getTowerType().getProjectileResId();
-                    int damage = tower.getTowerType() == Towers.ICE_MONKEY ? 0 : 1;
+                    int baseDamage = tower.getTowerType() == Towers.ICE_MONKEY ? 0 : 1;
+                    int damage = baseDamage + tower.getUpgradeLevel(UpgradeType.DAMAGE);
                     boolean isIce = tower.getTowerType() == Towers.ICE_MONKEY;
 
                     projectiles.add(new projectile(
@@ -111,9 +111,9 @@ public class ShootingController {
             }
         }
     }
+
     public void removeTower(Tower t) {
         towers.remove(t);
         lastShotTimes.remove(t);
     }
-
 }
