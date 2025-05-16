@@ -155,7 +155,7 @@ public class GameView extends View {
                 float angle = (float)Math.toDegrees(Math.atan2(dy, dx));
                 canvas.save();
                 canvas.translate(cx, cy);
-                canvas.rotate(angle);
+                canvas.rotate(angle+90);
                 RectF dst = new RectF(
                         -drawW/2, -drawH/2,
                         drawW/2,  drawH/2);
