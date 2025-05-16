@@ -355,29 +355,32 @@
 
         </FrameLayout>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="16dp"/>
 
-        <Button
-            android:id="@+id/btnSellTower"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sell"
-            android:background="@color/transparent_white"
-            android:fontFamily="@font/luckiestguy"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="16dp">
+
+            <ImageButton
+                android:id="@+id/btnCloseUpgrade"
+                android:layout_width="106dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/exit_button_" />
+
+            <ImageButton
+                android:id="@+id/btnSellTower"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/sell_button" />
+        </LinearLayout>
 
 
-        <!-- Close knop -->
-        <ImageButton
-            android:id="@+id/btnCloseUpgrade"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/exit_button_"
-            android:scaleType="centerInside"
-            android:background="@android:color/transparent"/>
     </LinearLayout>
 
 

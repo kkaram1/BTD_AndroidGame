@@ -29,7 +29,6 @@ import com.example.baloonstd.Phase.PhaseManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.content.Context;
@@ -81,7 +80,7 @@ public class GameActivity extends BaseActivity {
         upgradeToggleButton.setVisibility(View.GONE);
         prefs  = getSharedPreferences("player_session", MODE_PRIVATE);
         balloonsPopped = prefs.getInt("balloonsPopped",0);
-        Button btnSellTower = findViewById(R.id.btnSellTower);
+        ImageButton btnSellTower = findViewById(R.id.btnSellTower);
 
 
         upgradeToggleButton.setOnClickListener(v -> {
