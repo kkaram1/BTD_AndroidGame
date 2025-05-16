@@ -70,10 +70,6 @@ public class RegisterActivity extends AppCompatActivity {
                     if (response.equals("[]")) {
                         Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(this, LoginActivity.class));
-                        SharedPreferences prefs = getSharedPreferences("player_session", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString("username", username);
-                        editor.apply();
                         finish();
                     } else {
                         Toast.makeText(this, "Registration failed: username taken" , Toast.LENGTH_LONG).show();
