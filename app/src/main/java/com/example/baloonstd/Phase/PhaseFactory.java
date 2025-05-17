@@ -31,6 +31,7 @@ public class PhaseFactory {
             case 3:
                 balloonSetup.put(Balloon.RED, 10);
                 balloonSetup.put(Balloon.BLUE, 30);
+                balloonSetup.put(Balloon.ZEPPLIN, 1);
                 break;
             case 4:
                 balloonSetup.put(Balloon.BLUE, 15);

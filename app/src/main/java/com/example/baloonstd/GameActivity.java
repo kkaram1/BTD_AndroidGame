@@ -81,7 +81,6 @@ public class GameActivity extends BaseActivity {
         updateHealthUI();
         upgradeToggleButton  = findViewById(R.id.upgradeToggleButton);
         towerUpgradePopup   = findViewById(R.id.towerUpgradePopup);
-        Button btnUpgradeRange = findViewById(R.id.btnUpgradeRange);
         LinearLayout gameWonScreen = findViewById(R.id.gameWonScreen);
         Button exitMain = findViewById(R.id.btnExitToMainMenu);
         Button endless = findViewById(R.id.btnEndlessMode);
@@ -242,27 +241,35 @@ public class GameActivity extends BaseActivity {
             startActivity(intent2);
             finish();
         });
-        btnUpgradeRange.setOnClickListener(v -> {
+        btnRange.setOnClickListener(v -> {
             if (selectedTower == null) return;
-            int cost = 50;
+            Towers type = selectedTower.getTowerType();
+            if (!type.supports(UpgradeType.RANGE)) return;
+            int lvl  = selectedTower.getUpgradeLevel(UpgradeType.RANGE);
+            int cost = type.getUpgradeCost(UpgradeType.RANGE, lvl);
             if (!spendMoney(cost)) {
                 Toast.makeText(this, "Not enough money", Toast.LENGTH_SHORT).show();
                 return;
             }
+            selectedTower.incrementUpgrade(UpgradeType.RANGE);
             selectedTower.setRadius(selectedTower.getRadius() + 70);
-            selectedTower.setShotCooldown(800);
-            Toast.makeText(this, "Range increased", Toast.LENGTH_SHORT).show();
-            towerUpgradePopup.setVisibility(GONE);
-            upgradeToggleButton.setVisibility(GONE);
+            int spdLvl  = selectedTower.getUpgradeLevel(UpgradeType.SPEED);
+            long baseCd = selectedTower.getOriginalCooldown();
+            selectedTower.setShotCooldown(baseCd / (spdLvl + 1));
+
             updateRangeOverlayFor(selectedTower);
-            hideRangeOverlayFor(selectedTower);
+            Toast.makeText(this,
+                    "Range upgraded to lvl " + selectedTower.getUpgradeLevel(UpgradeType.RANGE),
+                    Toast.LENGTH_SHORT).show();
+            configurePopupFor(selectedTower);
         });
+
+
         btnDamage.setOnClickListener(v -> {
             Tower tower = selectedTower;
             if (tower == null) return;
             Towers type = tower.getTowerType();
             if (!type.supports(UpgradeType.DAMAGE)) return;
-
             int lvl  = tower.getUpgradeLevel(UpgradeType.DAMAGE);
             int cost = type.getUpgradeCost(UpgradeType.DAMAGE, lvl);
             if (!spendMoney(cost)) {
@@ -270,16 +277,13 @@ public class GameActivity extends BaseActivity {
                 return;
             }
             tower.incrementUpgrade(UpgradeType.DAMAGE);
-            Toast.makeText(this, "Damage +1 (lvl " + tower.getUpgradeLevel(UpgradeType.DAMAGE) + ")", Toast.LENGTH_SHORT).show();
-            int currentLvl = tower.getUpgradeLevel(UpgradeType.DAMAGE);
-            int maxLvl     = type.getMaxUpgradeLevel(UpgradeType.DAMAGE);
-            if (currentLvl >= maxLvl) {
-                btnDamage.setEnabled(false);
-            }
-            towerUpgradePopup.setVisibility(GONE);
-            upgradeToggleButton.setVisibility(GONE);
-            hideRangeOverlayFor(selectedTower);
+            Toast.makeText(this,
+                    "Damage upgraded to lvl " + tower.getUpgradeLevel(UpgradeType.DAMAGE),
+                    Toast.LENGTH_SHORT).show();
+            configurePopupFor(tower);
+            updateRangeOverlayFor(tower);
         });
+
         btnSpeed.setOnClickListener(v -> {
             Tower tower = selectedTower;
             if (tower == null) return;
@@ -288,22 +292,33 @@ public class GameActivity extends BaseActivity {
 
             int lvl  = tower.getUpgradeLevel(UpgradeType.SPEED);
             int cost = type.getUpgradeCost(UpgradeType.SPEED, lvl);
-            if (!spendMoney(cost)){
+            if (!spendMoney(cost)) {
                 Toast.makeText(this, "Not enough money", Toast.LENGTH_SHORT).show();
+                return;
             }
-            tower.incrementUpgrade(UpgradeType.SPEED);
-            Toast.makeText(this, "Speed +1 (lvl " + tower.getUpgradeLevel(UpgradeType.SPEED) + ")", Toast.LENGTH_SHORT).show();
-            int newLevel = tower.getUpgradeLevel(UpgradeType.SPEED);
-            long baseCd = tower.getOriginalCooldown();
-            long newCd  = baseCd / (newLevel + 1);
-            tower.setShotCooldown(newCd);
 
-            btnSpeed.setEnabled(newLevel < type.getMaxUpgradeLevel(UpgradeType.SPEED));
-            towerUpgradePopup.setVisibility(GONE);
-            upgradeToggleButton.setVisibility(GONE);
-            hideRangeOverlayFor(selectedTower);
+            tower.incrementUpgrade(UpgradeType.SPEED);
+
+            long baseCd = tower.getOriginalCooldown();
+            int  spdLvl = tower.getUpgradeLevel(UpgradeType.SPEED);
+            tower.setShotCooldown(baseCd / (spdLvl + 1));
+
+            Toast.makeText(this,
+                    "Speed upgraded to lvl " + spdLvl,
+                    Toast.LENGTH_SHORT).show();
+
+            configurePopupFor(tower);
+            updateRangeOverlayFor(tower);
         });
 
+        closeButton.setOnClickListener(v -> {
+            if (selectedTower != null) {
+                hideRangeOverlayFor(selectedTower);
+                selectedTower = null;
+            }
+            towerUpgradePopup.setVisibility(View.GONE);
+            upgradeToggleButton.setVisibility(View.GONE);
+        });
 
 
     }
@@ -444,7 +459,7 @@ public class GameActivity extends BaseActivity {
                 btnRange.setText("Range (" + costR + ")");
                 btnRange.setEnabled(true);
             } else {
-                btnSpeed.setText("Range max");
+                btnRange.setText("Range max");
                 btnRange.setEnabled(false);
             }
             upgradeRangeContainer.setVisibility(View.VISIBLE);
@@ -459,7 +474,7 @@ public class GameActivity extends BaseActivity {
                 btnDamage.setText("Damage (" + costD + ")");
                 btnDamage.setEnabled(true);
             } else {
-                btnSpeed.setText("Damage max");
+                btnDamage.setText("Damage max");
                 btnDamage.setEnabled(false);
             }
             upgradeDamageContainer.setVisibility(View.VISIBLE);

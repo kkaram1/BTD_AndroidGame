@@ -2,6 +2,7 @@ package com.example.baloonstd.Shooting;
 
 import android.graphics.Canvas;
 
+import com.example.baloonstd.Balloon.Balloon;
 import com.example.baloonstd.Balloon.BalloonEnemy;
 import com.example.baloonstd.GameView;
 import com.example.baloonstd.R;
@@ -44,16 +45,26 @@ public class ShootingController {
             projectile p = it.next();
             if (p.update(deltaSec, scaleX, scaleY)) {
                 BalloonEnemy target = p.getTarget();
+
                 if (p.isIceProjectile()) {
                     target.freeze(gameView.getContext());
                 }
                 int damage = p.getDamage();
                 if (damage > 0) {
-                    for (int i = 0; i < damage - 1; i++) {
-                        target.downgrade(gameView.getContext());
-                    }
-                    if (target.applyHit()) {
-                        gameView.removeEnemy(target);
+                    if (target.getType() == Balloon.ZEPPLIN) {
+                        for (int i = 0; i < damage; i++) {
+                            if (target.applyHit()) {
+                                gameView.removeEnemy(target);
+                                break;
+                            }
+                        }
+                    } else {
+                        for (int i = 0; i < damage - 1; i++) {
+                            target.downgrade(gameView.getContext());
+                        }
+                        if (target.applyHit()) {
+                            gameView.removeEnemy(target);
+                        }
                     }
                 }
                 it.remove();
@@ -63,6 +74,7 @@ public class ShootingController {
         }
         tryToShoot();
     }
+
 
     private void tryToShoot() {
         long now = System.currentTimeMillis();
