@@ -101,6 +101,14 @@ public class ShootingController {
                         tower.setImageResource(R.drawable.angrythrown);
                         tower.postDelayed(() -> tower.setImageResource(R.drawable.angrymonkey), 250);
                     }
+                    else if (tower.getTowerType() == Towers.ICE_MONKEY) {
+                        tower.setImageResource(R.drawable.thrownice);
+                        tower.postDelayed(() -> tower.setImageResource(R.drawable.ice_wizard), 250);
+                    }
+                    else if (tower.getTowerType() == Towers.SNIPER_MONKEY) {
+                        tower.setImageResource(R.drawable.thrownsnipe);
+                        tower.postDelayed(() -> tower.setImageResource(R.drawable.sniper), 400);
+                    }
 
                     int projRes = tower.getTowerType().getProjectileResId();
                     int baseDamage = tower.getTowerType() == Towers.ICE_MONKEY ? 0 : 1;
