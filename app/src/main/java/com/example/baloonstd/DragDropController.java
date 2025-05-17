@@ -29,6 +29,7 @@ public class DragDropController {
     private final ImageButton closeButton;
     private final List<Tower> placedTowers = new ArrayList<>();
     private final GameActivity activity;
+    private RangeView selectedRangeView;
 
     @SuppressLint("ClickableViewAccessibility")
     public DragDropController(FrameLayout dragLayer,
@@ -184,8 +185,9 @@ public class DragDropController {
 
                             if (activity.selectedTower == placed) {
                                 rangeView.setVisibility(View.INVISIBLE);
-                                activity.towerUpgradePopup.setVisibility(View.GONE);
+                                activity.towerUpgradePopup.setVisibility(LinearLayout.GONE);
                                 activity.selectedTower = null;
+                                selectedRangeView = null;
                             }
 
                             else {
@@ -193,12 +195,8 @@ public class DragDropController {
                                 rangeView.setVisibility(View.VISIBLE);
                                 towerUpgradePopup.setVisibility(View.VISIBLE);
                                 activity.configurePopupFor(placed);
+                                selectedRangeView = rangeView;
                             }
-                        });
-                        closeButton.setOnClickListener(v2 -> {
-                            activity.selectedTower = null;
-                            towerUpgradePopup.setVisibility(LinearLayout.GONE);
-                            rangeView.setVisibility(LinearLayout.GONE);
                         });
 
 
@@ -222,6 +220,14 @@ public class DragDropController {
                 default:
                     return false;
             }
+        });
+        closeButton.setOnClickListener(v -> {
+            if (selectedRangeView != null) {
+                selectedRangeView.setVisibility(View.GONE);
+                selectedRangeView = null;
+            }
+            towerUpgradePopup.setVisibility(View.GONE);
+            activity.selectedTower = null;
         });
     }
 
