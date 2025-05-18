@@ -29,8 +29,9 @@ public class MainActivity extends BaseActivity {
     }
 
     public void goToMenu(View v) {
-        Intent intent = new Intent(this, MenuSelect.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, MenuSelect.class);
+        //startActivity(intent);
+        startActivity(new Intent(this, DifficultySelectionActivity.class));
     }
 
     public void goToSettings(View v) {

@@ -45,7 +45,7 @@ public class GameActivity extends BaseActivity {
     private PhaseManager phaseManager;
     private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
-    private int money = 700;
+    private int money = 100;
     private int health = 50;
     private TextView healthText;
     private Button upgradeToggleButton;
@@ -63,6 +63,7 @@ public class GameActivity extends BaseActivity {
     private int popSoundId;
     private TextView upgradeTitle;
     private int gamesPlayed;
+    private Difficulty difficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +102,9 @@ public class GameActivity extends BaseActivity {
         upgradeSpeedContainer  = findViewById(R.id.upgradeSpeedContainer);
         upgradeTitle = findViewById(R.id.upgradeTitle);
 
+        String diffName = getIntent().getStringExtra("difficulty");
+        difficulty = diffName != null ? Difficulty.valueOf(diffName) : Difficulty.MEDIUM;
+
         TextView dartPriceTxt = findViewById(R.id.dartPrice);
         dartPriceTxt.setText(String.valueOf(Towers.DART_MONKEY.getPrice()));
 
@@ -133,7 +137,7 @@ public class GameActivity extends BaseActivity {
         Intent intent = getIntent();
         int mapNum = intent.getIntExtra("mapNum", -1);
         gameView = new GameView(this, mapNum);
-        phaseManager = new PhaseManager(this);
+        phaseManager = new PhaseManager(this, difficulty);
         gameContainer.addView(gameView);
         updateMapImage(mapNum);
         updateMoney(0);
@@ -191,7 +195,8 @@ public class GameActivity extends BaseActivity {
 
         gameView.setOnLayerPopListener(layer ->
                 runOnUiThread(() -> {
-                    addMoney(2 * layer);
+                    int earned = difficulty.getRewardPerLayer() * layer;
+                    addMoney(earned);
                     balloonsPopped += layer;
                 })
         );

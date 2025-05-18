@@ -5,80 +5,305 @@ import android.graphics.Point;
 
 import com.example.baloonstd.Balloon.Balloon;
 import com.example.baloonstd.Balloon.BalloonEnemy;
+import com.example.baloonstd.Difficulty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PhaseFactory {
-    private Context context;
+    private final Context context;
+    private final Difficulty difficulty;
 
-    public PhaseFactory(Context context) {
+    public PhaseFactory(Context context, Difficulty difficulty) {
         this.context = context;
+        this.difficulty = difficulty;
     }
 
     public Phase createPhase(int phaseNumber) {
         Map<Balloon, Integer> balloonSetup = new HashMap<>();
 
-        switch (phaseNumber) {
-            case 1:
-                balloonSetup.put(Balloon.RED, 5);
-                balloonSetup.put(Balloon.BLUE, 2);
-                break;
-            case 2:
-                balloonSetup.put(Balloon.RED, 25);
-                break;
-            case 3:
-                balloonSetup.put(Balloon.RED, 10);
-                balloonSetup.put(Balloon.BLUE, 30);
-                balloonSetup.put(Balloon.ZEPPLIN, 1);
-                break;
-            case 4:
-                balloonSetup.put(Balloon.BLUE, 15);
-                balloonSetup.put(Balloon.GREEN, 10);
-                break;
-            case 5:
-                balloonSetup.put(Balloon.BLUE, 10);
-                balloonSetup.put(Balloon.GREEN, 20);
-                break;
-            case 6:
-                balloonSetup.put(Balloon.BLUE, 15);
-                balloonSetup.put(Balloon.GREEN, 30);
-                break;
-            case 7:
-                balloonSetup.put(Balloon.GREEN, 50);
-                balloonSetup.put(Balloon.ZEPPLIN, 1);
-                break;
-            case 8:
-                balloonSetup.put(Balloon.ZEPPLIN, 3);
-                break;
-            // Add more phases easily here
-            default:
-                // Fallback phase (if phase number too high)
-                balloonSetup.put(Balloon.RED, 50);
-                break;
+        switch (difficulty) {
+            case EASY:   setupEasy(phaseNumber, balloonSetup);   break;
+            case MEDIUM: setupMedium(phaseNumber, balloonSetup); break;
+            case HARD:   setupHard(phaseNumber, balloonSetup);   break;
         }
 
         return new Phase(phaseNumber, createBalloons(balloonSetup));
     }
 
-    private ArrayList<BalloonEnemy> createBalloons(Map<Balloon, Integer> balloonSetup) {
-        ArrayList<BalloonEnemy> balloonList = new ArrayList<>();
+    private void setupEasy(int p, Map<Balloon,Integer> m){
+        switch (p) {
+            case 1:
+                m.put(Balloon.RED,     5);
+                break;
+            case 2:
+                m.put(Balloon.RED,    8);
+                break;
+            case 3:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,    2);
+                break;
+            case 4:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,    4);
+                break;
+            case 5:
+                m.put(Balloon.RED,    20);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,   3);
+                break;
+            case 6:
+                m.put(Balloon.RED,    15);
+                m.put(Balloon.BLUE,   12);
+                m.put(Balloon.GREEN,   6);
+                break;
+            case 7:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   12);
+                m.put(Balloon.GREEN,   10);
+                break;
+            case 8:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  15);
+                break;
+            case 9:
+                m.put(Balloon.RED,    5);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  25);
+                break;
+            case 10:
+                m.put(Balloon.BLUE,   20);
+                m.put(Balloon.GREEN,  20);
+                break;
+            case 11:
+                m.put(Balloon.BLUE,   15);
+                m.put(Balloon.GREEN,  25);
+                break;
+            case 12:
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  30);
+                break;
+            case 13:
 
-        for (Map.Entry<Balloon, Integer> entry : balloonSetup.entrySet()) {
-            Balloon balloonType = entry.getKey();
-            int count = entry.getValue();
-            for (int i = 0; i < count; i++) {
-                balloonList.add(new BalloonEnemy(
-                        context,
-                        balloonType,
-                        new Point(0,0)
-                ));
+                m.put(Balloon.BLUE,   5);
+                m.put(Balloon.GREEN,  35);
+                break;
+            case 14:
+                m.put(Balloon.GREEN,  40);
+                break;
+            case 15:
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.ZEPPLIN, 1);
+                break;
+            case 16:
+                m.put(Balloon.ZEPPLIN, 2);
+                break;
+            case 17:
+                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.ZEPPLIN, 2);
+                break;
+            case 18:
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.ZEPPLIN, 3);
+                break;
+            case 19:
+                m.put(Balloon.RED,   10);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.ZEPPLIN, 3);
+                break;
+            case 20:
+                m.put(Balloon.ZEPPLIN, 5);
+                break;
+            default: m.put(Balloon.RED, 20);                          break;
+        }
+    }
+    private void setupMedium(int p, Map<Balloon,Integer> m){
+        switch(p){
+            case 1:
+                m.put(Balloon.RED,     5);
+                break;
+            case 2:
+                m.put(Balloon.RED,    8);
+                break;
+            case 3:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,    2);
+                break;
+            case 4:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,    4);
+                break;
+            case 5:
+                m.put(Balloon.RED,    20);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,   3);
+                break;
+            case 6:
+                m.put(Balloon.RED,    15);
+                m.put(Balloon.BLUE,   12);
+                m.put(Balloon.GREEN,   6);
+                break;
+            case 7:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   12);
+                m.put(Balloon.GREEN,   10);
+                break;
+            case 8:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  15);
+                break;
+            case 9:
+                m.put(Balloon.RED,    5);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  25);
+                break;
+            case 10:
+                m.put(Balloon.BLUE,   20);
+                m.put(Balloon.GREEN,  20);
+                break;
+            case 11:
+                m.put(Balloon.BLUE,   15);
+                m.put(Balloon.GREEN,  25);
+                break;
+            case 12:
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  30);
+                break;
+            case 13:
+
+                m.put(Balloon.BLUE,   5);
+                m.put(Balloon.GREEN,  35);
+                break;
+            case 14:
+                m.put(Balloon.GREEN,  40);
+                break;
+            case 15:
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.ZEPPLIN, 1);
+                break;
+            case 16:
+                m.put(Balloon.ZEPPLIN, 2);
+                break;
+            case 17:
+                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.ZEPPLIN, 2);
+                break;
+            case 18:
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.ZEPPLIN, 3);
+                break;
+            case 19:
+                m.put(Balloon.RED,   10);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.ZEPPLIN, 3);
+                break;
+            case 20:
+                m.put(Balloon.ZEPPLIN, 5);
+                break;
+            default: m.put(Balloon.RED, 20);                          break;
+        }
+    }
+    private void setupHard(int p, Map<Balloon,Integer> m){
+        switch(p){
+            case 1:
+                m.put(Balloon.RED,     5);
+                break;
+            case 2:
+                m.put(Balloon.RED,    8);
+                break;
+            case 3:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,    2);
+                break;
+            case 4:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,    4);
+                break;
+            case 5:
+                m.put(Balloon.RED,    20);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,   3);
+                break;
+            case 6:
+                m.put(Balloon.RED,    15);
+                m.put(Balloon.BLUE,   12);
+                m.put(Balloon.GREEN,   6);
+                break;
+            case 7:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   12);
+                m.put(Balloon.GREEN,   10);
+                break;
+            case 8:
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  15);
+                break;
+            case 9:
+                m.put(Balloon.RED,    5);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  25);
+                break;
+            case 10:
+                m.put(Balloon.BLUE,   20);
+                m.put(Balloon.GREEN,  20);
+                break;
+            case 11:
+                m.put(Balloon.BLUE,   15);
+                m.put(Balloon.GREEN,  25);
+                break;
+            case 12:
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  30);
+                break;
+            case 13:
+
+                m.put(Balloon.BLUE,   5);
+                m.put(Balloon.GREEN,  35);
+                break;
+            case 14:
+                m.put(Balloon.GREEN,  40);
+                break;
+            case 15:
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.ZEPPLIN, 1);
+                break;
+            case 16:
+                m.put(Balloon.ZEPPLIN, 2);
+                break;
+            case 17:
+                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.ZEPPLIN, 2);
+                break;
+            case 18:
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.ZEPPLIN, 3);
+                break;
+            case 19:
+                m.put(Balloon.RED,   10);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.ZEPPLIN, 3);
+                break;
+            case 20:
+                m.put(Balloon.ZEPPLIN, 5);
+                break;
+            default: m.put(Balloon.RED, 20);                          break;
+        }
+    }
+
+    private ArrayList<BalloonEnemy> createBalloons(Map<Balloon,Integer> cfg){
+        ArrayList<BalloonEnemy> list = new ArrayList<>();
+        for (Map.Entry<Balloon,Integer> e : cfg.entrySet()) {
+            for (int i=0; i<e.getValue(); i++) {
+                list.add(new BalloonEnemy(context, e.getKey(), new Point(0,0)));
             }
         }
-
-
-
-        return balloonList;
+        return list;
     }
 }

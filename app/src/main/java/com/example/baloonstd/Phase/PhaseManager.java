@@ -2,13 +2,15 @@ package com.example.baloonstd.Phase;
 
 import android.content.Context;
 
+import com.example.baloonstd.Difficulty;
+
 public class PhaseManager {
     private int currentPhase = 1;
     private Phase currentPhaseData;
     private PhaseFactory phaseFactory;
 
-    public PhaseManager(Context context) {
-        phaseFactory = new PhaseFactory(context);
+    public PhaseManager(Context context, Difficulty difficulty) {
+        phaseFactory = new PhaseFactory(context, difficulty);
         loadPhase(currentPhase);
     }
 
