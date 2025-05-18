@@ -61,6 +61,7 @@ public class GameActivity extends BaseActivity {
     private FrameLayout upgradeSpeedContainer;
     private SoundPool soundPool;
     private int popSoundId;
+    private TextView upgradeTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class GameActivity extends BaseActivity {
         upgradeRangeContainer  = findViewById(R.id.upgradeRangeContainer);
         upgradeDamageContainer = findViewById(R.id.upgradeDamageContainer);
         upgradeSpeedContainer  = findViewById(R.id.upgradeSpeedContainer);
+        upgradeTitle = findViewById(R.id.upgradeTitle);
 
         TextView dartPriceTxt = findViewById(R.id.dartPrice);
         dartPriceTxt.setText(String.valueOf(Towers.DART_MONKEY.getPrice()));
@@ -464,6 +466,7 @@ public class GameActivity extends BaseActivity {
 
     public void configurePopupFor(Tower tower) {
         Towers t = tower.getTowerType();
+        upgradeTitle.setText(tower.getTowerType().getDisplayName());
         if (t.supports(UpgradeType.RANGE)) {
             int lvlR  = tower.getUpgradeLevel(UpgradeType.RANGE);
             int maxR  = t.getMaxUpgradeLevel(UpgradeType.RANGE);
