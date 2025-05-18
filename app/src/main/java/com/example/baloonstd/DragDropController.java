@@ -13,7 +13,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.baloonstd.Map.MapManager;
+import com.example.baloonstd.Map.Map;
 import com.example.baloonstd.Tower.Tower;
 import com.example.baloonstd.Tower.Towers;
 
@@ -34,8 +37,10 @@ public class DragDropController {
     @SuppressLint("ClickableViewAccessibility")
     public DragDropController(FrameLayout dragLayer,
                               LinearLayout towerPanel,
-                              List<android.util.Pair<Towers, ImageView>> towerIconList, LinearLayout towerUpgradePopup,
-                              ImageButton closeButton, GameActivity activity) {
+                              List<Pair<Towers, ImageView>> towerIconList,
+                              LinearLayout towerUpgradePopup,
+                              ImageButton closeButton,
+                              GameActivity activity) {
         this.dragLayer  = dragLayer;
         this.towerPanel = towerPanel;
         this.towerUpgradePopup = towerUpgradePopup;
@@ -76,151 +81,123 @@ public class DragDropController {
         dragLayer.setOnDragListener((v, event) -> {
             switch (event.getAction()) {
                 case DragEvent.ACTION_DRAG_STARTED:
-                    if (!event.getClipDescription()
-                            .hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN))
+                    if (!event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN))
                         return false;
-                    if (towerPanel != null) {
-                        towerPanel.setVisibility(View.GONE);
-                    }
+                    towerPanel.setVisibility(View.GONE);
                     gameView.showPathOverlay(true);
+                    gameView.showNoBuildOverlay(true);
 
-                    // Show temporary range circle at drag position
-                    int towerTag = Integer.parseInt(event.getClipDescription().getLabel().toString());
-                    Towers previewType = getTowerByTag(towerTag);
-                    int previewRange = previewType.getRange();
-                    RangeView previewRangeView = new RangeView(dragLayer.getContext(), previewRange);
-                    FrameLayout.LayoutParams previewParams = new FrameLayout.LayoutParams(
-                            previewRange * 2 + (int)previewRangeView.getPaint().getStrokeWidth(),
-                            previewRange * 2 + (int)previewRangeView.getPaint().getStrokeWidth()
-                    );
-                    previewRangeView.setLayoutParams(previewParams);
-                    previewRangeView.setX(-1000); // Off-screen initially
-                    previewRangeView.setY(-1000);
+                    int previewTag = Integer.parseInt(event.getClipDescription().getLabel().toString());
+                    Towers previewType = getTowerByTag(previewTag);
+                    RangeView previewRangeView = new RangeView(dragLayer.getContext(), previewType.getRange());
                     previewRangeView.setTag("PREVIEW_RANGE");
+                    int rr = previewRangeView.getRadius();
+                    float startX = event.getX() - rr;
+                    float startY = event.getY() - rr;
+                    previewRangeView.setX(startX);
+                    previewRangeView.setY(startY);
                     dragLayer.addView(previewRangeView);
-
                     return true;
 
                 case DragEvent.ACTION_DRAG_LOCATION:
-                    View previewView = dragLayer.findViewWithTag("PREVIEW_RANGE");
-                    if (previewView != null) {
-                        int radius = ((RangeView) previewView).getRadius();
-                        float px = event.getX() - radius;
-                        float py = event.getY() - radius;
-                        previewView.setX(px);
-                        previewView.setY(py);
+                    View pv = dragLayer.findViewWithTag("PREVIEW_RANGE");
+                    if (pv instanceof RangeView) {
+                        RangeView rv = (RangeView) pv;
+                        int r = rv.getRadius();
+                        rv.setX(event.getX() - r);
+                        rv.setY(event.getY() - r);
                     }
                     return true;
 
                 case DragEvent.ACTION_DROP:
-                    int w, h;
-                    if (event.getLocalState() instanceof View) {
-                        View localView = (View) event.getLocalState();
-                        w = localView.getWidth();
-                        h = localView.getHeight();
-                    } else {
-                        w = towerIcons.isEmpty() ? 0 : towerIcons.get(0).getWidth();
-                        h = towerIcons.isEmpty() ? 0 : towerIcons.get(0).getHeight();
-                    }
-                    float x = event.getX() - w / 2f;
-                    float y = event.getY() - h / 2f;
-
+                    int w = towerIcons.get(0).getWidth();
+                    int h = towerIcons.get(0).getHeight();
+                    float x = event.getX() - w/2f;
+                    float y = event.getY() - h/2f;
                     Rect dropRect = new Rect(
-                            (int)x,
-                            (int)y,
-                            (int)(x + w),
-                            (int)(y + h)
+                            (int)x, (int)y,
+                            (int)(x + w), (int)(y + h)
                     );
-
-                    int shrinkPx = 35;
-                    dropRect.inset(shrinkPx, shrinkPx);
+                    int shrink = 35;
+                    dropRect.inset(shrink, shrink);
 
                     boolean overlap = false;
-                    for (Tower m : placedTowers) {
-                        Rect r2 = m.getBounds();
-                        r2.inset(shrinkPx, shrinkPx);
+                    for (Tower t : placedTowers) {
+                        Rect r2 = t.getBounds();
+                        r2.inset(shrink, shrink);
                         if (Rect.intersects(dropRect, r2)) {
                             overlap = true;
                             break;
                         }
                     }
 
-                    boolean onPath = gameView.isOnPath(
-                            x + w/2f,
-                            y + h/2f
-                    );
+                    boolean onPath = gameView.isOnPath(x + w/2f, y + h/2f);
+                    int mapNum = activity.getIntent().getIntExtra("mapNum", 0);
+                    Map mapObj = MapManager.getMap(mapNum);
+                    float cx = x + w/2f;
+                    float cy = y + h/2f;
+                    int mapX = (int)(cx / gameView.getMapScaleX());
+                    int mapY = (int)(cy / gameView.getMapScaleY());
+                    if ( mapObj.isInNoBuildZone(mapX, mapY) ) {
+                        return true;
+                    }
+                    if (!overlap && !onPath) {
+                        int tag   = Integer.parseInt(event.getClipDescription().getLabel().toString());
+                        Towers sel = getTowerByTag(tag);
+                        activity.spendMoney(sel.getPrice());
 
-                    if (!onPath && !overlap) {
-                        int towerTag2 = Integer.parseInt(event.getClipDescription().getLabel().toString());
-                        Towers selectedType = getTowerByTag(towerTag2);
-                        activity.spendMoney(selectedType.getPrice());
-                        Tower placed = new Tower(dragLayer.getContext(), selectedType);
+                        Tower placed = new Tower(dragLayer.getContext(), sel);
                         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, h);
                         placed.setLayoutParams(lp);
                         placed.setX(x);
                         placed.setY(y);
 
-                        // Add range view
-                        int rangeRadius = selectedType.getRange();
-                        RangeView rangeView = new RangeView(dragLayer.getContext(), rangeRadius);
-                        FrameLayout.LayoutParams rangeParams = new FrameLayout.LayoutParams(
-                                rangeRadius * 2 + (int)rangeView.getPaint().getStrokeWidth(),
-                                rangeRadius * 2 + (int)rangeView.getPaint().getStrokeWidth()
+                        RangeView rv = new RangeView(dragLayer.getContext(), sel.getRange());
+                        FrameLayout.LayoutParams rp = new FrameLayout.LayoutParams(
+                                sel.getRange()*2 + (int)rv.getPaint().getStrokeWidth(),
+                                sel.getRange()*2 + (int)rv.getPaint().getStrokeWidth()
                         );
-                        rangeView.setLayoutParams(rangeParams);
-                        rangeView.setX(x + w/2f - rangeRadius);
-                        rangeView.setY(y + h/2f - rangeRadius);
+                        rv.setLayoutParams(rp);
+                        rv.setX(x + w/2f - sel.getRange());
+                        rv.setY(y + h/2f - sel.getRange());
+                        rv.setVisibility(View.INVISIBLE);
 
-                        rangeView.setVisibility(View.INVISIBLE);
-
-
-                        dragLayer.addView(rangeView);
+                        dragLayer.addView(rv);
                         dragLayer.addView(placed);
                         placedTowers.add(placed);
-                        Log.d("DDC", "Tower placed: " + selectedType + " op (" + x + "," + y + ")");
                         gameView.registerTower(placed);
-
+                        Log.d("DDC", "Tower placed: " + sel + " op (" + x + "," + y + ")");
 
                         placed.setOnClickListener(v1 -> {
-
                             if (activity.selectedTower == placed) {
-                                rangeView.setVisibility(View.INVISIBLE);
-                                activity.towerUpgradePopup.setVisibility(LinearLayout.GONE);
+                                rv.setVisibility(View.INVISIBLE);
+                                towerUpgradePopup.setVisibility(View.GONE);
                                 activity.selectedTower = null;
-                                selectedRangeView = null;
-                            }
-
-                            else {
+                                selectedRangeView     = null;
+                            } else {
                                 activity.selectedTower = placed;
-                                rangeView.setVisibility(View.VISIBLE);
+                                rv.setVisibility(View.VISIBLE);
                                 towerUpgradePopup.setVisibility(View.VISIBLE);
                                 activity.configurePopupFor(placed);
-                                selectedRangeView = rangeView;
+                                selectedRangeView = rv;
                             }
                         });
-
-
                     }
                     return true;
 
                 case DragEvent.ACTION_DRAG_ENDED:
-                    if (towerPanel != null) {
-                        towerPanel.setVisibility(View.VISIBLE);
-                    }
+                    towerPanel.setVisibility(View.VISIBLE);
                     gameView.showPathOverlay(false);
-
-                    // Remove preview range view
+                    gameView.showNoBuildOverlay(false);
                     View preview = dragLayer.findViewWithTag("PREVIEW_RANGE");
-                    if (preview != null) {
-                        dragLayer.removeView(preview);
-                    }
-
+                    if (preview != null) dragLayer.removeView(preview);
                     return true;
 
                 default:
                     return false;
             }
         });
+
         closeButton.setOnClickListener(v -> {
             if (selectedRangeView != null) {
                 selectedRangeView.setVisibility(View.GONE);

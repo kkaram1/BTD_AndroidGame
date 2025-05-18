@@ -26,6 +26,7 @@ import com.example.baloonstd.Player.PlayerManager;
 import com.example.baloonstd.Shooting.ShootingController;
 import com.example.baloonstd.Tower.Tower;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -46,6 +47,8 @@ public class GameView extends View {
     private long lastUpdateTime;
     private PhaseManager phaseManager;
     private boolean isPaused = false;
+    private List<Point> noBuildPolygon = Collections.emptyList();
+    private boolean showNoBuildOverlay = false;
 
 
     public interface OnPhaseCompleteListener { void onPhaseComplete(int phase); }
@@ -71,7 +74,9 @@ public class GameView extends View {
     public GameView(Context ctx, int mapNum) {
         super(ctx);
         this.mapNum = mapNum;
-        spawnPos = MapManager.getMap(mapNum).getSpawnPoint();
+        this.path = MapManager.getMap(mapNum).getPath();
+        this.spawnPos = MapManager.getMap(mapNum).getSpawnPoint();
+        this.noBuildPolygon = MapManager.getMap(mapNum).getNoBuildPolygon();
         init();
     }
     public GameView(Context ctx, AttributeSet attrs) {
@@ -79,7 +84,6 @@ public class GameView extends View {
         init();
     }
     private void init() {
-        path = MapManager.getMap(mapNum).getPath();
         lastUpdateTime = System.currentTimeMillis();
         shooter = new ShootingController(this);
     }
@@ -122,11 +126,26 @@ public class GameView extends View {
             postInvalidateDelayed(16);
             return;
         }
+        if (showNoBuildOverlay && noBuildPolygon.size() > 2) {
+            Paint p = new Paint();
+            p.setStyle(Paint.Style.FILL);
+            p.setColor(0x88FF0000); // semi-transparant rood
+            Path poly = new Path();
+            Point first = noBuildPolygon.get(0);
+            poly.moveTo(first.x * scaleX, first.y * scaleY);
+            for (int i = 1; i < noBuildPolygon.size(); i++) {
+                Point pt = noBuildPolygon.get(i);
+                poly.lineTo(pt.x * scaleX, pt.y * scaleY);
+            }
+            poly.close();
+            canvas.drawPath(poly, p);
+        }
         if (showPathOverlay && path.size() > 1) {
             Paint p = new Paint();
             p.setColor(Color.RED);
             p.setStyle(Paint.Style.STROKE);
-            p.setStrokeWidth(100f);
+            float roadWidth = (mapNum == 1 ? 175f : 100f);
+            p.setStrokeWidth(roadWidth);
             Path drawPath = new Path();
             Point first = path.get(0);
             drawPath.moveTo(first.x * scaleX, first.y * scaleY);
@@ -136,6 +155,7 @@ public class GameView extends View {
             }
             canvas.drawPath(drawPath, p);
         }
+
         for (BalloonEnemy e : enemies) {
             Bitmap b = e.getImage();
             float bmpW = b.getWidth();
@@ -224,7 +244,10 @@ public class GameView extends View {
         showPathOverlay = show;
         invalidate();
     }
-
+    public void showNoBuildOverlay(boolean show) {
+        this.showNoBuildOverlay = show;
+        invalidate();
+    }
     public void removeEnemy(BalloonEnemy e) {
         if (e.getType() == Balloon.ZEPPLIN) {
             if (!e.applyHit()) return;

@@ -13,6 +13,8 @@ import  com.example.baloonstd.Tower.Towers;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -57,7 +59,8 @@ public class GameActivity extends BaseActivity {
     private FrameLayout upgradeRangeContainer;
     private FrameLayout upgradeDamageContainer;
     private FrameLayout upgradeSpeedContainer;
-
+    private SoundPool soundPool;
+    private int popSoundId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -319,6 +322,16 @@ public class GameActivity extends BaseActivity {
             towerUpgradePopup.setVisibility(View.GONE);
             upgradeToggleButton.setVisibility(View.GONE);
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(4)
+                    .build();
+        } else {
+            soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+        }
+        popSoundId = soundPool.load(this, R.raw.popc, 1);
+
+        gameView.getShooter().setSoundPool(soundPool, popSoundId);
 
 
     }

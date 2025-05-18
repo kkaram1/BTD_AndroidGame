@@ -1,7 +1,7 @@
 package com.example.baloonstd.Shooting;
 
 import android.graphics.Canvas;
-
+import android.media.SoundPool;
 import com.example.baloonstd.Balloon.Balloon;
 import com.example.baloonstd.Balloon.BalloonEnemy;
 import com.example.baloonstd.GameView;
@@ -9,7 +9,6 @@ import com.example.baloonstd.R;
 import com.example.baloonstd.Tower.Tower;
 import com.example.baloonstd.Tower.Towers;
 import com.example.baloonstd.UpgradeType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,9 +20,16 @@ public class ShootingController {
     private final List<Tower> towers = new ArrayList<>();
     private final List<projectile> projectiles = new ArrayList<>();
     private final Map<Tower, Long> lastShotTimes = new HashMap<>();
+    private SoundPool soundPool;
+    private int popSoundId;
 
     public ShootingController(GameView gameView) {
         this.gameView = gameView;
+    }
+
+    public void setSoundPool(SoundPool sp, int soundId) {
+        this.soundPool = sp;
+        this.popSoundId = soundId;
     }
 
     public void addTower(final Tower tower) {
@@ -50,11 +56,13 @@ public class ShootingController {
                     target.freeze(gameView.getContext());
                 }
                 int damage = p.getDamage();
+                boolean popped = false;
+
                 if (damage > 0) {
                     if (target.getType() == Balloon.ZEPPLIN) {
                         for (int i = 0; i < damage; i++) {
                             if (target.applyHit()) {
-                                gameView.removeEnemy(target);
+                                popped = true;
                                 break;
                             }
                         }
@@ -63,8 +71,15 @@ public class ShootingController {
                             target.downgrade(gameView.getContext());
                         }
                         if (target.applyHit()) {
-                            gameView.removeEnemy(target);
+                            popped = true;
                         }
+                    }
+                }
+
+                if (popped) {
+                    gameView.removeEnemy(target);
+                    if (soundPool != null) {
+                        soundPool.play(popSoundId, 1f, 1f, 0, 0, 1f);
                     }
                 }
                 it.remove();
@@ -74,7 +89,6 @@ public class ShootingController {
         }
         tryToShoot();
     }
-
 
     private void tryToShoot() {
         long now = System.currentTimeMillis();
