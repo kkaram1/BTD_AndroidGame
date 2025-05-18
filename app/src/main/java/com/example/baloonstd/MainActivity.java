@@ -1,16 +1,15 @@
 package com.example.baloonstd;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.example.baloonstd.MusicManager;
 
 public class MainActivity extends BaseActivity {
@@ -28,13 +27,19 @@ public class MainActivity extends BaseActivity {
             return insets;
         });
     }
-    public void goToMenu(View v){
-        Intent i = new Intent(MainActivity.this, MenuSelect.class);
-        startActivity(i);
-    }
-    public void goToSettings(View v){
-        Intent i = new Intent(MainActivity.this, Settings.class);
-        startActivity(i);
+
+    public void goToMenu(View v) {
+        Intent intent = new Intent(this, MenuSelect.class);
+        startActivity(intent);
     }
 
+    public void goToSettings(View v) {
+        Intent intent = new Intent(this, Settings.class);
+        startActivity(intent);
+    }
+
+    public void goToLeaderBoard(View v) {
+        Intent intent = new Intent(this, LeaderBoard.class);
+        startActivity(intent);
+    }
 }

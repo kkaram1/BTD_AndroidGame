@@ -62,6 +62,7 @@ public class GameActivity extends BaseActivity {
     private SoundPool soundPool;
     private int popSoundId;
     private TextView upgradeTitle;
+    private int gamesPlayed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +109,8 @@ public class GameActivity extends BaseActivity {
 
         TextView icePriceTxt = findViewById(R.id.icePrice);
         icePriceTxt.setText(String.valueOf(Towers.ICE_MONKEY.getPrice()));
-
+        gamesPlayed =prefs.getInt("gamesPlayed",0);
+        if (!PlayerManager.getInstance().getPlayer().isGuest()) {saveGamesPlayed();}
 
         upgradeToggleButton.setOnClickListener(v -> {
             if (towerUpgradePopup.getVisibility() == View.VISIBLE) {
@@ -456,6 +458,27 @@ public class GameActivity extends BaseActivity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("a", String.valueOf(balloonsPopped));
+                params.put("b", PlayerManager.getInstance().getUsername());
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+    private void saveGamesPlayed() {
+        gamesPlayed++;
+        PlayerManager.getInstance().getPlayer().setGamesPlayed(gamesPlayed);
+        prefs.edit().putInt("gamesPlayed",gamesPlayed).apply();
+        String url = "https://studev.groept.be/api/a24pt301/incGamesPlayed";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+
+                },
+                error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("a", String.valueOf(gamesPlayed));
                 params.put("b", PlayerManager.getInstance().getUsername());
                 return params;
             }

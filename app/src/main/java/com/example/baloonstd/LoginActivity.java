@@ -3,6 +3,7 @@ package com.example.baloonstd;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,9 +44,10 @@ public class LoginActivity extends BaseActivity {
         int balloonsPopped2 = prefs.getInt("balloonsPopped",0);
         int towersPlaced2 = prefs.getInt("towersPlaced",0);
         boolean guest2 = prefs.getBoolean("guest",true);
+        int gamesPlayed2 = prefs.getInt("gamesPlayed",0);
         if (username != null) {
             // Auto-login
-            Player player = new Player(username,balloonsPopped2,towersPlaced2,guest2);
+            Player player = new Player(username,balloonsPopped2,towersPlaced2,guest2,gamesPlayed2);
             PlayerManager.getInstance().setPlayer(player);
             startActivity(new Intent(this, MainActivity.class));
             finish();
@@ -73,16 +75,18 @@ public class LoginActivity extends BaseActivity {
                         int playerId = jsonObject.getInt("idPlayer");
                         int balloonsPopped = jsonObject.getInt("balloonsPopped");
                         int towersPlaced = jsonObject.getInt("towersPlaced");
+                        int gamesPlayed = jsonObject.getInt("gamesPlayed");
                         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
                         prefs1.edit()
                                 .putString("username", enteredUsername)
                                 .putInt("playerId", playerId)
                                 .putInt("balloonsPopped", balloonsPopped)
                                 .putInt("towersPlaced",towersPlaced)
+                                .putInt("gamesPlayed",gamesPlayed)
                                 .putBoolean("guest",false)
                                 .apply();
 
-                        Player player = new Player(enteredUsername,balloonsPopped,towersPlaced,false);
+                        Player player = new Player(enteredUsername,balloonsPopped,towersPlaced,false,gamesPlayed);
                         PlayerManager.getInstance().setPlayer(player);
 
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);
@@ -120,7 +124,7 @@ public class LoginActivity extends BaseActivity {
     {
         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
         prefs1.edit().putString("username", "guest").apply();
-        Player player = new Player("guest",0,0,true);
+        Player player = new Player("guest",0,0,true,0);
         PlayerManager.getInstance().setPlayer(player);
         Intent i = new Intent(LoginActivity.this,MainActivity.class);
     startActivity(i);

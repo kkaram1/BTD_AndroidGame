@@ -5,12 +5,20 @@ public class Player {
     private int balloonsPopped;
     private int towersPlaced;
     private boolean guest;
+    private int gamesPlayed;
 
-    public Player(String username,int balloonsPopped,int towersPlaced,boolean guest) {
+    public Player(String username,int balloonsPopped,int towersPlaced,boolean guest,int gamesPlayed) {
         this.username = username;
         this.balloonsPopped = balloonsPopped;
         this.towersPlaced=towersPlaced;
         this.guest =guest;
+        this.gamesPlayed = gamesPlayed;
+    }
+    public Player (String username,int balloonsPopped,int gamesPlayed)
+    {
+        this.username = username;
+        this.balloonsPopped = balloonsPopped;
+        this.gamesPlayed = gamesPlayed;
     }
 
     public int getTowersPlaced() {
@@ -25,6 +33,10 @@ public class Player {
     public int getBalloonsPopped() {
         return balloonsPopped;
     }
+
+    public int getGamesPlayed() {return gamesPlayed;}
+
+    public void setGamesPlayed(int gamesPlayed) {this.gamesPlayed = gamesPlayed;}
 
     public void incrementBalloonsPopped(int amount) {
         this.balloonsPopped += amount;

@@ -65,9 +65,9 @@ public class Settings extends BaseActivity {
     }
     public void goToLogin(View v){
         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
-        prefs1.edit()
-                .putString("username", null)
-                .apply();
+        SharedPreferences.Editor editor = prefs1.edit();
+        editor.clear();
+        editor.apply();
         Intent i = new Intent(Settings.this, LoginActivity.class);
         startActivity(i);
     }
