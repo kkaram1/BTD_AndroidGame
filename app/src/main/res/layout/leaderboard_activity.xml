@@ -60,9 +60,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/transparent_white"
+            android:background="@color/gold"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/tvUsername"
@@ -92,6 +92,16 @@
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/luckiestguy"
                 android:text="Games Played: 0"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/achievementsNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/luckiestguy"
+                android:text="Achievements Unlocked: 0/16"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -130,18 +140,33 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/wooden_background2"
-        android:text="Rank:            Username:            Balloons Popped:              Games Played:"
         android:fontFamily="@font/luckiestguy"
-        android:textSize="18dp"
-        android:textColor="@color/black"
         android:gravity="center"
+        android:text="Rank:            Username:            Balloons Popped:              Games Played:"
         android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/rvLeaderboard"
         app:layout_constraintEnd_toEndOf="@+id/rvLeaderboard"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="@+id/rvLeaderboard"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/wooden_background2"
+        android:fontFamily="@font/luckiestguy"
+        android:text="Player Stats"
+        android:textColor="@color/black"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardUserStats"
+        app:layout_constraintEnd_toEndOf="@+id/cardUserStats"
+        app:layout_constraintStart_toStartOf="@+id/cardUserStats"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.graphics.Color;
+
+import androidx.annotation.ColorInt;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.baloonstd.Player.Player;
 import java.util.List;
@@ -19,7 +22,7 @@ public class LeaderBoardAdapter
         this.ranks = ranks;
     }
 
-    // 1) Inflate item layout and create ViewHolder
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -27,9 +30,18 @@ public class LeaderBoardAdapter
         return new ViewHolder(itemView);
     }
 
-    // 2) Bind data to each row
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if (ranks.get(position) == 1) {
+            holder.tvItemRank.setTextColor(Color.parseColor("#FFD700"));
+        } else if (ranks.get(position) == 2) {
+            holder.tvItemRank.setTextColor(Color.parseColor("#C0C0C0"));
+        } else if (ranks.get(position) == 3) {
+            holder.tvItemRank.setTextColor(Color.parseColor("#CD7F32"));
+        } else {
+            holder.tvItemRank.setTextColor(Color.BLACK);
+        }
         Player p = players.get(position);
         holder.tvUsername.setText("          "+p.getUsername());
         holder.tvItemBalloons.setText(String.valueOf(p.getBalloonsPopped()));
@@ -37,13 +49,13 @@ public class LeaderBoardAdapter
         holder.tvItemRank.setText("     "+ranks.get(position));
     }
 
-    // 3) Report data size
+
     @Override
     public int getItemCount() {
         return players.size();
     }
 
-    // ViewHolder holds references to each view in a row
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView tvUsername, tvItemBalloons, tvItemGamesPlayed,tvItemRank;
 
