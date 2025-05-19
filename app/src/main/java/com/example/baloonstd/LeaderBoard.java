@@ -1,6 +1,4 @@
 package com.example.baloonstd;
-import com.example.baloonstd.LeaderBoardAdapter;
-
 
 import android.os.Bundle;
 import com.example.baloonstd.Player.Player;
@@ -25,7 +23,6 @@ import java.util.List;
 
 public class LeaderBoard extends BaseActivity {
     private static final String LEADERBOARD_URL = "https://studev.groept.be/api/a24pt301/leaderBoard";
-    private Toolbar toolbar;
     private TextView tvUsername, tvBalloonsPopped, tvGamesPlayed;
     private RecyclerView rvLeaderboard;
     private LeaderBoardAdapter adapter;
@@ -39,12 +36,6 @@ public class LeaderBoard extends BaseActivity {
 
         setContentView(R.layout.leaderboard_activity);
 
-        setSupportActionBar(toolbar);
-        ActionBar bar = getSupportActionBar();
-        if (bar != null) {
-            bar.setDisplayHomeAsUpEnabled(true);
-            bar.setTitle("Leaderboard");
-        }
 
         tvUsername = findViewById(R.id.tvUsername);
         tvBalloonsPopped = findViewById(R.id.tvBalloonsPopped);
@@ -57,9 +48,9 @@ public class LeaderBoard extends BaseActivity {
 
         Player currentPlayer = PlayerManager.getInstance().getPlayer();
         if (currentPlayer != null) {
-            tvUsername.setText(currentPlayer.getUsername());
-            tvBalloonsPopped.setText(String.valueOf(currentPlayer.getBalloonsPopped()));
-            tvGamesPlayed.setText(String.valueOf(currentPlayer.getGamesPlayed()));
+            tvUsername.setText("Username: "+currentPlayer.getUsername());
+            tvBalloonsPopped.setText("Balloons Popped: "+currentPlayer.getBalloonsPopped());
+            tvGamesPlayed.setText("Games Played: "+currentPlayer.getGamesPlayed());
         }
 
         fetchLeaderBoard();
@@ -81,8 +72,7 @@ public class LeaderBoard extends BaseActivity {
                         String username = jsonObject.getString("username");
                         int balloonsPopped = jsonObject.getInt("balloonsPopped");
                         int gamesPlayed = jsonObject.optInt("gamesPlayed", 0);
-                        int towersPlaced = jsonObject.optInt("towersPlaced", 0);
-                        players.add(new Player(username, balloonsPopped, towersPlaced, false, gamesPlayed));
+                        players.add(new Player(username, balloonsPopped, gamesPlayed));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -59,7 +59,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="126dp"
+            android:layout_height="match_parent"
             android:background="@color/transparent_white"
             android:orientation="vertical"
             android:padding="16dp">
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/transparent_white"
                 android:fontFamily="@font/luckiestguy"
-                android:text="Username"
+                android:text="Username: "
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -83,7 +83,7 @@
                 android:fontFamily="@font/luckiestguy"
                 android:text="Balloons Popped: 0"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvGamesPlayed"
@@ -93,7 +93,7 @@
                 android:fontFamily="@font/luckiestguy"
                 android:text="Games Played: 0"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -118,9 +118,9 @@
         android:layout_width="562dp"
         android:layout_height="106dp"
         app:layout_constraintBottom_toTopOf="@+id/rvLeaderboard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.759"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView5"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/leaderboard_sign" />
