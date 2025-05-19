@@ -9,5 +9,6 @@
     <color name="transparent_white">#00FFFFFF</color>       <!-- Fully transparent white -->
     <color name="light_transparent_brown">#88A0522D</color> <!-- 50% brown -->
     <color name="purple">#800080</color>
+    <color name="darkBlue">#000080</color>
 
 </resources>

@@ -4,8 +4,6 @@ import android.os.Bundle;
 import com.example.baloonstd.Player.Player;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.core.view.WindowCompat;
@@ -43,7 +41,7 @@ public class LeaderBoard extends BaseActivity {
         rvLeaderboard = findViewById(R.id.rvLeaderboard);
         // set up RecyclerView with empty adapter
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new LeaderBoardAdapter(new ArrayList<>());
+        adapter = new LeaderBoardAdapter(new ArrayList<>(),new ArrayList<>());
         rvLeaderboard.setAdapter(adapter);
 
         Player currentPlayer = PlayerManager.getInstance().getPlayer();
@@ -65,6 +63,7 @@ public class LeaderBoard extends BaseActivity {
             null,
             response -> {
                 List<Player> players = new ArrayList<>();
+                List<Integer> ranks = new ArrayList<>();
                 // Parse each entry in the returned JSON array
                 for (int i = 0; i < response.length(); i++) {
                     try {
@@ -73,12 +72,13 @@ public class LeaderBoard extends BaseActivity {
                         int balloonsPopped = jsonObject.getInt("balloonsPopped");
                         int gamesPlayed = jsonObject.optInt("gamesPlayed", 0);
                         players.add(new Player(username, balloonsPopped, gamesPlayed));
+                        ranks.add(i+1);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 // Bind data to RecyclerView
-                adapter = new LeaderBoardAdapter(players);
+                adapter = new LeaderBoardAdapter(ranks,players);
                 rvLeaderboard.setAdapter(adapter);
 
             },
