@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:weightSum="3.5"
     android:padding="8dp"
     android:layout_margin="4dp"
     android:background="@color/transparent_white"
     android:elevation="4dp">
     <TextView
         android:id="@+id/tvItemRank"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_weight="0.5"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
@@ -23,7 +24,7 @@
 
     <TextView
         android:id="@+id/tvItemUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_weight="1"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
@@ -33,6 +34,8 @@
         android:shadowDy="3"
         android:fontFamily="@font/luckiestguy"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="Username" />
 
     <TextView
@@ -43,7 +46,7 @@
         android:shadowRadius="3"
         android:shadowDx="0"
         android:shadowDy="3"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_weight="1"
         android:fontFamily="@font/luckiestguy"
         android:layout_height="wrap_content"
@@ -52,7 +55,7 @@
 
     <TextView
         android:id="@+id/tvItemGamesPlayed"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_weight="1"
         android:textColor="#FFFFFF"
         android:textStyle="bold"

@@ -49,6 +49,8 @@ public class GameView extends View {
     private boolean isPaused = false;
     private List<Point> noBuildPolygon = Collections.emptyList();
     private boolean showNoBuildOverlay = false;
+    private SharedPreferences prefs;
+    private AchievementManager achievementManager;
 
 
     public interface OnPhaseCompleteListener { void onPhaseComplete(int phase); }
@@ -85,6 +87,9 @@ public class GameView extends View {
     }
     private void init() {
         lastUpdateTime = System.currentTimeMillis();
+        prefs = getContext().getSharedPreferences("player_session", Context.MODE_PRIVATE);
+        AchievementManager.init(getContext());
+        achievementManager = AchievementManager.get();
         shooter = new ShootingController(this);
     }
     public void setPhase(PhaseManager pm) {
@@ -290,14 +295,14 @@ public class GameView extends View {
     public void registerTower(Tower t)
     {
         PlayerManager.getInstance().getPlayer().incTowers(1);
-        SharedPreferences prefs = getContext().getSharedPreferences("player_session", Context.MODE_PRIVATE);
-        if(!PlayerManager.getInstance().getPlayer().isGuest()){prefs.edit().putInt("towersPlaced", PlayerManager.getInstance().getPlayer().getTowersPlaced()).apply();
-            updateTowersPlaced();}
+        prefs.edit().putInt("towersPlaced", PlayerManager.getInstance().getPlayer().getTowersPlaced()).apply();
+        if(!PlayerManager.getInstance().getPlayer().isGuest()) {updateTowersPlaced();}
         shooter.addTower(t);
     }
 
     private void updateTowersPlaced() {
         String url = "https://studev.groept.be/api/a24pt301/incTowers";
+        achievementManager.checkAll(PlayerManager.getInstance().getPlayer());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
 

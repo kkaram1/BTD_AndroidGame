@@ -64,6 +64,7 @@ public class GameActivity extends BaseActivity {
     private TextView upgradeTitle;
     private int gamesPlayed;
     private Difficulty difficulty;
+    private AchievementManager achievementManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +116,9 @@ public class GameActivity extends BaseActivity {
         icePriceTxt.setText(String.valueOf(Towers.ICE_MONKEY.getPrice()));
         gamesPlayed =prefs.getInt("gamesPlayed",0);
         if (!PlayerManager.getInstance().getPlayer().isGuest()) {saveGamesPlayed();}
+        AchievementManager.init(this);
+        achievementManager = AchievementManager.get();
+
 
         upgradeToggleButton.setOnClickListener(v -> {
             if (towerUpgradePopup.getVisibility() == View.VISIBLE) {
@@ -390,8 +394,8 @@ public class GameActivity extends BaseActivity {
     }
 
     private void onBalloonReachedEnd(int damage) {
-        SharedPreferences prefs = getSharedPreferences("SettingsPrefs", MODE_PRIVATE);
-        boolean vibrationEnabled = prefs.getBoolean("vibrationEnabled", true);
+        SharedPreferences prefs2 = getSharedPreferences("SettingsPrefs", MODE_PRIVATE);
+        boolean vibrationEnabled = prefs2.getBoolean("vibrationEnabled", true);
         if (vibrationEnabled) {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             if (vibrator != null && vibrator.hasVibrator()) {
@@ -452,10 +456,11 @@ public class GameActivity extends BaseActivity {
     }
     private void saveBalloonPop() {
         prefs.edit().putInt("balloonsPopped",balloonsPopped).apply();
+        PlayerManager.getInstance().getPlayer().setBalloonsPopped(balloonsPopped);
+        achievementManager.checkAll(PlayerManager.getInstance().getPlayer());
         String url = "https://studev.groept.be/api/a24pt301/incBalloons";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
-
                 },
                 error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
         ) {

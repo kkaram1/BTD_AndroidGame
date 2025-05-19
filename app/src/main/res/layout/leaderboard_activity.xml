@@ -168,5 +168,5 @@
         app:layout_constraintStart_toStartOf="@+id/cardUserStats"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-
+    <!-- todo add achivemnts here -->
 </androidx.constraintlayout.widget.ConstraintLayout>

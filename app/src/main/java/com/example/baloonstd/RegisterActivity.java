@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,6 +84,10 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("username", username);
                 params.put("password", password);
                 return params;
+            }
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
             }
         };
 
