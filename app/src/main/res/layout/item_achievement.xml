@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvAchievementName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Achievement Name"
+        android:fontFamily="@font/luckiestguy"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:shadowColor="#000000"
+        android:shadowRadius="3"
+        android:shadowDx="0"
+        android:shadowDy="3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvAchievementDescription"
+        android:layout_width="0dp"
+        android:textColor="@color/black"
+
+        android:fontFamily="@font/luckiestguy"
+        android:layout_height="wrap_content"
+        android:text="Achievement Description"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tvAchievementName"
+        app:layout_constraintTop_toBottomOf="@id/tvAchievementName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

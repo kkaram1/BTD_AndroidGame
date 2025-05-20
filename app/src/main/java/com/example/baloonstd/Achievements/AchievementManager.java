@@ -15,6 +15,7 @@ public class AchievementManager {
     private final Set<Integer> unlockedIds = new HashSet<>();
     private final SharedPreferences prefs;
     private Context context;
+    // todo make so that already achived acivments are in gold
     private AchievementManager(Context ctx) {
         context = ctx.getApplicationContext();
         prefs = context.getSharedPreferences("player_session", Context.MODE_PRIVATE);
@@ -69,4 +70,5 @@ public class AchievementManager {
         editor.putStringSet("achievements", toSave);
         editor.apply();
     }
+    public int getNumAchievements() {return unlockedIds.size();}
 }

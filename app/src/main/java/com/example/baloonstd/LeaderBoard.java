@@ -1,9 +1,18 @@
 package com.example.baloonstd;
 
 import android.os.Bundle;
+
+import com.example.baloonstd.Achievements.AchievementManager;
+import com.example.baloonstd.Achievements.AchievementRepository;
 import com.example.baloonstd.Player.Player;
+
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.core.view.WindowCompat;
@@ -17,15 +26,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.baloonstd.Achievements.AchievementAdapter;
 
 
 public class LeaderBoard extends BaseActivity {
     private static final String LEADERBOARD_URL = "https://studev.groept.be/api/a24pt301/leaderBoard";
-    private TextView tvUsername, tvBalloonsPopped, tvGamesPlayed;
+    private TextView tvUsername, tvBalloonsPopped, tvGamesPlayed,achievementsText;
     private RecyclerView rvLeaderboard;
     private LeaderBoardAdapter adapter;
     private RequestQueue requestQueue;
-
+    private AchievementManager achievementManager;
+    private RecyclerView rvAchievements;
+    private AchievementAdapter achievementAdapter;
+    private ImageButton btnCloseAchievements;
+    private Button btnOpenAchievements;
+    private CardView layoutAchievementsList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +49,35 @@ public class LeaderBoard extends BaseActivity {
 
         setContentView(R.layout.leaderboard_activity);
 
+        AchievementManager.init(this);
+        achievementManager = AchievementManager.get();
 
         tvUsername = findViewById(R.id.tvUsername);
         tvBalloonsPopped = findViewById(R.id.tvBalloonsPopped);
         tvGamesPlayed = findViewById(R.id.tvGamesPlayed);
         rvLeaderboard = findViewById(R.id.rvLeaderboard);
+        achievementsText = findViewById(R.id.achievementsNum);
+        btnCloseAchievements = findViewById(R.id.btnCloseAchievements);
+        rvAchievements = findViewById(R.id.rvAchievementsList);
+        btnOpenAchievements = findViewById(R.id.achievementsBtn);
+        layoutAchievementsList = findViewById(R.id.layoutAchievementsList);
+
+        rvAchievements.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        achievementAdapter = new AchievementAdapter(AchievementRepository.getAll());
+        rvAchievements.setAdapter(achievementAdapter);
+
+
+        btnCloseAchievements.setOnClickListener(v -> {
+            rvAchievements.setVisibility(View.GONE);
+            btnCloseAchievements.setVisibility(View.GONE);
+            layoutAchievementsList.setVisibility(View.GONE);
+        });
+        btnOpenAchievements.setOnClickListener(v -> {
+            rvAchievements.setVisibility(View.VISIBLE);
+            btnCloseAchievements.setVisibility(View.VISIBLE);
+            layoutAchievementsList.setVisibility(View.VISIBLE);
+        });
+
         // set up RecyclerView with empty adapter
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
         adapter = new LeaderBoardAdapter(new ArrayList<>(),new ArrayList<>());
@@ -49,6 +88,7 @@ public class LeaderBoard extends BaseActivity {
             tvUsername.setText("Username: "+currentPlayer.getUsername());
             tvBalloonsPopped.setText("Balloons Popped: "+currentPlayer.getBalloonsPopped());
             tvGamesPlayed.setText("Games Played: "+currentPlayer.getGamesPlayed());
+            achievementsText.setText("Achievements Unlocked: " + achievementManager.getNumAchievements() + "/16");
         }
 
         fetchLeaderBoard();
