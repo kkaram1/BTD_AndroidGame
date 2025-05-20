@@ -136,7 +136,7 @@ public class GameView extends View {
         if (showNoBuildOverlay && noBuildPolygon.size() > 2) {
             Paint p = new Paint();
             p.setStyle(Paint.Style.FILL);
-            p.setColor(0x88FF0000); // semi-transparant rood
+            p.setColor(0x88FF0000);
             Path poly = new Path();
             Point first = noBuildPolygon.get(0);
             poly.moveTo(first.x * scaleX, first.y * scaleY);
@@ -172,27 +172,21 @@ public class GameView extends View {
             float uScale = Math.min(scaleX, scaleY) * 0.3f;
             float drawW = bmpW * uScale;
             float drawH = bmpH * uScale;
-            if (e.getType() == Balloon.ZEPPLIN) {
+            if (e.getType() == Balloon.ZEPPLIN || e.getType() == Balloon.ZEPPLINBLACK) {
                 int idx = e.getCurrentWaypointIndex();
-                Point next = idx < path.size() ? path.get(idx) : path.get(path.size()-1);
-                float nx = next.x * scaleX;
-                float ny = next.y * scaleY;
-                float dx = nx - cx;
-                float dy = ny - cy;
-                float angle = (float)Math.toDegrees(Math.atan2(dy, dx));
+                Point next = idx < path.size() ? path.get(idx) : path.get(path.size() - 1);
+                float nx = next.x * scaleX, ny = next.y * scaleY;
+                float dx = nx - cx, dy = ny - cy;
+                float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
                 canvas.save();
                 canvas.translate(cx, cy);
-                canvas.rotate(angle+90);
-                RectF dst = new RectF(
-                        -drawW/2, -drawH/2,
-                        drawW/2,  drawH/2);
+                canvas.rotate(angle + 90f);
+                RectF dst = new RectF(-drawW/2, -drawH/2, drawW/2, drawH/2);
                 canvas.drawBitmap(b, null, dst, null);
                 canvas.restore();
             } else {
-                RectF dst = new RectF(
-                        cx - drawW/2, cy - drawH/2,
-                        cx + drawW/2, cy + drawH/2);
-                canvas.drawBitmap(b, null, dst, null);
+                RectF dst = new RectF(cx - drawW/2, cy - drawH/2, cx + drawW/2, cy + drawH/2);
+                canvas.drawBitmap(e.getImage(), null, dst, null);
             }
         }
         updateEnemyPositions(deltaSec);
@@ -265,6 +259,12 @@ public class GameView extends View {
             enemies.remove(e);
             return;
         }
+        if (e.getType() == Balloon.ZEPPLINBLACK) {
+            if (!e.applyHit()) return;
+            spawnZepplins(pos, idx, 2, 60);
+            enemies.remove(e);
+            return;
+        }
         if (e.getType() == Balloon.BLACK) {
             if (!e.applyHit()) {
                 return;
@@ -285,7 +285,7 @@ public class GameView extends View {
         Random rnd = new Random();
         for (int i = 0; i < count; i++) {
             double angle = rnd.nextDouble() * Math.PI * 2;
-            double radius = rnd.nextDouble() * spreadPx;
+            double radius = 10+ rnd.nextDouble() * (spreadPx-10);
             int dx = (int)(Math.cos(angle) * radius);
             int dy = (int)(Math.sin(angle) * radius);
             Point spawn = new Point(center.x + dx, center.y + dy);
@@ -293,6 +293,29 @@ public class GameView extends View {
             BalloonEnemy green = new BalloonEnemy(getContext(), Balloon.GREEN, spawn);
             green.setCurrentWaypointIndex(waypointIndex);
             enemies.add(green);
+        }
+    }
+
+    private void spawnZepplins(Point center, int waypointIndex, int count, int separationPx) {
+
+        List<Point> path = MapManager.getMap(mapNum).getPath();
+        Point prev = path.get(Math.max(0, waypointIndex - 1));
+        Point curr = path.get(Math.min(path.size() - 1, waypointIndex));
+        float dx = curr.x - prev.x;
+        float dy = curr.y - prev.y;
+        float len = (float) Math.hypot(dx, dy);
+        if (len == 0) len = 1;
+        float ux = dx / len, uy = dy / len;
+
+        for (int i = 0; i < count; i++) {
+
+            float offset = separationPx * i;
+            int sx = Math.round(center.x - ux * offset);
+            int sy = Math.round(center.y - uy * offset);
+
+            BalloonEnemy z = new BalloonEnemy(getContext(), Balloon.ZEPPLIN, new Point(sx, sy));
+            z.setCurrentWaypointIndex(waypointIndex);
+            enemies.add(z);
         }
     }
 

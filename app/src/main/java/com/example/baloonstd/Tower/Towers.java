@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 public enum Towers {
-    DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000,50,1000f,R.drawable.dart,
+    DART_MONKEY(1, R.drawable.angrymonkey, "Dart Monkey", 250,1000,100,1000f,R.drawable.dart,
             List.of(UpgradeType.RANGE, UpgradeType.SPEED),Map.of(UpgradeType.RANGE, new int[]{50, 100}, UpgradeType.SPEED, new int[]{75, 150})),
-    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9001,2000,100,4000f,R.drawable.bullet,
+    SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9001,2000,200,5000f,R.drawable.bullet,
             List.of(UpgradeType.SPEED, UpgradeType.DAMAGE), Map.of(UpgradeType.SPEED, new int[]{100, 200}, UpgradeType.DAMAGE, new int[]{75, 100})),
-    ICE_MONKEY(3, R.drawable.ice_wizard, "Ice Monkey", 200,1000,75, 1000f,R.drawable.iceball,
-            List.of(UpgradeType.DAMAGE, UpgradeType.RANGE), Map.of(UpgradeType.DAMAGE, new int[]{50, 75}, UpgradeType.RANGE, new int[]{60, 120}));
+    ICE_MONKEY(3, R.drawable.ice_wizard, "Ice Monkey", 200,1000,150, 1000f,R.drawable.iceball,
+            List.of(UpgradeType.DAMAGE, UpgradeType.RANGE), Map.of(UpgradeType.DAMAGE, new int[]{50, 100}, UpgradeType.RANGE, new int[]{60, 120}));
     private final int tag;
     private final String displayName;
     private final int range;

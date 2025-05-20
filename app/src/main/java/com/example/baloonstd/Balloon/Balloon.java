@@ -10,7 +10,8 @@ import com.example.baloonstd.R;
 
 public enum Balloon {
     RED(R.drawable.red_balloon,R.drawable.icered, 120f, 1,100),BLUE(R.drawable.blue_balloon,R.drawable.iceblue, 140f, 2,100)
-    ,GREEN(R.drawable.green_balloon,R.drawable.icegreen, 160f, 3,100),BLACK(R.drawable.blackballoon,R.drawable.blackice, 160f, 3,100),ZEPPLIN(R.drawable.zepplin,R.drawable.icezepplin,80f,10,300),ZEPPLINBLACK(R.drawable.zepplinblack,R.drawable.blackicez,60f,20,300);
+    ,GREEN(R.drawable.green_balloon,R.drawable.icegreen, 160f, 3,100),BLACK(R.drawable.blackballoon,R.drawable.blackice, 160f, 2,100),
+    ZEPPLIN(R.drawable.zepplin,R.drawable.icezepplin,80f,10,300),ZEPPLINBLACK(R.drawable.zepplinblack,R.drawable.blackicez,60f,20,300);
 
 
     private float speed;

@@ -186,7 +186,7 @@ public class GameActivity extends BaseActivity {
 
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
             if(!PlayerManager.getInstance().getPlayer().isGuest()){saveBalloonPop();}
-            if(phase == 8){gameWonScreen.setVisibility(LinearLayout.VISIBLE);}
+            if(phase == 20){gameWonScreen.setVisibility(LinearLayout.VISIBLE);}
             int phaseDispaly = phase +1;
             nextPhaseButton.setText("Start Phase "+ phaseDispaly);
             nextPhaseButton.setVisibility(Button.VISIBLE);

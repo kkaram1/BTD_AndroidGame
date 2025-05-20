@@ -26,7 +26,7 @@ public class BalloonEnemy {
         this.position = position;
         this.currentWaypointIndex = 0;
         applyType(ctx, type);
-        this.hitsRemaining = (type == Balloon.ZEPPLIN ? type.getLayer() : 1);
+        this.hitsRemaining = (type == Balloon.ZEPPLIN || type == Balloon.ZEPPLINBLACK || type == Balloon.BLACK)  ? type.getLayer() : 1;
     }
 
     private void applyType(Context ctx, Balloon b) {
