@@ -46,7 +46,7 @@ public class GameActivity extends BaseActivity {
     private PhaseManager phaseManager;
     private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
-    private int money = 100;
+    private int money = 1000;
     private int health = 50;
     private TextView healthText;
     private Button upgradeToggleButton;
@@ -221,10 +221,10 @@ public class GameActivity extends BaseActivity {
             int price = selectedTower.getTowerType().getPrice();
             int refund = (int) Math.floor(price * 0.75);
             addMoney(refund);
-            FrameLayout dragL = findViewById(R.id.dragLayer);
-            dragL.removeView(selectedTower);
-            for (int i = 0; i < dragL.getChildCount(); i++) {
-                View child = dragL.getChildAt(i);
+
+            dragLayer.removeView(selectedTower);
+            for (int i = 0; i < dragLayer.getChildCount(); i++) {
+                View child = dragLayer.getChildAt(i);
                 if (child instanceof RangeView) {
                     float cx = selectedTower.getX() + selectedTower.getWidth() / 2f;
                     float cy = selectedTower.getY() + selectedTower.getHeight() / 2f;
@@ -233,7 +233,7 @@ public class GameActivity extends BaseActivity {
                     float rY = child.getY() + ((RangeView) child).getRadius();
 
                     if (Math.hypot(cx - rX, cy - rY) < 1f) {
-                        dragL.removeView(child);
+                        dragLayer.removeView(child);
                         break;
                     }
                 }

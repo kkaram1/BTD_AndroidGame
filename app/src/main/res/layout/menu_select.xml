@@ -1,71 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:background="@color/green"
     android:layout_height="match_parent">
 
-
-    <ImageButton
-        android:id="@+id/map1"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginEnd="10dp"
-        android:onClick="goToGame0"
+    <ImageView
+        android:id="@+id/backgroundImg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/homepage_background"
         android:scaleType="centerCrop"
-        android:src="@drawable/btdmap1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/map2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
-
-    <ImageButton
-        android:id="@+id/map2"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginBottom="120dp"
-        android:onClick="goToGame1"
-        android:scaleType="centerCrop"
-        android:src="@drawable/btdmap2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.25"
-        app:layout_constraintHorizontal_bias="0.5"/>
-
-    <ImageButton
-        android:id="@+id/map3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="80dp"
-        android:onClick="goToGame2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/map2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.276"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#AA000000"
+        android:padding="8dp"
         android:text="Pick a map to play"
-        app:layout_constraintBottom_toTopOf="@+id/map2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/white"
-        android:textSize="20dp"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
         android:fontFamily="@font/luckiestguy"
-        android:shadowColor="#000000"
-        android:shadowDx="5"
-        android:shadowDy="5"
-        android:shadowRadius="7"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/map2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.15"/>
+
+    <ImageButton
+        android:id="@+id/map1"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:onClick="goToGame0"
+        android:scaleType="centerCrop"
+        android:src="@drawable/btdmap1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/map2"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView" />
+
+    <ImageButton
+        android:id="@+id/map2"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/btdmap2"
+        android:scaleType="centerCrop"
+        android:onClick="goToGame1"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/map1"
+        app:layout_constraintEnd_toStartOf="@+id/map3"/>
+
+    <ImageButton
+        android:id="@+id/map3"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/red_balloon"
+        android:scaleType="centerCrop"
+        android:onClick="goToGame2"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/map2"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

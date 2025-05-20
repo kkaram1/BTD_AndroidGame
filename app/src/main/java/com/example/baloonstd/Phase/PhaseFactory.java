@@ -35,7 +35,9 @@ public class PhaseFactory {
     private void setupEasy(int p, Map<Balloon,Integer> m){
         switch (p) {
             case 1:
-                m.put(Balloon.RED,     5);
+                //m.put(Balloon.RED,     5);
+                //m.put(Balloon.BLACK,     2);
+                m.put(Balloon.ZEPPLIN, 1);
                 break;
             case 2:
                 m.put(Balloon.RED,    8);

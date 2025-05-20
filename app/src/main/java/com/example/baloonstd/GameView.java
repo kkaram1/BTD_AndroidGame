@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class GameView extends View {
     private final int nativeWidth = 500, nativeHeight = 322;
@@ -255,24 +256,24 @@ public class GameView extends View {
         invalidate();
     }
     public void removeEnemy(BalloonEnemy e) {
+        Point pos = e.getPosition();
+        int idx = e.getCurrentWaypointIndex();
+
         if (e.getType() == Balloon.ZEPPLIN) {
             if (!e.applyHit()) return;
-
-            int idx = e.getCurrentWaypointIndex();
-
-            for (int i = 0; i < 10; i++) {
-                Point spawnPoint = new Point(e.getPosition());
-                BalloonEnemy green = new BalloonEnemy(
-                        getContext(),
-                        Balloon.GREEN,
-                        spawnPoint
-                );
-                green.setCurrentWaypointIndex(idx);
-                enemies.add(green);
-            }
+            spawnGreenCluster(pos, idx, 10, 20);
             enemies.remove(e);
             return;
         }
+        if (e.getType() == Balloon.BLACK) {
+            if (!e.applyHit()) {
+                return;
+            }
+            spawnGreenCluster(pos, idx, 2, 20);
+            enemies.remove(e);
+            return;
+        }
+
         if (e.getLayer() > 1) {
             e.downgrade(getContext());
         } else {
@@ -280,6 +281,22 @@ public class GameView extends View {
             if (layerPopListener != null) layerPopListener.onLayerPopped(e.getLayer());
         }
     }
+    private void spawnGreenCluster(Point center, int waypointIndex, int count, int spreadPx) {
+        Random rnd = new Random();
+        for (int i = 0; i < count; i++) {
+            double angle = rnd.nextDouble() * Math.PI * 2;
+            double radius = rnd.nextDouble() * spreadPx;
+            int dx = (int)(Math.cos(angle) * radius);
+            int dy = (int)(Math.sin(angle) * radius);
+            Point spawn = new Point(center.x + dx, center.y + dy);
+
+            BalloonEnemy green = new BalloonEnemy(getContext(), Balloon.GREEN, spawn);
+            green.setCurrentWaypointIndex(waypointIndex);
+            enemies.add(green);
+        }
+    }
+
+
     public void setPaused(boolean paused) {
         isPaused = paused;
         if (paused) {
@@ -326,4 +343,5 @@ public class GameView extends View {
     public ShootingController getShooter() {
         return shooter;
     }
+
 }
