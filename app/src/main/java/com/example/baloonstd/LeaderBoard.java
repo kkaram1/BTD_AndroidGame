@@ -1,7 +1,7 @@
 package com.example.baloonstd;
 
+import android.util.Log;
 import android.os.Bundle;
-
 import com.example.baloonstd.Achievements.AchievementManager;
 import com.example.baloonstd.Achievements.AchievementRepository;
 import com.example.baloonstd.Player.Player;
@@ -122,11 +122,13 @@ public class LeaderBoard extends BaseActivity {
                 rvLeaderboard.setAdapter(adapter);
 
             },
-            error -> Toast.makeText(
-                LeaderBoard.this,
-                "Error fetching leaderboard: " + error.getMessage(),
-                Toast.LENGTH_LONG
-            ).show()
+            error -> {
+                Toast.makeText(
+                    LeaderBoard.this,
+                    "Error fetching leaderboard: " + error.getMessage(),
+                    Toast.LENGTH_LONG
+                ).show();
+            }
         );
 
         requestQueue.add(jsonArrayRequest);

@@ -43,4 +43,22 @@ public class Player {
     }
 
     public void setBalloonsPopped(int balloonsPopped) {this.balloonsPopped = balloonsPopped;}
+
+    public int getTowersUpgraded() {return balloonsPopped;
+    }
+
+    public int getHighestRound() {return balloonsPopped;
+    }
+
+    public int getGoldEarned() {return balloonsPopped;
+    }
+
+    public int getCurrentGold() {return balloonsPopped;
+    }
+
+    public boolean hasFlawlessRound() {return true;
+    }
+
+    public int getMinLifeLeftInARound() {return balloonsPopped;
+    }
 }
