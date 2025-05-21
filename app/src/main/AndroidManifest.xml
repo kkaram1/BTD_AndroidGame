@@ -49,9 +49,6 @@
             android:name=".LeaderBoard"
             android:screenOrientation="landscape"
             android:exported="false" />
-        <activity
-            android:name=".DifficultySelectionActivity"
-            android:label="Select Difficulty" />
     </application>
 
 </manifest>

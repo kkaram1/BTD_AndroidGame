@@ -37,7 +37,6 @@
         android:id="@+id/map1"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:onClick="goToGame0"
         android:scaleType="centerCrop"
         android:src="@drawable/btdmap1"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -52,7 +51,6 @@
         android:layout_height="160dp"
         android:src="@drawable/btdmap2"
         android:scaleType="centerCrop"
-        android:onClick="goToGame1"
         app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/map1"
@@ -64,9 +62,65 @@
         android:layout_height="160dp"
         android:src="@drawable/red_balloon"
         android:scaleType="centerCrop"
-        android:onClick="goToGame2"
         app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/map2"
         app:layout_constraintEnd_toEndOf="parent"/>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/difficultyCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:cardCornerRadius="8dp"
+        app:cardUseCompatPadding="true"
+        android:backgroundTint="@color/light_transparent_brown"
+        app:layout_constraintTop_toBottomOf="@id/map3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+        <LinearLayout
+            android:id="@+id/difficultyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            android:gravity="center"
+            android:padding="12dp">
+            <Button
+                android:id="@+id/btn_easy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Easy"
+                android:onClick="startGameEasy"
+                android:fontFamily="@font/luckiestguy"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:backgroundTint="@color/green"/>
+            <Button
+                android:id="@+id/btn_medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Medium"
+                android:onClick="startGameMed"
+                android:backgroundTint="@color/gold"
+                android:fontFamily="@font/luckiestguy"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+            <Button
+                android:id="@+id/btn_hard"
+                android:layout_width="0dp"
+                android:backgroundTint="@color/black"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:onClick="startGameHard"
+                android:text="Hard"
+                android:fontFamily="@font/luckiestguy"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
