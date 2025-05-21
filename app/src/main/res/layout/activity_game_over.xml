@@ -26,7 +26,7 @@
         android:paddingTop="12dp"
         android:paddingEnd="24dp"
         android:paddingBottom="12dp"
-        android:text="Back to the start LOSER"
+        android:text="Back to the start"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

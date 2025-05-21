@@ -46,7 +46,7 @@ public class GameActivity extends BaseActivity {
     private PhaseManager phaseManager;
     private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
-    private int money = 1000;
+    private int money = 250;
     private int health = 50;
     private TextView healthText;
     private Button upgradeToggleButton;
@@ -362,8 +362,8 @@ public class GameActivity extends BaseActivity {
 
         for(Pair<Towers, ImageView> pair : pairList) {
             if (pair.first.getPrice() > money) {
-                pair.second.setAlpha(0.5f); // make icon semi-transparent to show it's unaffordable
-                pair.second.setEnabled(false); // prevent clicking
+                pair.second.setAlpha(0.5f);
+                pair.second.setEnabled(false);
             } else {
                 pair.second.setAlpha(1.0f);
                 pair.second.setEnabled(true);

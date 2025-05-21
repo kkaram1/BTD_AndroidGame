@@ -68,7 +68,8 @@ public class ShootingController {
                 int dmg = p.getDamage();
                 boolean popped = false;
                 if (dmg > 0) {
-                    if (t.getType() == Balloon.ZEPPLIN) {
+                    if (t.getType() == Balloon.ZEPPLIN || t.getType() == Balloon.ZEPPLINBLACK || t.getType() == Balloon.BLACK) {
+
                         for (int i = 0; i < dmg; i++) {
                             if (t.applyHit()) { popped = true; break; }
                         }

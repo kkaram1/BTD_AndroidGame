@@ -1,9 +1,9 @@
 package com.example.baloonstd;
 
 public enum Difficulty {
-    EASY(6),
-    MEDIUM(5),
-    HARD(4);
+    EASY(8),
+    MEDIUM(6),
+    HARD(6);
 
     private final int rewardPerLayer;
 

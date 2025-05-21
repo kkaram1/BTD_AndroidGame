@@ -20,6 +20,7 @@ public class BalloonEnemy {
     private float originalSpeed;
 
     private int damageLayers = 0;
+    private boolean destroyed = false;
 
     public BalloonEnemy(Context ctx, Balloon type, Point position) {
         this.type = type;
@@ -132,5 +133,11 @@ public class BalloonEnemy {
     public void setDamageLayers(int dmg) {
         this.damageLayers = Math.max(0, dmg);
     }
+    public boolean isDestroyed() {
+        return destroyed;
+    }
 
+    public void markDestroyed() {
+        this.destroyed = true;
+    }
 }

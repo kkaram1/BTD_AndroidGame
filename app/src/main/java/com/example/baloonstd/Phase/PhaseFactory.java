@@ -35,7 +35,7 @@ public class PhaseFactory {
     private void setupEasy(int p, Map<Balloon,Integer> m){
         switch (p) {
             case 1:
-                m.put(Balloon.RED,     5);
+                m.put(Balloon.RED,    5);
                 break;
             case 2:
                 m.put(Balloon.RED,    8);
@@ -49,18 +49,18 @@ public class PhaseFactory {
                 m.put(Balloon.BLUE,    4);
                 break;
             case 5:
-                m.put(Balloon.RED,    20);
-                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   4);
                 m.put(Balloon.GREEN,   3);
                 break;
             case 6:
-                m.put(Balloon.RED,    15);
-                m.put(Balloon.BLUE,   12);
-                m.put(Balloon.GREEN,   6);
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,   5);
                 break;
             case 7:
                 m.put(Balloon.RED,    10);
-                m.put(Balloon.BLUE,   12);
+                m.put(Balloon.BLUE,   10);
                 m.put(Balloon.GREEN,   10);
                 break;
             case 8:
@@ -79,22 +79,22 @@ public class PhaseFactory {
                 break;
             case 11:
                 m.put(Balloon.BLUE,   15);
-                m.put(Balloon.GREEN,  25);
+                m.put(Balloon.BLACK,  3);
                 break;
             case 12:
-                m.put(Balloon.BLUE,   10);
-                m.put(Balloon.GREEN,  30);
+                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.BLACK,  6);
                 break;
             case 13:
-
                 m.put(Balloon.BLUE,   5);
-                m.put(Balloon.GREEN,  35);
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  7);
                 break;
             case 14:
-                m.put(Balloon.GREEN,  40);
+                m.put(Balloon.ZEPPLIN, 1);
                 break;
             case 15:
-                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  4);
                 m.put(Balloon.ZEPPLIN, 1);
                 break;
             case 16:
@@ -102,20 +102,21 @@ public class PhaseFactory {
                 break;
             case 17:
                 m.put(Balloon.GREEN,  10);
+                m.put(Balloon.BLACK,  4);
                 m.put(Balloon.ZEPPLIN, 2);
                 break;
             case 18:
-                m.put(Balloon.GREEN,  5);
                 m.put(Balloon.ZEPPLIN, 3);
                 break;
             case 19:
-                m.put(Balloon.RED,   10);
-                m.put(Balloon.BLUE,   10);
-                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.RED,   5);
+                m.put(Balloon.BLUE,   5);
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  5);
                 m.put(Balloon.ZEPPLIN, 3);
                 break;
             case 20:
-                m.put(Balloon.ZEPPLIN, 5);
+                m.put(Balloon.ZEPPLINBLACK, 2);
                 break;
             default: m.put(Balloon.RED, 20);                          break;
         }
@@ -123,7 +124,7 @@ public class PhaseFactory {
     private void setupMedium(int p, Map<Balloon,Integer> m){
         switch(p){
             case 1:
-                m.put(Balloon.RED,     5);
+                m.put(Balloon.RED,    5);
                 break;
             case 2:
                 m.put(Balloon.RED,    8);
@@ -137,18 +138,18 @@ public class PhaseFactory {
                 m.put(Balloon.BLUE,    4);
                 break;
             case 5:
-                m.put(Balloon.RED,    20);
-                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   4);
                 m.put(Balloon.GREEN,   3);
                 break;
             case 6:
-                m.put(Balloon.RED,    15);
-                m.put(Balloon.BLUE,   12);
-                m.put(Balloon.GREEN,   6);
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,   5);
                 break;
             case 7:
                 m.put(Balloon.RED,    10);
-                m.put(Balloon.BLUE,   12);
+                m.put(Balloon.BLUE,   10);
                 m.put(Balloon.GREEN,   10);
                 break;
             case 8:
@@ -167,22 +168,22 @@ public class PhaseFactory {
                 break;
             case 11:
                 m.put(Balloon.BLUE,   15);
-                m.put(Balloon.GREEN,  25);
+                m.put(Balloon.BLACK,  3);
                 break;
             case 12:
-                m.put(Balloon.BLUE,   10);
-                m.put(Balloon.GREEN,  30);
+                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.BLACK,  6);
                 break;
             case 13:
-
                 m.put(Balloon.BLUE,   5);
-                m.put(Balloon.GREEN,  35);
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  7);
                 break;
             case 14:
-                m.put(Balloon.GREEN,  40);
+                m.put(Balloon.ZEPPLIN, 1);
                 break;
             case 15:
-                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  4);
                 m.put(Balloon.ZEPPLIN, 1);
                 break;
             case 16:
@@ -190,20 +191,21 @@ public class PhaseFactory {
                 break;
             case 17:
                 m.put(Balloon.GREEN,  10);
+                m.put(Balloon.BLACK,  4);
                 m.put(Balloon.ZEPPLIN, 2);
                 break;
             case 18:
-                m.put(Balloon.GREEN,  5);
                 m.put(Balloon.ZEPPLIN, 3);
                 break;
             case 19:
-                m.put(Balloon.RED,   10);
-                m.put(Balloon.BLUE,   10);
-                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.RED,   5);
+                m.put(Balloon.BLUE,   5);
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  5);
                 m.put(Balloon.ZEPPLIN, 3);
                 break;
             case 20:
-                m.put(Balloon.ZEPPLIN, 5);
+                m.put(Balloon.ZEPPLINBLACK, 2);
                 break;
             default: m.put(Balloon.RED, 20);                          break;
         }
@@ -211,42 +213,42 @@ public class PhaseFactory {
     private void setupHard(int p, Map<Balloon,Integer> m){
         switch(p){
             case 1:
-                m.put(Balloon.RED,     5);
+                m.put(Balloon.RED,    8);
                 break;
             case 2:
-                m.put(Balloon.RED,    8);
+                m.put(Balloon.RED,    12);
                 break;
             case 3:
                 m.put(Balloon.RED,    10);
-                m.put(Balloon.BLUE,    2);
+                m.put(Balloon.BLUE,    3);
                 break;
             case 4:
                 m.put(Balloon.RED,    10);
-                m.put(Balloon.BLUE,    4);
+                m.put(Balloon.BLUE,    5);
                 break;
             case 5:
-                m.put(Balloon.RED,    20);
-                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   5);
                 m.put(Balloon.GREEN,   3);
                 break;
             case 6:
-                m.put(Balloon.RED,    15);
-                m.put(Balloon.BLUE,   12);
-                m.put(Balloon.GREEN,   6);
+                m.put(Balloon.RED,    10);
+                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.GREEN,   5);
                 break;
             case 7:
                 m.put(Balloon.RED,    10);
-                m.put(Balloon.BLUE,   12);
+                m.put(Balloon.BLUE,   10);
                 m.put(Balloon.GREEN,   10);
                 break;
             case 8:
                 m.put(Balloon.RED,    10);
                 m.put(Balloon.BLUE,   10);
-                m.put(Balloon.GREEN,  15);
+                m.put(Balloon.GREEN,  20);
                 break;
             case 9:
                 m.put(Balloon.RED,    5);
-                m.put(Balloon.BLUE,   10);
+                m.put(Balloon.BLUE,   15);
                 m.put(Balloon.GREEN,  25);
                 break;
             case 10:
@@ -255,43 +257,49 @@ public class PhaseFactory {
                 break;
             case 11:
                 m.put(Balloon.BLUE,   15);
-                m.put(Balloon.GREEN,  25);
+                m.put(Balloon.BLACK,  3);
                 break;
             case 12:
-                m.put(Balloon.BLUE,   10);
-                m.put(Balloon.GREEN,  30);
+                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.BLACK,  6);
                 break;
             case 13:
-
                 m.put(Balloon.BLUE,   5);
-                m.put(Balloon.GREEN,  35);
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  7);
                 break;
             case 14:
-                m.put(Balloon.GREEN,  40);
+                m.put(Balloon.BLACK,  2);
+                m.put(Balloon.ZEPPLIN, 1);
                 break;
             case 15:
-                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  5);
                 m.put(Balloon.ZEPPLIN, 1);
                 break;
             case 16:
+                m.put(Balloon.BLACK,  5);
                 m.put(Balloon.ZEPPLIN, 2);
                 break;
             case 17:
                 m.put(Balloon.GREEN,  10);
+                m.put(Balloon.BLACK,  7);
                 m.put(Balloon.ZEPPLIN, 2);
                 break;
             case 18:
-                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  6);
                 m.put(Balloon.ZEPPLIN, 3);
                 break;
             case 19:
-                m.put(Balloon.RED,   10);
-                m.put(Balloon.BLUE,   10);
-                m.put(Balloon.GREEN,  10);
+                m.put(Balloon.RED,   5);
+                m.put(Balloon.BLUE,   5);
+                m.put(Balloon.GREEN,  5);
+                m.put(Balloon.BLACK,  9);
                 m.put(Balloon.ZEPPLIN, 3);
                 break;
             case 20:
-                m.put(Balloon.ZEPPLIN, 5);
+                m.put(Balloon.BLACK,  2);
+                m.put(Balloon.ZEPPLIN, 2);
+                m.put(Balloon.ZEPPLINBLACK, 2);
                 break;
             default: m.put(Balloon.RED, 20);                          break;
         }

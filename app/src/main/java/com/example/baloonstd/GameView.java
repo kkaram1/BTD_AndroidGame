@@ -250,17 +250,21 @@ public class GameView extends View {
         invalidate();
     }
     public void removeEnemy(BalloonEnemy e) {
+        if (e.isDestroyed()) return;
+
         Point pos = e.getPosition();
         int idx = e.getCurrentWaypointIndex();
 
         if (e.getType() == Balloon.ZEPPLIN) {
             if (!e.applyHit()) return;
-            spawnGreenCluster(pos, idx, 10, 20);
+            e.markDestroyed();
+            spawnGreenCluster(pos, idx, 4, 20);
             enemies.remove(e);
             return;
         }
         if (e.getType() == Balloon.ZEPPLINBLACK) {
             if (!e.applyHit()) return;
+            e.markDestroyed();
             spawnZepplins(pos, idx, 2, 60);
             enemies.remove(e);
             return;
@@ -269,6 +273,7 @@ public class GameView extends View {
             if (!e.applyHit()) {
                 return;
             }
+            e.markDestroyed();
             spawnGreenCluster(pos, idx, 2, 20);
             enemies.remove(e);
             return;
