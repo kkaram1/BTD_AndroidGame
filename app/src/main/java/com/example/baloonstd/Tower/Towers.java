@@ -12,7 +12,9 @@ public enum Towers {
     SNIPER_MONKEY(2, R.drawable.sniper, "Sniper Monkey", 9001,2000,200,5000f,R.drawable.bullet,
             List.of(UpgradeType.SPEED, UpgradeType.DAMAGE), Map.of(UpgradeType.SPEED, new int[]{100, 200}, UpgradeType.DAMAGE, new int[]{75, 100})),
     ICE_MONKEY(3, R.drawable.ice_wizard, "Ice Monkey", 200,1000,150, 1000f,R.drawable.iceball,
-            List.of(UpgradeType.DAMAGE, UpgradeType.RANGE), Map.of(UpgradeType.DAMAGE, new int[]{50, 100}, UpgradeType.RANGE, new int[]{60, 120}));
+            List.of(UpgradeType.DAMAGE, UpgradeType.RANGE), Map.of(UpgradeType.DAMAGE, new int[]{50, 100}, UpgradeType.RANGE, new int[]{60, 120})),
+    BANK(4, R.drawable.bank, "Bank", 0,0,500, 0,-1,
+            List.of(UpgradeType.GENERATION),Map.of(UpgradeType.GENERATION, new int[]{150, 200}));
     private final int tag;
     private final String displayName;
     private final int range;
@@ -78,6 +80,16 @@ public enum Towers {
     public int getMaxUpgradeLevel(UpgradeType u) {
         int[] arr = costs.getOrDefault(u, new int[0]);
         return arr.length;
+    }
+
+    public int getGenerationPerRound(int level) {
+        if (this != BANK) return 0;
+        switch (level) {
+            case 0:  return 100;
+            case 1:  return 150;
+            case 2:  return 225;
+            default: return 225;
+        }
     }
 
 

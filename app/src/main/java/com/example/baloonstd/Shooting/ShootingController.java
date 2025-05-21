@@ -95,6 +95,7 @@ public class ShootingController {
         long now = System.currentTimeMillis();
 
         for (Tower tower : towers) {
+            if (tower.getTowerType() == Towers.BANK) continue;
             long allowed = nextShotTime.getOrDefault(tower, 0L);
             if (now < allowed) continue;
 

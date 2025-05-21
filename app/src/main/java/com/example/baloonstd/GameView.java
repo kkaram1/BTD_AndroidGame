@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -26,6 +27,8 @@ import com.example.baloonstd.Phase.PhaseManager;
 import com.example.baloonstd.Player.PlayerManager;
 import com.example.baloonstd.Shooting.ShootingController;
 import com.example.baloonstd.Tower.Tower;
+import com.example.baloonstd.Tower.Towers;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -365,6 +368,7 @@ public class GameView extends View {
         };
         Volley.newRequestQueue(this.getContext()).add(stringRequest);
     }
+
 
     public float getMapScaleX() { return scaleX; }
     public float getMapScaleY() { return scaleY; }

@@ -68,6 +68,8 @@ public class GameActivity extends BaseActivity {
     private int gamesPlayed;
     private Difficulty difficulty;
     private AchievementManager achievementManager;
+    private Button        btnGeneration;
+    private FrameLayout   upgradeGenerationContainer;
 
 
     @Override
@@ -108,6 +110,10 @@ public class GameActivity extends BaseActivity {
         upgradeDamageContainer = findViewById(R.id.upgradeDamageContainer);
         upgradeSpeedContainer  = findViewById(R.id.upgradeSpeedContainer);
         upgradeTitle = findViewById(R.id.upgradeTitle);
+        btnGeneration            = findViewById(R.id.btnUpgradeGeneration);
+        upgradeGenerationContainer = findViewById(R.id.upgradeGenerationContainer);
+
+
 
         String diffName = getIntent().getStringExtra("difficulty");
         difficulty = diffName != null ? Difficulty.valueOf(diffName) : Difficulty.MEDIUM;
@@ -120,6 +126,10 @@ public class GameActivity extends BaseActivity {
 
         TextView icePriceTxt = findViewById(R.id.icePrice);
         icePriceTxt.setText(String.valueOf(Towers.ICE_MONKEY.getPrice()));
+
+        TextView bankPriceTxt = findViewById(R.id.bankPrice);
+        bankPriceTxt.setText(String.valueOf(Towers.BANK.getPrice()));
+
         gamesPlayed =prefs.getInt("gamesPlayed",0);
         if (!PlayerManager.getInstance().getPlayer().isGuest()) {saveGamesPlayed();}
         AchievementManager.init(this);
@@ -143,6 +153,8 @@ public class GameActivity extends BaseActivity {
         pairList.add( new Pair<>(DART_MONKEY,findViewById(R.id.towerMonkeyIcon)));
         pairList.add( new Pair<>(SNIPER_MONKEY,findViewById(R.id.towerSniperIcon)));
         pairList.add( new Pair<>(ICE_MONKEY,findViewById(R.id.towerIceIcon)));
+        pairList.add(new Pair<>(Towers.BANK, findViewById(R.id.towerBankIcon)));
+
 
         Intent intent = getIntent();
         int mapNum = intent.getIntExtra("mapNum", -1);
@@ -190,6 +202,7 @@ public class GameActivity extends BaseActivity {
 
 
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
+            grantBankIncome();
             if (!PlayerManager.getInstance().getPlayer().isGuest()) {
                 saveBalloonPop(false);
                 saveUpgradesDone(false);
@@ -347,6 +360,28 @@ public class GameActivity extends BaseActivity {
 
             configurePopupFor(tower);
             updateRangeOverlayFor(tower);
+            upgradesDone++;
+        });
+        btnGeneration.setOnClickListener(v -> {
+            if (selectedTower == null) return;
+            Towers tt = selectedTower.getTowerType();
+            if (!tt.supports(UpgradeType.GENERATION)) return;
+
+            int lvl  = selectedTower.getUpgradeLevel(UpgradeType.GENERATION);
+            int cost = tt.getUpgradeCost(UpgradeType.GENERATION, lvl);
+            if (!spendMoney(cost)) {
+                Toast.makeText(this, "Not enough money", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            selectedTower.incrementUpgrade(UpgradeType.GENERATION);
+
+            Toast.makeText(
+                    this,
+                    "Bank interest +"+(lvl==0?50:75)+" / round",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            configurePopupFor(selectedTower);
             upgradesDone++;
         });
 
@@ -565,6 +600,10 @@ public class GameActivity extends BaseActivity {
 
     public void configurePopupFor(Tower tower) {
         Towers t = tower.getTowerType();
+        upgradeRangeContainer.setVisibility(View.GONE);
+        upgradeDamageContainer.setVisibility(View.GONE);
+        upgradeSpeedContainer.setVisibility(View.GONE);
+        upgradeGenerationContainer.setVisibility(View.GONE);
         upgradeTitle.setText(tower.getTowerType().getDisplayName());
         if (t.supports(UpgradeType.RANGE)) {
             int lvlR  = tower.getUpgradeLevel(UpgradeType.RANGE);
@@ -608,8 +647,21 @@ public class GameActivity extends BaseActivity {
                 btnSpeed.setEnabled(false);
             }
             upgradeSpeedContainer.setVisibility(View.VISIBLE);
+        }
+        if (t.supports(UpgradeType.GENERATION)) {
+            int lvl  = tower.getUpgradeLevel(UpgradeType.GENERATION);
+            int max  = t.getMaxUpgradeLevel(UpgradeType.GENERATION);   // 2
+            if (lvl < max) {
+                int cost = t.getUpgradeCost(UpgradeType.GENERATION, lvl);
+                btnGeneration.setText("Generation ("+cost+")");
+                btnGeneration.setEnabled(true);
+            } else {
+                btnGeneration.setText("Generation max");
+                btnGeneration.setEnabled(false);
+            }
+            upgradeGenerationContainer.setVisibility(View.VISIBLE);
         } else {
-            upgradeSpeedContainer.setVisibility(View.GONE);
+            upgradeGenerationContainer.setVisibility(View.GONE);
         }
     }
 
@@ -632,7 +684,29 @@ public class GameActivity extends BaseActivity {
             }
         }
     }
+    private void grantBankIncome() {
+        int gained = 0;
 
+        FrameLayout drag = findViewById(R.id.dragLayer);
+        for (int i = 0; i < drag.getChildCount(); i++) {
+            View v = drag.getChildAt(i);
+            if (v instanceof Tower) {
+                Tower t = (Tower) v;
+
+                if (t.getTowerType() == Towers.BANK) {
+                    int lvl   = t.getUpgradeLevel(UpgradeType.GENERATION);
+                    int inc   = t.getTowerType().getGenerationPerRound(lvl);
+                    gained   += inc;
+                }
+            }
+        }
+
+        if (gained > 0) {
+            addMoney(gained);
+            Toast.makeText(this, "Bank income +" + gained,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
 }
