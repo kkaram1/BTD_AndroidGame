@@ -84,7 +84,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.75">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/new_game"
             android:layout_width="200dp"
             android:layout_height="60dp"
@@ -98,21 +98,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/continue_game"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/btd_button_background_continue"
-            android:enabled="false"
-            android:fontFamily="@font/luckiestguy"
-            android:onClick="goToMenu"
-            android:text="Continue"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/LeaderBoard"
             android:layout_width="200dp"
             android:layout_height="60dp"
@@ -126,8 +112,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settings_button"
             android:layout_width="200dp"
             android:layout_height="60dp"

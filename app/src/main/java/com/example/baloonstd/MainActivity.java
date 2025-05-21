@@ -3,14 +3,12 @@ package com.example.baloonstd;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import com.example.baloonstd.MusicManager;
+import com.example.baloonstd.LeaderBoard.LeaderBoard;
 
 public class MainActivity extends BaseActivity {
 

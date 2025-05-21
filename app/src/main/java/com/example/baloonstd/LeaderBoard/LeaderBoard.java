@@ -1,9 +1,9 @@
-package com.example.baloonstd;
+package com.example.baloonstd.LeaderBoard;
 
-import android.util.Log;
 import android.os.Bundle;
 import com.example.baloonstd.Achievements.AchievementManager;
 import com.example.baloonstd.Achievements.AchievementRepository;
+import com.example.baloonstd.BaseActivity;
 import com.example.baloonstd.Player.Player;
 
 import android.view.View;
@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.baloonstd.Achievements.AchievementAdapter;
+import com.example.baloonstd.R;
 
 
 public class LeaderBoard extends BaseActivity {

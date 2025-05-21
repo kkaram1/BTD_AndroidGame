@@ -1,4 +1,4 @@
-package com.example.baloonstd;
+package com.example.baloonstd.LeaderBoard;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,9 +6,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.graphics.Color;
 
-import androidx.annotation.ColorInt;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.baloonstd.Player.Player;
+import com.example.baloonstd.R;
+
 import java.util.List;
 
 public class LeaderBoardAdapter
