@@ -60,7 +60,7 @@
         android:id="@+id/map3"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:src="@drawable/red_balloon"
+        android:src="@drawable/btdmap3"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.util.Pair;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.WindowCompat;
 import com.example.baloonstd.Phase.PhaseManager;
 import java.util.ArrayList;
@@ -444,11 +445,32 @@ public class GameActivity extends BaseActivity {
     }
 
     private void updateMapImage(int mapNum) {
+        ConstraintLayout.LayoutParams lp =
+                (ConstraintLayout.LayoutParams) mapImageView.getLayoutParams();
         switch (mapNum) {
-            case 0: mapImageView.setImageResource(R.drawable.btdmap1); break;
-            case 1: mapImageView.setImageResource(R.drawable.btdmap2); break;
-            case 2: mapImageView.setImageResource(R.drawable.red_balloon); break;
+            case 0:
+                mapImageView.setImageResource(R.drawable.btdmap1);
+                mapImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                mapImageView.setAdjustViewBounds(true);
+                lp.dimensionRatio = "H,322:500";
+                break;
+
+            case 1:
+                mapImageView.setImageResource(R.drawable.btdmap2);
+                mapImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                mapImageView.setAdjustViewBounds(true);
+                lp.dimensionRatio = "H,322:500";
+                break;
+
+            case 2:
+                mapImageView.setImageResource(R.drawable.btdmap3);
+                mapImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                mapImageView.setAdjustViewBounds(false);
+                lp.dimensionRatio = null;
+                break;
         }
+
+        mapImageView.setLayoutParams(lp); // pas toe
     }
 
     private void onBalloonReachedEnd(int damage) {

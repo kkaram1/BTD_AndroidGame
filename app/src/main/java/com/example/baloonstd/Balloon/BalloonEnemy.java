@@ -14,11 +14,9 @@ public class BalloonEnemy {
     private Point position;
     private int currentWaypointIndex;
     private int hitsRemaining;
-
     private boolean frozen = false;
     private Bitmap originalImage;
     private float originalSpeed;
-
     private int damageLayers = 0;
     private boolean destroyed = false;
 
@@ -111,7 +109,6 @@ public class BalloonEnemy {
         frozen = true;
         speedPixelsPerSecond = originalSpeed * 0.3f;
 
-        // Load frozen image
         int frozenResId = type.getFrozenResId();
         if (frozenResId != 0) {
             Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), frozenResId);

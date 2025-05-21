@@ -23,8 +23,7 @@ public class PhaseManager {
     }
 
     public boolean hasNextPhase() {
-        // You can decide how many total phases there are
-        return currentPhase < 50; // Example: 50 phases total
+        return currentPhase < 50;
     }
 
     public Phase moveToNextPhase() {
