@@ -21,19 +21,11 @@ public class AchievementManager {
         context = ctx.getApplicationContext();
         prefs = context.getSharedPreferences("player_session", Context.MODE_PRIVATE);
         all = AchievementRepository.getAll();
-        loadNum();
+        loadUnlockedFromPrefs();
     }
 
     public int loadNum() {
-        int num =0;
-        for(Achievements a: all)
-        {
-            if(a.shouldUnlock(PlayerManager.getInstance().getPlayer()))
-            {
-                num++;
-            }
-        }
-        return num;
+        return unlockedIds.size();
     }
 
     public static void init(Context ctx) {
@@ -41,7 +33,12 @@ public class AchievementManager {
             instance = new AchievementManager(ctx);
         }
     }
-
+    public void reset() {
+        if (instance != null) {
+            instance.unlockedIds.clear();
+            instance = null;
+        }
+    }
     public static AchievementManager get() {
         if (instance == null) {
             throw new IllegalStateException(
@@ -64,7 +61,12 @@ public class AchievementManager {
     private void onAchievementUnlocked(Achievements a) {
         Toast.makeText(context,"Achievement Unlocked! "+a.getName(),Toast.LENGTH_LONG).show();
     }
-
+    private void loadUnlockedFromPrefs() {
+        Set<String> saved = prefs.getStringSet("achievements", new HashSet<>());
+        for (String idStr : saved) {
+            unlockedIds.add(Integer.valueOf(idStr));
+        }
+    }
     private void saveUnlockedToPrefs() {
         SharedPreferences.Editor editor = prefs.edit();
         Set<String> toSave = new HashSet<>();
@@ -73,5 +75,8 @@ public class AchievementManager {
         }
         editor.putStringSet("achievements", toSave);
         editor.apply();
+    }
+    public boolean isUnlocked(int id) {
+        return unlockedIds.contains(id);
     }
 }

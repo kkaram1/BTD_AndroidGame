@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.baloonstd.Achievements.AchievementManager;
 import com.example.baloonstd.Player.Player;
 import com.example.baloonstd.Player.PlayerManager;
 
@@ -33,6 +34,7 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        AchievementManager.init(this);
 
         usernameInput = findViewById(R.id.editTextUsername);
         passwordInput = findViewById(R.id.editTextPassword);
@@ -46,10 +48,13 @@ public class LoginActivity extends BaseActivity {
         boolean guest2 = prefs.getBoolean("guest",true);
         int gamesPlayed2 = prefs.getInt("gamesPlayed",0);
         int playerId2 = prefs.getInt("idPlayer",0);
+        int towerUpgraded2 = prefs.getInt("upgradesDone",0);
+        int highestRound2 = prefs.getInt("highestRound",0);
         if (username != null) {
             // Auto-login
-            Player player = new Player(username,balloonsPopped2,towersPlaced2,guest2,gamesPlayed2,playerId2);
+            Player player = new Player(username,balloonsPopped2,towersPlaced2,guest2,gamesPlayed2,playerId2,towerUpgraded2,highestRound2);
             PlayerManager.getInstance().setPlayer(player);
+            AchievementManager.get().checkAll(player);
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
@@ -77,6 +82,8 @@ public class LoginActivity extends BaseActivity {
                         int balloonsPopped = jsonObject.getInt("balloonsPopped");
                         int towersPlaced = jsonObject.getInt("towersPlaced");
                         int gamesPlayed = jsonObject.getInt("gamesPlayed");
+                        int upgradesDone = jsonObject.getInt("upgradesDone");
+                        int highestRound = jsonObject.getInt("highestRound");
                         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
                         prefs1.edit()
                                 .putString("username", enteredUsername)
@@ -85,10 +92,13 @@ public class LoginActivity extends BaseActivity {
                                 .putInt("towersPlaced",towersPlaced)
                                 .putInt("gamesPlayed",gamesPlayed)
                                 .putBoolean("guest",false)
+                                .putInt("highestRound",highestRound)
+                                .putInt("upgradesDone",upgradesDone)
                                 .apply();
 
-                        Player player = new Player(enteredUsername,balloonsPopped,towersPlaced,false,gamesPlayed,playerId);
+                        Player player = new Player(enteredUsername,balloonsPopped,towersPlaced,false,gamesPlayed,playerId,upgradesDone,highestRound);
                         PlayerManager.getInstance().setPlayer(player);
+                        AchievementManager.get().checkAll(player);
 
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(i);
@@ -125,7 +135,7 @@ public class LoginActivity extends BaseActivity {
     {
         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
         prefs1.edit().putString("username", "guest").apply();
-        Player player = new Player("guest",0,0,true,0,0);
+        Player player = new Player("guest",0,0,true,0,0,0,0);
         PlayerManager.getInstance().setPlayer(player);
         Intent i = new Intent(LoginActivity.this,MainActivity.class);
     startActivity(i);

@@ -7,14 +7,15 @@ import java.util.function.Predicate;
 import com.example.baloonstd.Player.Player;
 
 public class Achievements {
-    private final int  id;
+    private final int id;
     private final String name;
     private final String description;
     private final Predicate<Player> condition;
     private Instant unlockedAt;
+
     public Achievements(int id,
                         String name,
-                       String description,
+                        String description,
                         Predicate<Player> condition) {
         this.id = id;
         this.name = name;
@@ -35,20 +36,7 @@ public class Achievements {
         return description;
     }
 
-    public boolean shouldUnlock( Player player) {
+    public boolean shouldUnlock(Player player) {
         return condition.test(player);
-    }
-
-    public void markUnlocked() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            this.unlockedAt = Instant.now();
-        }
-    }
-    public Instant getUnlockedAt() {
-        return unlockedAt;
-    }
-
-    public boolean isUnlocked() {
-        return unlockedAt != null;
     }
 }

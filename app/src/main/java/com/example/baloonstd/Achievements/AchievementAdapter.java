@@ -31,8 +31,11 @@ public class AchievementAdapter extends RecyclerView.Adapter<AchievementAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Achievements achievement = achievements.get(position);
-        if(achievement.shouldUnlock(PlayerManager.getInstance().getPlayer()))
-        { holder.tvName.setTextColor(Color.parseColor("#FFD700"));}
+        if (AchievementManager.get().isUnlocked(achievement.getId())) {
+            holder.tvName.setTextColor(Color.parseColor("#FFD700"));
+        } else {
+            holder.tvName.setTextColor(Color.WHITE);
+        }
         holder.tvName.setText(achievement.getName());
         holder.tvDescription.setText(achievement.getDescription());
     }

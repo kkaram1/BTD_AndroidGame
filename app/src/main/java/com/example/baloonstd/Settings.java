@@ -26,9 +26,13 @@ public class Settings extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.settings);
         Button logout = findViewById(R.id.logOutButton);
-        if(PlayerManager.getInstance().getPlayer().isGuest())
-        {logout.setText("Register");}
-        else{logout.setText("Logout");}
+        if(PlayerManager.getInstance().getPlayer() == null) {
+            logout.setText("Register");
+        } else if(PlayerManager.getInstance().getPlayer().isGuest()) {
+            logout.setText("Register");
+        } else {
+            logout.setText("Logout");
+        }
         SeekBar musicSeekBar = findViewById(R.id.musicVolumeSeekBar);
         SharedPreferences sharedPreferences = getSharedPreferences("SettingsPrefs", MODE_PRIVATE);
         int savedVolume = sharedPreferences.getInt("musicVolume", 50); // default to 50
@@ -69,8 +73,8 @@ public class Settings extends BaseActivity {
         SharedPreferences.Editor editor = prefs1.edit();
         editor.clear();
         editor.apply();
+        AchievementManager.get().reset();
         Intent i = new Intent(Settings.this, LoginActivity.class);
         startActivity(i);
-        finish();
     }
 }

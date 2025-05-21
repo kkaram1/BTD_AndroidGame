@@ -14,16 +14,10 @@ public class AchievementRepository {
                         player -> player.getBalloonsPopped() >= 10
                 ),
                 new Achievements(
-                        2,
-                        "Tower Tycoon",
-                        "Place 50 towers",
-                        player -> player.getTowersPlaced() >= 50
-                ),
-                new Achievements(
                         3,
                         "Balloon Intermediate",
                         "Pop 100 balloons",
-                        player -> player.getBalloonsPopped() >= 50
+                        player -> player.getBalloonsPopped() >= 100
                 ),
                 new Achievements(
                         4,
@@ -44,6 +38,12 @@ public class AchievementRepository {
                         player -> player.getTowersPlaced() >= 10
                 ),
                 new Achievements(
+                        2,
+                        "Tower Tycoon",
+                        "Place 50 towers",
+                        player -> player.getTowersPlaced() >= 50
+                ),
+                new Achievements(
                         7,
                         "Tower Master",
                         "Place 100 towers",
@@ -60,6 +60,24 @@ public class AchievementRepository {
                         "Upgrade Enthusiast",
                         "Upgrade 20 towers",
                         player -> player.getTowersUpgraded() >= 20
+                ),
+                new Achievements(
+                        13,
+                        "Upgrade Loverrrr",
+                        "Upgrade 50 towers",
+                        player -> player.getTowersUpgraded() >= 50
+                ),
+                new Achievements(
+                        14,
+                        "Okay enough upgrading",
+                        "Upgrade 100 towers",
+                        player -> player.getTowersUpgraded() >= 100
+                ),
+                new Achievements(
+                        15,
+                        "I SAID ENOUGH",
+                        "Upgrade 1000 towers",
+                        player -> player.getTowersUpgraded() >= 1000
                 ),
                 new Achievements(
                         10,
@@ -80,28 +98,10 @@ public class AchievementRepository {
                         player -> player.getHighestRound() >= 50
                 ),
                 new Achievements(
-                        13,
-                        "Gold Collector",
-                        "Earn 1000 gold",
-                        player -> player.getGoldEarned() >= 1000
-                ),
-                new Achievements(
-                        14,
-                        "Super Saver",
-                        "Have 2000 gold at once",
-                        player -> player.getCurrentGold() >= 2000
-                ),
-                new Achievements(
-                        15,
-                        "Comeback King",
-                        "Survive a round with only 1 life left",
-                        player -> player.getMinLifeLeftInARound() == 1
-                ),
-                new Achievements(
                         16,
-                        "Perfect Defense",
-                        "Complete a round without losing any lives",
-                        player -> player.hasFlawlessRound()
+                        "The End?",
+                        "Reach Round 100",
+                        player -> player.getHighestRound() >= 100
                 )
         );
     }

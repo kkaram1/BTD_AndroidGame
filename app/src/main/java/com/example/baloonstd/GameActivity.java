@@ -51,6 +51,8 @@ public class GameActivity extends BaseActivity {
     private TextView healthText;
     private Button upgradeToggleButton;
     private int balloonsPopped;
+    private int upgradesDone;
+    private int highestRound;
     LinearLayout towerUpgradePopup;
     private  SharedPreferences prefs;
     protected Tower selectedTower;
@@ -66,6 +68,7 @@ public class GameActivity extends BaseActivity {
     private int gamesPlayed;
     private Difficulty difficulty;
     private AchievementManager achievementManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,8 @@ public class GameActivity extends BaseActivity {
         upgradeToggleButton.setVisibility(GONE);
         prefs  = getSharedPreferences("player_session", MODE_PRIVATE);
         balloonsPopped = prefs.getInt("balloonsPopped",0);
+        upgradesDone = prefs.getInt("upgradesDone",0);
+        highestRound = prefs.getInt("highestRound",0);
         ImageButton btnSellTower = findViewById(R.id.btnSellTower);
         btnRange  = findViewById(R.id.btnUpgradeRange);
         btnDamage = findViewById(R.id.btnUpgradeDamage);
@@ -185,7 +190,21 @@ public class GameActivity extends BaseActivity {
 
 
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
-            if(!PlayerManager.getInstance().getPlayer().isGuest()){saveBalloonPop();}
+            if (!PlayerManager.getInstance().getPlayer().isGuest()) {
+                saveBalloonPop(false);
+                saveUpgradesDone(false);
+                if (PlayerManager.getInstance().getPlayer().setHighestRound(phase)) {
+                    highestRound = phase;
+                    saveHighestRound(false);
+                }
+            } else {
+                if (PlayerManager.getInstance().getPlayer().setHighestRound(phase)) {
+                    highestRound = phase;
+                    saveHighestRound(true);
+                }
+                saveBalloonPop(true);
+                saveUpgradesDone(true);
+            }
             if(phase == 20){gameWonScreen.setVisibility(LinearLayout.VISIBLE);}
             int phaseDispaly = phase +1;
             nextPhaseButton.setText("Start Phase "+ phaseDispaly);
@@ -279,6 +298,7 @@ public class GameActivity extends BaseActivity {
                     "Range upgraded to lvl " + selectedTower.getUpgradeLevel(UpgradeType.RANGE),
                     Toast.LENGTH_SHORT).show();
             configurePopupFor(selectedTower);
+            upgradesDone++;
         });
 
 
@@ -299,6 +319,7 @@ public class GameActivity extends BaseActivity {
                     Toast.LENGTH_SHORT).show();
             configurePopupFor(tower);
             updateRangeOverlayFor(tower);
+            upgradesDone++;
         });
 
         btnSpeed.setOnClickListener(v -> {
@@ -326,6 +347,7 @@ public class GameActivity extends BaseActivity {
 
             configurePopupFor(tower);
             updateRangeOverlayFor(tower);
+            upgradesDone++;
         });
 
         closeButton.setOnClickListener(v -> {
@@ -455,10 +477,53 @@ public class GameActivity extends BaseActivity {
             }
         }
     }
-    private void saveBalloonPop() {
+    private void saveHighestRound(boolean guest) {
+        prefs.edit().putInt("highestRound",highestRound).apply();
+        PlayerManager.getInstance().getPlayer().setHighestRound(highestRound);
+        achievementManager.checkAll(PlayerManager.getInstance().getPlayer());
+        if(!guest){
+            String url = "https://studev.groept.be/api/a24pt301/incHighestRound";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    response -> {
+                    },
+                    error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
+            ) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("a", String.valueOf(highestRound));
+                    params.put("b", PlayerManager.getInstance().getUsername());
+                    return params;
+                }
+            };
+            Volley.newRequestQueue(this).add(stringRequest);}
+    }
+   private void saveUpgradesDone(boolean guest){
+       prefs.edit().putInt("upgradesDone",upgradesDone).apply();
+       PlayerManager.getInstance().getPlayer().setTowerUpgraded(upgradesDone);
+       achievementManager.checkAll(PlayerManager.getInstance().getPlayer());
+       if(!guest){
+       String url = "https://studev.groept.be/api/a24pt301/incUpgradesDone";
+       StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+               response -> {
+               },
+               error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
+       ) {
+           @Override
+           protected Map<String, String> getParams() {
+               Map<String, String> params = new HashMap<>();
+               params.put("a", String.valueOf(upgradesDone));
+               params.put("b", PlayerManager.getInstance().getUsername());
+               return params;
+           }
+       };
+       Volley.newRequestQueue(this).add(stringRequest);}
+   }
+    private void saveBalloonPop(boolean guest) {
         prefs.edit().putInt("balloonsPopped",balloonsPopped).apply();
         PlayerManager.getInstance().getPlayer().setBalloonsPopped(balloonsPopped);
         achievementManager.checkAll(PlayerManager.getInstance().getPlayer());
+        if(!guest){
         String url = "https://studev.groept.be/api/a24pt301/incBalloons";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
@@ -473,7 +538,7 @@ public class GameActivity extends BaseActivity {
                 return params;
             }
         };
-        Volley.newRequestQueue(this).add(stringRequest);
+        Volley.newRequestQueue(this).add(stringRequest);}
     }
     private void saveGamesPlayed() {
         gamesPlayed++;

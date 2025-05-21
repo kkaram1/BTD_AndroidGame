@@ -7,14 +7,17 @@ public class Player {
     private boolean guest;
     private int gamesPlayed;
     private  int  playerId;
-
-    public Player(String username,int balloonsPopped,int towersPlaced,boolean guest,int gamesPlayed,int playerId) {
+    private int towerUpgraded;
+    private int highestRound;
+    public Player(String username,int balloonsPopped,int towersPlaced,boolean guest,int gamesPlayed,int playerId,int towerUpgraded,int highestRound) {
         this.username = username;
         this.balloonsPopped = balloonsPopped;
         this.towersPlaced=towersPlaced;
         this.guest =guest;
         this.gamesPlayed = gamesPlayed;
         this.playerId = playerId;
+        this.towerUpgraded =towerUpgraded;
+        this.highestRound =highestRound;
     }
     public Player (String username,int balloonsPopped,int gamesPlayed)
     {
@@ -23,11 +26,16 @@ public class Player {
         this.gamesPlayed = gamesPlayed;
     }
 
-    public int getTowersPlaced() {
-        return towersPlaced;
-    }
-
+    public int getTowersPlaced() {return towersPlaced;}
+    public void setTowerUpgraded(int towerUpgraded) {this.towerUpgraded = towerUpgraded;}
     public int getPlayerId() {return playerId;}
+
+    public boolean setHighestRound(int highestRound) {
+        if(this.highestRound<highestRound)
+        {this.highestRound = highestRound;
+        return true;}
+        return false;
+    }
 
     public void incTowers(int inc){towersPlaced+=inc;}
 
@@ -35,35 +43,16 @@ public class Player {
 
     public boolean isGuest() {return guest;}
 
-    public int getBalloonsPopped() {
-        return balloonsPopped;
-    }
+    public int getBalloonsPopped() {return balloonsPopped;}
 
     public int getGamesPlayed() {return gamesPlayed;}
 
     public void setGamesPlayed(int gamesPlayed) {this.gamesPlayed = gamesPlayed;}
 
-    public void incrementBalloonsPopped(int amount) {
-        this.balloonsPopped += amount;
-    }
 
     public void setBalloonsPopped(int balloonsPopped) {this.balloonsPopped = balloonsPopped;}
 
-    public int getTowersUpgraded() {return balloonsPopped;
-    }
+    public int getTowersUpgraded() {return towerUpgraded;}
 
-    public int getHighestRound() {return balloonsPopped;
-    }
-
-    public int getGoldEarned() {return balloonsPopped;
-    }
-
-    public int getCurrentGold() {return balloonsPopped;
-    }
-
-    public boolean hasFlawlessRound() {return true;
-    }
-
-    public int getMinLifeLeftInARound() {return balloonsPopped;
-    }
+    public int getHighestRound() {return highestRound;}
 }
