@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.example.baloonstd.Player.Player;
+import com.example.baloonstd.Player.PlayerManager;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,12 +17,23 @@ public class AchievementManager {
     private final Set<Integer> unlockedIds = new HashSet<>();
     private final SharedPreferences prefs;
     private Context context;
-    // todo make so that already achived acivments are in gold
     private AchievementManager(Context ctx) {
         context = ctx.getApplicationContext();
         prefs = context.getSharedPreferences("player_session", Context.MODE_PRIVATE);
         all = AchievementRepository.getAll();
-        loadUnlockedFromPrefs();
+        loadNum();
+    }
+
+    public int loadNum() {
+        int num =0;
+        for(Achievements a: all)
+        {
+            if(a.shouldUnlock(PlayerManager.getInstance().getPlayer()))
+            {
+                num++;
+            }
+        }
+        return num;
     }
 
     public static void init(Context ctx) {
@@ -52,15 +65,6 @@ public class AchievementManager {
         Toast.makeText(context,"Achievement Unlocked! "+a.getName(),Toast.LENGTH_LONG).show();
     }
 
-    private void loadUnlockedFromPrefs() {
-        Set<String> saved = prefs.getStringSet("achievements", new HashSet<String>());
-        for (String idStr : saved) {
-            try {
-                unlockedIds.add(Integer.valueOf(idStr));
-            } catch (NumberFormatException e) {
-            }
-        }
-    }
     private void saveUnlockedToPrefs() {
         SharedPreferences.Editor editor = prefs.edit();
         Set<String> toSave = new HashSet<>();
@@ -70,5 +74,4 @@ public class AchievementManager {
         editor.putStringSet("achievements", toSave);
         editor.apply();
     }
-    public int getNumAchievements() {return unlockedIds.size();}
 }

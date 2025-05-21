@@ -45,9 +45,10 @@ public class LoginActivity extends BaseActivity {
         int towersPlaced2 = prefs.getInt("towersPlaced",0);
         boolean guest2 = prefs.getBoolean("guest",true);
         int gamesPlayed2 = prefs.getInt("gamesPlayed",0);
+        int playerId2 = prefs.getInt("idPlayer",0);
         if (username != null) {
             // Auto-login
-            Player player = new Player(username,balloonsPopped2,towersPlaced2,guest2,gamesPlayed2);
+            Player player = new Player(username,balloonsPopped2,towersPlaced2,guest2,gamesPlayed2,playerId2);
             PlayerManager.getInstance().setPlayer(player);
             startActivity(new Intent(this, MainActivity.class));
             finish();
@@ -86,7 +87,7 @@ public class LoginActivity extends BaseActivity {
                                 .putBoolean("guest",false)
                                 .apply();
 
-                        Player player = new Player(enteredUsername,balloonsPopped,towersPlaced,false,gamesPlayed);
+                        Player player = new Player(enteredUsername,balloonsPopped,towersPlaced,false,gamesPlayed,playerId);
                         PlayerManager.getInstance().setPlayer(player);
 
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);
@@ -124,7 +125,7 @@ public class LoginActivity extends BaseActivity {
     {
         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
         prefs1.edit().putString("username", "guest").apply();
-        Player player = new Player("guest",0,0,true,0);
+        Player player = new Player("guest",0,0,true,0,0);
         PlayerManager.getInstance().setPlayer(player);
         Intent i = new Intent(LoginActivity.this,MainActivity.class);
     startActivity(i);

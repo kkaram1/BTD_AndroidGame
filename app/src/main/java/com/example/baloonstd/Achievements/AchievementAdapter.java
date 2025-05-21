@@ -1,5 +1,6 @@
 package com.example.baloonstd.Achievements;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.baloonstd.Player.PlayerManager;
 import com.example.baloonstd.R;
 
 import java.util.List;
@@ -29,6 +31,8 @@ public class AchievementAdapter extends RecyclerView.Adapter<AchievementAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Achievements achievement = achievements.get(position);
+        if(achievement.shouldUnlock(PlayerManager.getInstance().getPlayer()))
+        { holder.tvName.setTextColor(Color.parseColor("#FFD700"));}
         holder.tvName.setText(achievement.getName());
         holder.tvDescription.setText(achievement.getDescription());
     }

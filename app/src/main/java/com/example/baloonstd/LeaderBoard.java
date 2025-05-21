@@ -88,7 +88,7 @@ public class LeaderBoard extends BaseActivity {
             tvUsername.setText("Username: "+currentPlayer.getUsername());
             tvBalloonsPopped.setText("Balloons Popped: "+currentPlayer.getBalloonsPopped());
             tvGamesPlayed.setText("Games Played: "+currentPlayer.getGamesPlayed());
-            achievementsText.setText("Achievements Unlocked: " + achievementManager.getNumAchievements() + "/16");
+            achievementsText.setText("Achievements Unlocked: " + achievementManager.loadNum() + "/16");
         }
 
         fetchLeaderBoard();

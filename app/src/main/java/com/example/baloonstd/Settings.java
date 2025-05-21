@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.baloonstd.Achievements.AchievementManager;
 import com.example.baloonstd.Player.PlayerManager;
 
 public class Settings extends BaseActivity {
@@ -70,5 +71,6 @@ public class Settings extends BaseActivity {
         editor.apply();
         Intent i = new Intent(Settings.this, LoginActivity.class);
         startActivity(i);
+        finish();
     }
 }
