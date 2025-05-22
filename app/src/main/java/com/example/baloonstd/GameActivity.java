@@ -14,8 +14,9 @@ import  com.example.baloonstd.Tower.Towers;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
-import android.media.SoundPool;
+import com.example.baloonstd.audio.SFXManager;
+import android.media.MediaPlayer;
+import android.util.Log;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -63,8 +64,6 @@ public class GameActivity extends BaseActivity {
     private FrameLayout upgradeRangeContainer;
     private FrameLayout upgradeDamageContainer;
     private FrameLayout upgradeSpeedContainer;
-    private SoundPool soundPool;
-    private int popSoundId;
     private TextView upgradeTitle;
     private int gamesPlayed;
     private Difficulty difficulty;
@@ -79,6 +78,7 @@ public class GameActivity extends BaseActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_game);
+        SFXManager.init(this);
 
         mapImageView      = findViewById(R.id.mapImageView);
         towerPanel        = findViewById(R.id.towerPanel);
@@ -233,6 +233,7 @@ public class GameActivity extends BaseActivity {
 
         gameView.setOnLayerPopListener(layer ->
                 runOnUiThread(() -> {
+                    SFXManager.playPop();
                     int earned = difficulty.getRewardPerLayer() * layer;
                     addMoney(earned);
                     balloonsPopped += layer;
@@ -394,16 +395,7 @@ public class GameActivity extends BaseActivity {
             towerUpgradePopup.setVisibility(View.GONE);
             upgradeToggleButton.setVisibility(View.GONE);
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            soundPool = new SoundPool.Builder()
-                    .setMaxStreams(4)
-                    .build();
-        } else {
-            soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-        }
-        popSoundId = soundPool.load(this, R.raw.popc, 1);
 
-        gameView.getShooter().setSoundPool(soundPool, popSoundId);
 
 
     }
@@ -688,6 +680,10 @@ public class GameActivity extends BaseActivity {
             Toast.makeText(this, "Bank income +" + gained,
                     Toast.LENGTH_SHORT).show();
         }
+    }
+    public void goToSettings2(View v) {
+        Intent intent = new Intent(this, Settings.class);
+        startActivity(intent);
     }
 
 

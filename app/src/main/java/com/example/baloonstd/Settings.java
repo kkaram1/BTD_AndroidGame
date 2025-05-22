@@ -16,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.baloonstd.Achievements.AchievementManager;
 import com.example.baloonstd.Player.PlayerManager;
+import com.example.baloonstd.audio.MusicManager;
+import com.example.baloonstd.audio.SFXManager;
 
 public class Settings extends BaseActivity {
 
@@ -53,6 +55,26 @@ public class Settings extends BaseActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) { }
         });
+
+        SeekBar sfxSeekBar = findViewById(R.id.sfxVolumeSeekBar);
+        int savedSfxVolume = sharedPreferences.getInt("sfxVolume", 50); // default 50
+        sfxSeekBar.setProgress(savedSfxVolume);
+        sfxSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float sfxVolume = progress / 100f;
+                SFXManager.setVolume(sfxVolume);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("sfxVolume", progress);
+                editor.apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
         SwitchCompat vibrationSwitch = findViewById(R.id.vibrationSwitch);
         boolean vibrationEnabled = sharedPreferences.getBoolean("vibrationEnabled", true);
         vibrationSwitch.setChecked(vibrationEnabled);
@@ -68,6 +90,10 @@ public class Settings extends BaseActivity {
             return insets;
         });
     }
+    public void goBack(View v) {
+        finish();
+    }
+
     public void goToLogin(View v){
         SharedPreferences prefs1 = getSharedPreferences("player_session", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs1.edit();
