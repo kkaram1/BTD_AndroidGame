@@ -73,21 +73,20 @@ public class MapManager {
         list.add(new Map(R.drawable.btdmap2, path1,noBuildZoneMap0));
         ArrayList<Point> path2 = new ArrayList<>();
         path2.add(new Point(  0, 166));
-        path2.add(new Point(146, 165));
-        path2.add(new Point(146,  77));
+        path2.add(new Point(158, 165));
+        path2.add(new Point(158,  77));
         path2.add(new Point(251,  77));
         path2.add(new Point(251, 240));
-        path2.add(new Point(136, 240));
-        path2.add(new Point(136, 295));
-        path2.add(new Point(401, 295));
-        path2.add(new Point(401, 198));
+        path2.add(new Point(145, 240));
+        path2.add(new Point(145, 295));
+        path2.add(new Point(395, 295));
+        path2.add(new Point(395, 198));
         path2.add(new Point(304, 198));
         path2.add(new Point(304, 130));
         path2.add(new Point(415, 130));
         path2.add(new Point(415,  13));
         path2.add(new Point(302,  11));
         path2.add(new Point(302,   0));
-
         list.add(new Map(R.drawable.btdmap3, path2, Collections.emptyList()));
         return list.get(mapNum);
     }
