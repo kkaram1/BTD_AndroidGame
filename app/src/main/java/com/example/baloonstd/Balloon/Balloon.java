@@ -16,7 +16,6 @@ public enum Balloon {
 
     private float speed;
     private int layer;
-    private Point position;
     private final int displaySize;
     private final int resNormal, resIce;
 
@@ -26,7 +25,6 @@ public enum Balloon {
         this.resIce = resIce;
         this.speed = speed;
         this.layer = layer;
-        this.position=position;
         this.displaySize = displaySize;
     }
 

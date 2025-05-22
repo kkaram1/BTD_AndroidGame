@@ -163,7 +163,7 @@ public class GameActivity extends BaseActivity {
         phaseManager = new PhaseManager(this, difficulty);
         gameContainer.addView(gameView);
         updateMapImage(mapNum);
-        updateMoney(0);
+        updateMoneyUI();
 
         DragDropController controller = new DragDropController(
                 dragLayer,
@@ -186,7 +186,7 @@ public class GameActivity extends BaseActivity {
         });
 
         openPanel.setOnClickListener(v -> {
-            updateMoneyDisplay();
+            updateMoneyUI();
             boolean vis = towerPanel.getVisibility() == LinearLayout.VISIBLE;
             towerPanel.setVisibility(vis ? GONE : LinearLayout.VISIBLE);
         });
@@ -410,15 +410,13 @@ public class GameActivity extends BaseActivity {
     public boolean spendMoney(int amount) {
         if (money < amount) return false;
         money -= amount;
-        updateMoney(0);
-        updateMoneyDisplay();
+        updateMoneyUI();
         return true;
     }
 
-    private void updateMoneyDisplay() {
-        moneyText.setText( ""+money);
-
-        for(Pair<Towers, ImageView> pair : pairList) {
+    private void updateMoneyUI() {
+        moneyText.setText("" + money);
+        for (Pair<Towers, ImageView> pair : pairList) {
             if (pair.first.getPrice() > money) {
                 pair.second.setAlpha(0.5f);
                 pair.second.setEnabled(false);
@@ -429,20 +427,32 @@ public class GameActivity extends BaseActivity {
         }
     }
 
-
     public GameView getGameView() {
         return gameView;
     }
     public void addMoney(int amount) {
         money += amount;
-        updateMoney(amount);
-        updateMoneyDisplay();
+        updateMoneyUI();
     }
 
+    private void postStatToServer(String url, String a, String b) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
 
-    private void updateMoney(int delta) {
-        moneyText.setText(""+ money);
+                },
+                error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("a", a);
+                params.put("b", b);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(stringRequest);
     }
+
 
     private void updateMapImage(int mapNum) {
         ConstraintLayout.LayoutParams lp =
@@ -499,9 +509,6 @@ public class GameActivity extends BaseActivity {
     private void updateHealthUI() {
         healthText.setText("" + health);
     }
-    public int getMoney(){
-        return money;
-    }
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -535,88 +542,41 @@ public class GameActivity extends BaseActivity {
         }
     }
     private void saveHighestRound(boolean guest) {
-        prefs.edit().putInt("highestRound",highestRound).apply();
+        prefs.edit().putInt("highestRound", highestRound).apply();
         PlayerManager.getInstance().getPlayer().setHighestRound(highestRound);
         achievementManager.checkAll(PlayerManager.getInstance().getPlayer());
-        if(!guest){
+        if (!guest) {
             String url = "https://studev.groept.be/api/a24pt301/incHighestRound";
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                    response -> {
-                    },
-                    error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
-            ) {
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("a", String.valueOf(highestRound));
-                    params.put("b", PlayerManager.getInstance().getUsername());
-                    return params;
-                }
-            };
-            Volley.newRequestQueue(this).add(stringRequest);}
+            postStatToServer(url, String.valueOf(highestRound), PlayerManager.getInstance().getUsername());
+        }
     }
-   private void saveUpgradesDone(boolean guest){
-       prefs.edit().putInt("upgradesDone",upgradesDone).apply();
-       PlayerManager.getInstance().getPlayer().setTowerUpgraded(upgradesDone);
-       achievementManager.checkAll(PlayerManager.getInstance().getPlayer());
-       if(!guest){
-       String url = "https://studev.groept.be/api/a24pt301/incUpgradesDone";
-       StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-               response -> {
-               },
-               error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
-       ) {
-           @Override
-           protected Map<String, String> getParams() {
-               Map<String, String> params = new HashMap<>();
-               params.put("a", String.valueOf(upgradesDone));
-               params.put("b", PlayerManager.getInstance().getUsername());
-               return params;
-           }
-       };
-       Volley.newRequestQueue(this).add(stringRequest);}
-   }
+
+    private void saveUpgradesDone(boolean guest) {
+        prefs.edit().putInt("upgradesDone", upgradesDone).apply();
+        PlayerManager.getInstance().getPlayer().setTowerUpgraded(upgradesDone);
+        achievementManager.checkAll(PlayerManager.getInstance().getPlayer());
+        if (!guest) {
+            String url = "https://studev.groept.be/api/a24pt301/incUpgradesDone";
+            postStatToServer(url, String.valueOf(upgradesDone), PlayerManager.getInstance().getUsername());
+        }
+    }
+
     private void saveBalloonPop(boolean guest) {
-        prefs.edit().putInt("balloonsPopped",balloonsPopped).apply();
+        prefs.edit().putInt("balloonsPopped", balloonsPopped).apply();
         PlayerManager.getInstance().getPlayer().setBalloonsPopped(balloonsPopped);
         achievementManager.checkAll(PlayerManager.getInstance().getPlayer());
-        if(!guest){
-        String url = "https://studev.groept.be/api/a24pt301/incBalloons";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                response -> {
-                },
-                error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("a", String.valueOf(balloonsPopped));
-                params.put("b", PlayerManager.getInstance().getUsername());
-                return params;
-            }
-        };
-        Volley.newRequestQueue(this).add(stringRequest);}
+        if (!guest) {
+            String url = "https://studev.groept.be/api/a24pt301/incBalloons";
+            postStatToServer(url, String.valueOf(balloonsPopped), PlayerManager.getInstance().getUsername());
+        }
     }
+
     private void saveGamesPlayed() {
         gamesPlayed++;
         PlayerManager.getInstance().getPlayer().setGamesPlayed(gamesPlayed);
-        prefs.edit().putInt("gamesPlayed",gamesPlayed).apply();
+        prefs.edit().putInt("gamesPlayed", gamesPlayed).apply();
         String url = "https://studev.groept.be/api/a24pt301/incGamesPlayed";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                response -> {
-
-                },
-                error -> Toast.makeText(this, "Volley error: (network)" + error.getMessage(), Toast.LENGTH_LONG).show()
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("a", String.valueOf(gamesPlayed));
-                params.put("b", PlayerManager.getInstance().getUsername());
-                return params;
-            }
-        };
-        Volley.newRequestQueue(this).add(stringRequest);
+        postStatToServer(url, String.valueOf(gamesPlayed), PlayerManager.getInstance().getUsername());
     }
 
 

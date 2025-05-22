@@ -47,7 +47,7 @@ public class LoginActivity extends BaseActivity {
         int towersPlaced2 = prefs.getInt("towersPlaced",0);
         boolean guest2 = prefs.getBoolean("guest",true);
         int gamesPlayed2 = prefs.getInt("gamesPlayed",0);
-        int playerId2 = prefs.getInt("idPlayer",0);
+        int playerId2 = prefs.getInt("playerId",0);
         int towerUpgraded2 = prefs.getInt("upgradesDone",0);
         int highestRound2 = prefs.getInt("highestRound",0);
         if (username != null) {

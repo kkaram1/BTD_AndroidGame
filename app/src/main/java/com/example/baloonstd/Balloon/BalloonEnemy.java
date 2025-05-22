@@ -5,8 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Handler;
+import android.os.Looper;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BalloonEnemy {
+
+    private static final Map<Integer, Bitmap> frozenImageCache = new HashMap<>();
     private Balloon type;
     private Bitmap balloonImage;
     private float speedPixelsPerSecond;
@@ -17,7 +22,6 @@ public class BalloonEnemy {
     private boolean frozen = false;
     private Bitmap originalImage;
     private float originalSpeed;
-    private int damageLayers = 0;
     private boolean destroyed = false;
 
     public BalloonEnemy(Context ctx, Balloon type, Point position) {
@@ -33,16 +37,27 @@ public class BalloonEnemy {
         this.layer = b.getLayer();
         this.speedPixelsPerSecond = b.getSpeed();
         this.balloonImage = b.getBitmap(ctx,false);
-        this.originalImage = balloonImage;
-        this.originalSpeed = speedPixelsPerSecond;
+        if (!frozen) {
+            this.originalImage = balloonImage;
+            this.originalSpeed = speedPixelsPerSecond;
+        }
+    }
+
+    private void setFrozenImage(Context ctx) {
+        int frozenResId = type.getFrozenResId();
+        if (frozenResId != 0) {
+            Bitmap cached = frozenImageCache.get(frozenResId);
+            if (cached == null) {
+                Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), frozenResId);
+                cached = Bitmap.createScaledBitmap(raw, balloonImage.getWidth(), balloonImage.getHeight(), true);
+                frozenImageCache.put(frozenResId, cached);
+            }
+            balloonImage = cached;
+        }
     }
 
     public float getSpeedPixelsPerSecond() {
         return speedPixelsPerSecond;
-    }
-
-    public void setSpeedPixelsPerSecond(float speed) {
-        this.speedPixelsPerSecond = speed;
     }
 
     public Bitmap getImage() {
@@ -80,11 +95,7 @@ public class BalloonEnemy {
             applyType(ctx, next);
             if (wasFrozen) {
                 speedPixelsPerSecond = originalSpeed * 0.3f;
-                int frozenResId = type.getFrozenResId();
-                if (frozenResId != 0) {
-                    Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), frozenResId);
-                    balloonImage = Bitmap.createScaledBitmap(raw, balloonImage.getWidth(), balloonImage.getHeight(), true);
-                }
+                setFrozenImage(ctx);
             }
         }
     }
@@ -99,36 +110,19 @@ public class BalloonEnemy {
         return type;
     }
 
-    public boolean isFrozen() {
-        return frozen;
-    }
-
     public void freeze(Context ctx) {
         if (frozen) return;
 
         frozen = true;
         speedPixelsPerSecond = originalSpeed * 0.3f;
 
-        int frozenResId = type.getFrozenResId();
-        if (frozenResId != 0) {
-            Bitmap raw = BitmapFactory.decodeResource(ctx.getResources(), frozenResId);
-            balloonImage = Bitmap.createScaledBitmap(raw, balloonImage.getWidth(), balloonImage.getHeight(), true);
-        }
+        setFrozenImage(ctx);
 
-        new Handler().postDelayed(() -> {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             balloonImage = originalImage;
             speedPixelsPerSecond = originalSpeed;
             frozen = false;
         }, 5000);
-    }
-
-
-    public int getDamageLayers() {
-        return damageLayers;
-    }
-
-    public void setDamageLayers(int dmg) {
-        this.damageLayers = Math.max(0, dmg);
     }
     public boolean isDestroyed() {
         return destroyed;
