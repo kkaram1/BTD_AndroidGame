@@ -32,11 +32,6 @@ public class ShootingController {
         this.gameView = gameView;
     }
 
-    public void setSoundPool(SoundPool sp, int soundId) {
-        this.soundPool = sp;
-        this.popSoundId = soundId;
-    }
-
     public void addTower(final Tower tower) {
         towers.add(tower);
 
