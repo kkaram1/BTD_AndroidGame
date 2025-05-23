@@ -48,7 +48,7 @@ public class GameActivity extends BaseActivity {
     private PhaseManager phaseManager;
     private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
-    private int money = 250;
+    private int money = 500;
     private int health = 50;
     private TextView healthText;
     private Button upgradeToggleButton;
@@ -116,8 +116,14 @@ public class GameActivity extends BaseActivity {
 
 
 
-        String diffName = getIntent().getStringExtra("difficulty");
-        difficulty = diffName != null ? Difficulty.valueOf(diffName) : Difficulty.MEDIUM;
+        // Retrieve Difficulty enum extra (falls back to MEDIUM)
+        Difficulty diffExtra = (Difficulty) getIntent().getSerializableExtra("difficulty");
+        if (diffExtra != null) {
+            difficulty = diffExtra;
+        } else {
+            String diffName = getIntent().getStringExtra("difficulty");
+            difficulty = diffName != null ? Difficulty.valueOf(diffName) : Difficulty.MEDIUM;
+        }
 
         TextView dartPriceTxt = findViewById(R.id.dartPrice);
         dartPriceTxt.setText(String.valueOf(Towers.DART_MONKEY.getPrice()));

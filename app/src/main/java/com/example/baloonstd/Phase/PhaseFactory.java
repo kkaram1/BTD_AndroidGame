@@ -51,12 +51,12 @@ public class PhaseFactory {
             case 5:
                 m.put(Balloon.RED,    10);
                 m.put(Balloon.BLUE,   4);
-                m.put(Balloon.GREEN,   3);
+                m.put(Balloon.ZEPPLIN,   1);
                 break;
             case 6:
                 m.put(Balloon.RED,    10);
-                m.put(Balloon.BLUE,   10);
-                m.put(Balloon.GREEN,   5);
+                m.put(Balloon.BLACK,   3);
+                m.put(Balloon.ZEPPLINBLACK,   1);
                 break;
             case 7:
                 m.put(Balloon.RED,    10);
@@ -124,7 +124,7 @@ public class PhaseFactory {
     private void setupMedium(int p, Map<Balloon,Integer> m){
         switch(p){
             case 1:
-                m.put(Balloon.RED,    5);
+                m.put(Balloon.BLACK,    5);
                 break;
             case 2:
                 m.put(Balloon.RED,    8);
@@ -213,7 +213,7 @@ public class PhaseFactory {
     private void setupHard(int p, Map<Balloon,Integer> m){
         switch(p){
             case 1:
-                m.put(Balloon.RED,    8);
+                m.put(Balloon.RED,    1);
                 break;
             case 2:
                 m.put(Balloon.RED,    12);
