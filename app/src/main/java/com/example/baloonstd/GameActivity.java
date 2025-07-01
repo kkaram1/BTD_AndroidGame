@@ -48,7 +48,7 @@ public class GameActivity extends BaseActivity {
     private PhaseManager phaseManager;
     private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
-    private int money = 5000;
+    private int money = 500;
     private int health = 50;
     private TextView healthText;
     private Button upgradeToggleButton;

@@ -51,7 +51,7 @@ public class PhaseFactory {
             case 5:
                 m.put(Balloon.RED,    10);
                 m.put(Balloon.BLUE,   4);
-                m.put(Balloon.BLACK,   4);
+                m.put(Balloon.BLACK,   1);
                 break;
             case 6:
                 m.put(Balloon.RED,    10);
