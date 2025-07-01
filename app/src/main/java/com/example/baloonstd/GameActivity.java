@@ -48,7 +48,7 @@ public class GameActivity extends BaseActivity {
     private PhaseManager phaseManager;
     private ArrayList<Pair<Towers,ImageView>> pairList;
     private TextView moneyText;
-    private int money = 500;
+    private int money = 5000;
     private int health = 50;
     private TextView healthText;
     private Button upgradeToggleButton;
@@ -70,6 +70,7 @@ public class GameActivity extends BaseActivity {
     private AchievementManager achievementManager;
     private Button        btnGeneration;
     private FrameLayout   upgradeGenerationContainer;
+    private int currentPhase;
 
 
     @Override
@@ -210,6 +211,7 @@ public class GameActivity extends BaseActivity {
 
         gameView.setOnPhaseCompleteListener(phase -> runOnUiThread(() -> {
             grantBankIncome();
+            currentPhase =phase;
             if (!PlayerManager.getInstance().getPlayer().isGuest()) {
                 saveBalloonPop(false);
                 saveUpgradesDone(false);
@@ -225,7 +227,7 @@ public class GameActivity extends BaseActivity {
                 saveBalloonPop(true);
                 saveUpgradesDone(true);
             }
-            if(phase == 20){gameWonScreen.setVisibility(LinearLayout.VISIBLE);}
+            if(phase == 9){gameWonScreen.setVisibility(LinearLayout.VISIBLE);}
             int phaseDispaly = phase +1;
             nextPhaseButton.setText("Start Phase "+ phaseDispaly);
             nextPhaseButton.setVisibility(Button.VISIBLE);
@@ -247,7 +249,7 @@ public class GameActivity extends BaseActivity {
         );
         endless.setOnClickListener(v -> {
             gameWonScreen.setVisibility(GONE);
-            int phaseDispaly = 3;
+            int phaseDispaly = currentPhase +1;
             nextPhaseButton.setText("Start Phase "+ phaseDispaly);
             nextPhaseButton.setVisibility(Button.VISIBLE);
         });
